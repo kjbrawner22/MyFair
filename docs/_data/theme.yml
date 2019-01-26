@@ -1,1 +1,5 @@
 skin: night
+navigation_pages:
+  - index.md
+  - deliverables.md
+  - about.md
