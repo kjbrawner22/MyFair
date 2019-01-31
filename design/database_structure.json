@@ -1,0 +1,29 @@
+{
+	"users" : {
+		"some-id" : {
+			"packets" : {
+				"packet-id-1" : {
+					"basic-info" : {
+						"name" : "John Doe",
+						"company" : "Boeing"
+					},
+					"social" : {
+						"twitter" : "john.doe2"
+					},
+					"documents": {
+						
+					},
+					"access-uids" : {
+						"some-other-id" : "true",
+						//...
+					}
+				}
+			}
+		},
+		"some-other-id" : {
+			"packets" : {
+				//...
+			}
+		}
+	}
+}
