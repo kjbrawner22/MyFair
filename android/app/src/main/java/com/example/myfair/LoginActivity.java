@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,24 +36,37 @@ public class LoginActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                // Sign in failure
-                                Toast.makeText(view.getContext(), "Incorrect email or password.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } else {
-                    Toast.makeText(view.getContext(), "Fill out both fields.", Toast.LENGTH_LONG).show();
+                if (email.isEmpty()) {
+                    etEmail.setError("Email field is required.");
+                    etEmail.requestFocus();
+                    return;
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    etEmail.setError("Valid email address required.");
+                    etEmail.requestFocus();
+                    return;
                 }
+
+                if (password.isEmpty()) {
+                    etPassword.setError("Password field is required.");
+                    etPassword.requestFocus();
+                    return;
+                }
+
+
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // Sign in failure
+                            Toast.makeText(view.getContext(), "Incorrect email or password.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
 
