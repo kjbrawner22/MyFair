@@ -17,9 +17,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
+    private boolean onSignInView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +28,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+
         final EditText etEmail = findViewById(R.id.etEmail);
         final EditText etPassword = findViewById(R.id.etPassword);
         Button btnSignIn = findViewById(R.id.btnSignIn);
+        Button btnSignUp = findViewById(R.id.btnSignUp);
+        Button btnSignUpForm = findViewById(R.id.btnSignUpForm);
+        Button btnSignInForm = findViewById(R.id.btnSignInForm);
+
+        handleFormChange();
+
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -70,6 +78,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void handleFormChange() {
+        //TODO: Change visibility on sign-in and sign-up forms with button toggle
+    }
+
+    @Override
+    public void onClick(View v) {
+        //TODO: handle clicks and transfer current listener into here
     }
 
     @Override
