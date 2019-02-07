@@ -46,10 +46,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnSignIn.setOnClickListener(this);
     }
 
-    // Handle all the clicks needed
+    // Handle all the click listeners
     @Override
     public void onClick(final View v) {
-        //TODO: handle clicks and transfer current listener into here
         int id = v.getId();
         switch (id) {
             case R.id.btnSignIn:
@@ -76,8 +75,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         final EditText etEmail = findViewById(R.id.etSignInEmail);
         final EditText etPassword = findViewById(R.id.etSignInPassword);
 
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
+        final String email = etEmail.getText().toString();
+        final String password = etPassword.getText().toString();
 
         if (email.isEmpty()) {
             etEmail.setError("Email field is required.");
@@ -113,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    // validate the sign-in fields, and return a boolean of the result
+    // validate the sign-up fields, and return a boolean of the result
     private boolean validSignUpFields() {
         final EditText etEmail = findViewById(R.id.etSignUpEmail);
         final EditText etPassword = findViewById(R.id.etSignUpPassword);
@@ -145,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return false;
     }
 
-    // sign-up a user in the firebase authentication system.
+    // sign-up a user in the Firebase authentication system.
     private void signUp() {
         final String email = ((EditText) findViewById(R.id.etSignUpEmail))
                 .getText().toString();
@@ -173,7 +172,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void changeForm(int id) {
         ConstraintLayout lytSignIn = findViewById(R.id.lytSignIn);
         ConstraintLayout lytSignUp = findViewById(R.id.lytSignUp);
-        int duration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         if (id == R.id.btnSignUpForm) {
             lytSignIn.setVisibility(View.GONE);
@@ -184,18 +182,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    // check auth state on start of application
     @Override
     public void onStart() {
         super.onStart();
         updateUI();
     }
 
+    // check auth state on resume of application
     @Override
     protected void onResume() {
         super.onResume();
         updateUI();
     }
 
+    // check auth state, and if the user is authenticated,
+    // proceed to the main activity
     private void updateUI() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
