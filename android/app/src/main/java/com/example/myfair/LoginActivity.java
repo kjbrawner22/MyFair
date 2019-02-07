@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,20 +58,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.btnSignUp:
-                //TODO: sign-up logic here
+                if (validSignUpFields()) {
+                    signUp();
+                }
                 break;
             case R.id.btnSignInForm:
             case R.id.btnSignUpForm:
                 //change view to sign-up or sign-in form here
-                changeForm(id);
                 Log.d("CHANGE_FORM", "Changing form...");
+                changeForm(id);
                 break;
         }
     }
 
+    // validate the sign-in fields, and return a boolean of the result
     private boolean validSignInFields() {
-        final EditText etEmail = findViewById(R.id.etEmail);
-        final EditText etPassword = findViewById(R.id.etPassword);
+        final EditText etEmail = findViewById(R.id.etSignInEmail);
+        final EditText etPassword = findViewById(R.id.etSignInPassword);
 
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
@@ -92,36 +96,91 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void signIn() {
-        final String email = ((EditText)findViewById(R.id.etEmail)).getText().toString();
-        final String password = ((EditText)findViewById(R.id.etPassword)).getText().toString();
+        final String email = ((EditText)findViewById(R.id.etSignInEmail)).getText().toString();
+        final String password = ((EditText)findViewById(R.id.etSignInPassword)).getText().toString();
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // Sign in success
-                    Toast.makeText(LoginActivity.this, "Correct", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    updateUI();
                 } else {
                     // Sign in failure
-                    Toast.makeText(LoginActivity.this, "Incorrect email or password.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Incorrect email and/or password.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+    // validate the sign-in fields, and return a boolean of the result
+    private boolean validSignUpFields() {
+        final EditText etEmail = findViewById(R.id.etSignUpEmail);
+        final EditText etPassword = findViewById(R.id.etSignUpPassword);
+        final EditText etConfirmPassword = findViewById(R.id.etConfirmPassword);
+
+        final String email = etEmail.getText().toString();
+        final String password = etPassword.getText().toString();
+        final String confirmPassword = etConfirmPassword.getText().toString();
+
+        if (email.isEmpty()) {
+            etEmail.setError("Email field is required.");
+            etEmail.requestFocus();
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Valid email address required.");
+            etEmail.requestFocus();
+        } else if (password.isEmpty()) {
+            etPassword.setError("Password field is required.");
+            etPassword.requestFocus();
+        } else if (confirmPassword.isEmpty()) {
+            etConfirmPassword.setError("Must confirm your password.");
+            etConfirmPassword.requestFocus();
+        } else if (!password.equals(confirmPassword)) {
+            etConfirmPassword.setError("The two entered passwords do not match.");
+            etConfirmPassword.requestFocus();
+        } else {
+            return true;
+        }
+
+        return false;
+    }
+
+    // sign-up a user in the firebase authentication system.
+    private void signUp() {
+        final String email = ((EditText) findViewById(R.id.etSignUpEmail))
+                .getText().toString();
+        final String password = ((EditText) findViewById(R.id.etSignUpPassword))
+                .getText().toString();
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("SIGN_UP_USER", "createUserWithEmail:success");
+                            updateUI();
+                        } else {
+                            Log.d("SIGN_UP_USER", "createUserWithEmail:failure");
+                            Toast.makeText(LoginActivity.this,
+                                    "Failed to create a new user.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    // change to either the sign-in or sign-up form view
     private void changeForm(int id) {
         ConstraintLayout lytSignIn = findViewById(R.id.lytSignIn);
         ConstraintLayout lytSignUp = findViewById(R.id.lytSignUp);
+        int duration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         if (id == R.id.btnSignUpForm) {
             lytSignIn.setVisibility(View.GONE);
             lytSignUp.setVisibility(View.VISIBLE);
         } else {
-            lytSignIn.setVisibility(View.VISIBLE);
             lytSignUp.setVisibility(View.GONE);
+            lytSignIn.setVisibility(View.VISIBLE);
         }
     }
 
