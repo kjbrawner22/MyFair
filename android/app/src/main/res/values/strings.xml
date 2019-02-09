@@ -2,4 +2,6 @@
     <string name="app_name">MyFair</string>
     <string name="profile_Creation">Profile Creation</string>
     <string name="back">Back</string>
+    <string name="btnUpdate">Update</string>
+    <string name="placeholder">placeholder</string>
 </resources>
