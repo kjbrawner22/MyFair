@@ -21,11 +21,22 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Button btnSignOut = findViewById(R.id.btnSignOut);
+        Button btnProfileCreation = findViewById(R.id.btnProfileCreation);
+
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        btnProfileCreation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileCreation.class);
                 startActivity(intent);
                 finish();
             }

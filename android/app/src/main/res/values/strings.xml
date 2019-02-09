@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyFair</string>
+    <string name="profile_Creation">Profile Creation</string>
+    <string name="back">Back</string>
 </resources>
