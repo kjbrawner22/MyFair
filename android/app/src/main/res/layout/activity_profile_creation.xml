@@ -54,8 +54,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtType"
-        app:layout_constraintVertical_bias="0.16" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintVertical_bias="0.126" />
 
     <EditText
         android:id="@+id/txtLname"
@@ -72,22 +72,19 @@
         app:layout_constraintTop_toBottomOf="@+id/txtFname"
         android:importantForAutofill="no" />
 
-    <EditText
-        android:id="@+id/txtType"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="205dp"
+        android:layout_height="49dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="@string/typeEntry"
-        android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtLname"
-        app:layout_constraintVertical_bias="0.005"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.082" />
 
 </android.support.constraint.ConstraintLayout>
