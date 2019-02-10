@@ -23,7 +23,7 @@ public class ProfileCreation extends AppCompatActivity implements View.OnClickLi
     private FirebaseUser user = mAuth.getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TAG = "ProfileCreation";
-    private User usrObj = new User("student", "Josh", "Helms");
+    private User2 usrObj = new User2("student", "Josh", "Helms");
     private TextView txtFname, txtLname, txtType;
 
     @Override
