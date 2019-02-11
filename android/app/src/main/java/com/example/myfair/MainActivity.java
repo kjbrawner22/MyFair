@@ -31,4 +31,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void goScan(View view){
+        Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+        startActivity(intent);
+    }
+
+    public void goGenerate(View view){
+        Intent intent = new Intent( MainActivity.this, GenerateActivity.class);
+        startActivity(intent);
+    }
 }

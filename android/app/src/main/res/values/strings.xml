@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyFair</string>
+    <string name="btnScan">Scan</string>
+    <string name="btnGen">Generate</string>
+    <string name="btnHome">Home</string>
+    <string name="qrImage">qrImage</string>
+    <string name="qrInput">Input</string>
+    <string name="btnSave">Save</string>
 </resources>
