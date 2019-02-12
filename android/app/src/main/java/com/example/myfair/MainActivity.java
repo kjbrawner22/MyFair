@@ -3,6 +3,7 @@ package com.example.myfair;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
+    final Fragment fragment1 = new HistoryFragment();
+    final Fragment fragment2 = new CollectionsFragment();
+    final Fragment fragment3 = new CreateFragment();
+    final Fragment fragment4 = new AnalyticsFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active = fragment1;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -27,23 +35,25 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
-                    mTextMessage.setText(R.string.title_history);
-                    switchToHistory();
-                    break;
+                    fm.beginTransaction().hide(active).show(fragment1).commit();
+                    active = fragment1;
+                    return true;
+
                 case R.id.navigation_collections:
-                    mTextMessage.setText(R.string.title_collections);
-                    switchToCollections();
-                    break;
+                    fm.beginTransaction().hide(active).show(fragment2).commit();
+                    active = fragment2;
+                    return true;
+
                 case R.id.navigation_create:
-                    mTextMessage.setText(R.string.title_create);
-                    switchToCreate();
-                    break;
+                    fm.beginTransaction().hide(active).show(fragment3).commit();
+                    active = fragment3;
+                    return true;
                 case R.id.navigation_analytics:
-                    mTextMessage.setText(R.string.title_analytics);
-                    switchToAnalytics();
-                    break;
+                    fm.beginTransaction().hide(active).show(fragment4).commit();
+                    active = fragment4;
+                    return true;
             }
-            return true;
+            return false;
         }
 
     };
@@ -73,11 +83,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment4, "4").hide(fragment4).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment3, "3").hide(fragment3).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment2, "2").hide(fragment2).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment1, "1").commit();
         mAuth = FirebaseAuth.getInstance();
 
         mTextMessage = (TextView) findViewById(R.id.textView);
 
-        BottomNavigationView navBar = findViewById(R.id.navigation);
+        BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.navigation);
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
