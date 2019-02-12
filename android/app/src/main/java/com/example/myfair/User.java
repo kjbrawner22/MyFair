@@ -7,13 +7,10 @@ public class User {
     public static final String FIELD_FIRST_NAME = "first_name";
     public static final String FIELD_LAST_NAME = "last_name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
+    public static final String FIELD_PROFILE_CREATED = "profile_created";
+    public static final String FIELD_USERNAME ="username";
 
     private HashMap<String, Object> map;
-
-    private String type;
-
-    private String firstName;
-    private String lastName;
 
     public User() {
         map = new HashMap<>();
@@ -29,8 +26,23 @@ public class User {
         return map;
     }
 
+    public void setMap(Map newMap){
+        if(!newMap.isEmpty()) {
+            map.putAll(newMap);
+        }
+    }
+
     public boolean setValue(String key, Object value) {
         map.put(key, value);
         return true;
     }
+
+    public String getValue(String key){
+        return (String) map.get(key);
+    }
+
+    public boolean containsKey(String key){
+        return map.containsKey(key);
+    }
+
 }
