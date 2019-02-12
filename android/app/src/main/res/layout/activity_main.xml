@@ -48,6 +48,7 @@
         app:menu="@menu/menu_main" />
 
     <FrameLayout
+        android:id="@+id/fragmentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
