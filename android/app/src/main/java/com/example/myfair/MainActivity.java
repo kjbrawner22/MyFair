@@ -83,10 +83,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment4, "4").hide(fragment4).commit();
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment3, "3").hide(fragment3).commit();
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment2, "2").hide(fragment2).commit();
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment1, "1").commit();
         mAuth = FirebaseAuth.getInstance();
 
         mTextMessage = (TextView) findViewById(R.id.textView);
@@ -94,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.navigation);
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment4, "4").hide(fragment4).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment3, "3").hide(fragment3).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment2, "2").hide(fragment2).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragment1, "1").commit();
 
         Button btnSignOut = findViewById(R.id.btnSignOut);
         btnSignOut.setOnClickListener(new View.OnClickListener() {
