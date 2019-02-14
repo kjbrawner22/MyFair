@@ -10,6 +10,8 @@ public class User {
     public static final String FIELD_PROFILE_CREATED = "profile_created";
     public static final String FIELD_USERNAME ="username";
 
+    public static final String VALUE_TRUE = "true";
+
     private HashMap<String, Object> map;
 
     public User() {

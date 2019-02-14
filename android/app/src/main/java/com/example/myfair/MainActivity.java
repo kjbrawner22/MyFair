@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean profileComplete(User localUser){
-        boolean a = localUser.containsKey(User.FIELD_PROFILE_CREATED), b = false;
+        boolean a = localUser.containsKey(User.FIELD_PROFILE_CREATED);
 
         if(a){      // localUser contains profile flag, check flag
-            b = localUser.getValue(User.FIELD_PROFILE_CREATED).equals("true");
+            return localUser.getValue(User.FIELD_PROFILE_CREATED).equals(User.VALUE_TRUE);
         }
-        return b;   // profile flag was never set, no need to check
+        return a;   // profile flag was never set, no need to check
     }
 
     private void updateUI() {
