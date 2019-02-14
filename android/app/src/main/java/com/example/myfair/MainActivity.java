@@ -23,14 +23,11 @@ public class MainActivity extends AppCompatActivity implements
 
     private TextView mTextMessage;
 
-    //FIXME: Organize these declarations
-
-    final Fragment fragmentHistory = new HistoryFragment();
-    final Fragment fragmentCollections = new CollectionsFragment();
-    final Fragment fragmentCreate = new CreateFragment();
-    final Fragment fragmentAnalytics = new AnalyticsFragment();
-    final FragmentManager fm = getSupportFragmentManager();
-    Fragment active = fragmentHistory;
+    Fragment fragmentHistory;
+    Fragment fragmentCollections;
+    Fragment fragmentCreate;
+    Fragment fragmentAnalytics;
+    FragmentManager fm;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,22 +56,18 @@ public class MainActivity extends AppCompatActivity implements
     };
 
     public void switchToHistory() {
-        active = fragmentHistory;
         fm.beginTransaction().replace(R.id.fragmentLayout, fragmentHistory).commit();
     }
 
     public void switchToCollections() {
-        active = fragmentCollections;
         fm.beginTransaction().replace(R.id.fragmentLayout, fragmentCollections).commit();
     }
 
     public void switchToCreate() {
-        active = fragmentCreate;
         fm.beginTransaction().replace(R.id.fragmentLayout, fragmentCreate).commit();
     }
 
     public void switchToAnalytics() {
-        active = fragmentAnalytics;
         fm.beginTransaction().replace(R.id.fragmentLayout, fragmentAnalytics).commit();
     }
 
@@ -84,6 +77,12 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        fragmentHistory = new HistoryFragment();
+        fragmentCollections = new CollectionsFragment();
+        fragmentCreate = new CreateFragment();
+        fragmentAnalytics = new AnalyticsFragment();
+
+        fm = getSupportFragmentManager();
 
         mTextMessage = (TextView) findViewById(R.id.textView);
 
