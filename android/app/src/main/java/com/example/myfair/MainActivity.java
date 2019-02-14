@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements
         CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
@@ -24,12 +23,12 @@ public class MainActivity extends AppCompatActivity implements
 
     private TextView mTextMessage;
 
-    final Fragment fragment1 = new HistoryFragment();
-    final Fragment fragment2 = new CollectionsFragment();
-    final Fragment fragment3 = new CreateFragment();
-    final Fragment fragment4 = new AnalyticsFragment();
+    final Fragment fragmentHistory = new HistoryFragment();
+    final Fragment fragmentCollections = new CollectionsFragment();
+    final Fragment fragmentCreate = new CreateFragment();
+    final Fragment fragmentAnalytics = new AnalyticsFragment();
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment active = fragment1;
+    Fragment active = fragmentHistory;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -38,22 +37,18 @@ public class MainActivity extends AppCompatActivity implements
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
-                    fm.beginTransaction().hide(active).show(fragment1).commit();
-                    active = fragment1;
+                    switchToHistory();
                     return true;
 
                 case R.id.navigation_collections:
-                    fm.beginTransaction().hide(active).show(fragment2).commit();
-                    active = fragment2;
+                    switchToCollections();
                     return true;
 
                 case R.id.navigation_create:
-                    fm.beginTransaction().hide(active).show(fragment3).commit();
-                    active = fragment3;
+                    switchToCreate();
                     return true;
                 case R.id.navigation_analytics:
-                    fm.beginTransaction().hide(active).show(fragment4).commit();
-                    active = fragment4;
+                    switchToAnalytics();
                     return true;
             }
             return false;
@@ -62,23 +57,23 @@ public class MainActivity extends AppCompatActivity implements
     };
 
     public void switchToHistory() {
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragmentLayout, new CollectionsFragment()).commit();
+        active = fragmentHistory;
+        fm.beginTransaction().replace(R.id.fragmentLayout, fragmentHistory).commit();
     }
 
     public void switchToCollections() {
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragmentLayout, new CollectionsFragment()).commit();
+        active = fragmentCollections;
+        fm.beginTransaction().replace(R.id.fragmentLayout, fragmentCollections).commit();
     }
 
     public void switchToCreate() {
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragmentLayout, new CollectionsFragment()).commit();
+        active = fragmentCreate;
+        fm.beginTransaction().replace(R.id.fragmentLayout, fragmentCreate).commit();
     }
 
     public void switchToAnalytics() {
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragmentLayout, new CollectionsFragment()).commit();
+        active = fragmentAnalytics;
+        fm.beginTransaction().replace(R.id.fragmentLayout, fragmentAnalytics).commit();
     }
 
     @Override
@@ -93,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements
         BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.navigation);
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment4, "4").hide(fragment4).commit();
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment3, "3").hide(fragment3).commit();
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment2, "2").hide(fragment2).commit();
-        fm.beginTransaction().add(R.id.fragmentLayout, fragment1, "1").commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragmentAnalytics, "4").hide(fragmentAnalytics).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragmentCreate, "3").hide(fragmentCreate).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragmentCollections, "2").hide(fragmentCollections).commit();
+        fm.beginTransaction().add(R.id.fragmentLayout, fragmentHistory, "1").commit();
 
         Button btnSignOut = findViewById(R.id.btnSignOut);
         btnSignOut.setOnClickListener(new View.OnClickListener() {
