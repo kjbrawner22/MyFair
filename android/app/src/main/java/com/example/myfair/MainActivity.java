@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private TextView mTextMessage;
 
+    //FIXME: Organize these declarations
+
     final Fragment fragmentHistory = new HistoryFragment();
     final Fragment fragmentCollections = new CollectionsFragment();
     final Fragment fragmentCreate = new CreateFragment();
