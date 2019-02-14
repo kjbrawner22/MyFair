@@ -1,6 +1,7 @@
 package com.example.myfair;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
+        CollectionsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener {
 
     private FirebaseAuth mAuth;
 
@@ -105,5 +108,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // can leave empty
     }
 }
