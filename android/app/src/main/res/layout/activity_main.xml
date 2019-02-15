@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="64dp"
-        android:onClick="goScan"
         android:text="@string/btnScan"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +53,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
         android:layout_marginTop="64dp"
-        android:onClick="goGenerate"
         android:text="@string/btnGen"
         app:layout_constraintStart_toEndOf="@+id/btnScan"
         app:layout_constraintTop_toTopOf="parent" />
