@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.protobuf.GeneratedMessageLite;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,15 +31,27 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Button goScan = findViewById(R.id.btnScan);
+        goScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        Button goGen = findViewById(R.id.btnGen);
+        goGen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, GenerateActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
-    public void goScan(View view){
-        Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-        startActivity(intent);
-    }
 
-    public void goGenerate(View view){
-        Intent intent = new Intent( MainActivity.this, GenerateActivity.class);
-        startActivity(intent);
-    }
 }

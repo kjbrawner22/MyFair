@@ -35,7 +35,7 @@ public class GenerateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_generate);
 
         qrImage = findViewById(R.id.qrImage);
         qrInput = findViewById(R.id.qrInput);
