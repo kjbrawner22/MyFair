@@ -28,6 +28,10 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
     ZXingScannerView qrCodeScanner = findViewById(R.id.qrCodeScanner);
     ImageView barcodeBackImageView = findViewById(R.id.barcodeBackImageView);
+    ImageView flashOnOffImageView = findViewById(R.id.flashOnOffImageView);
+
+    int MY_CAMERA_REQUEST_CODE = 6515;
+
 
 
 
@@ -41,7 +45,27 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         setContentView(R.layout.activity_scan);
         scannerInit();
 
-        
+        barcodeBackImageView.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                onBackPressed();
+            }
+        } );
+
+        flashOnOffImageView.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                Context cont = getApplicationContext();
+                if(qrCodeScanner.getFlash() == true){
+                    qrCodeScanner.setFlash(false);
+                    flashOnOffImageView.setBackground(ContextCompat.getDrawable(cont,R.drawable.flash_off_vector_icon));
+                }else{
+                    qrCodeScanner.setFlash(true);
+                    flashOnOffImageView.setBackground(ContextCompat.getDrawable(cont,R.drawable.flash_on_vector_icon));
+                }
+            }
+        });
 
 
         Button goHome = findViewById(R.id.scanbtnHome);
@@ -64,6 +88,11 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     protected void onResume(){
         super.onResume();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(new String[]{Manifest.permission.CAMERA},MY_CAMERA_REQUEST_CODE);
+            }
+        }
         qrCodeScanner.startCamera();
         qrCodeScanner.setResultHandler(ScanActivity.this);
     }
@@ -83,6 +112,19 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     public void handleResult(Result p0){
         if(p0!=null){
             Toast.makeText(this,p0.getText(),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        if(requestCode == MY_CAMERA_REQUEST_CODE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                openCamera();
+            }
+            else if (grantResults[0] == PackageManager.PERMISSION_DENIED){
+
+            }
         }
     }
 
