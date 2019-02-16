@@ -8,4 +8,8 @@
     <string name="lnameEntry">Last name</string>
     <string name="name_entry">Enter Your Name</string>
     <string name="usernameEntry">Choose a Username</string>
+    <string name="title_history">History</string>
+    <string name="title_collections">Collections</string>
+    <string name="title_create">Create</string>
+    <string name="title_analytics">Analytics</string>
 </resources>
