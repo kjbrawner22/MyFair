@@ -59,6 +59,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragmentLayout"
         app:menu="@menu/menu_main" />
-
-
 </android.support.constraint.ConstraintLayout>
