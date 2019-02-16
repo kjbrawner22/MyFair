@@ -39,6 +39,9 @@ dependencies {
 
     // Implementation for QR Code Generation
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+
+    //Barcode Dependency
+    implementation 'me.dm7.barcodescanner:zxing:1.9.8'
 }
 
 apply plugin: 'com.google.gms.google-services'
