@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements
                 case R.id.navigation_collections:
                     switchToFragment(fragmentCollections);
                     return true;
-
                 case R.id.navigation_create:
                     switchToFragment(fragmentCreate);
                     return true;
