@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements
     private FirebaseAuth mAuth;
     private boolean profileCreated;
 
-    private TextView mTextMessage;
-
     Fragment fragmentHistory;
     Fragment fragmentCollections;
     Fragment fragmentCreate;
@@ -92,8 +90,6 @@ public class MainActivity extends AppCompatActivity implements
         fragmentAnalytics = new AnalyticsFragment();
 
         fm = getSupportFragmentManager();
-
-        mTextMessage = (TextView) findViewById(R.id.textView);
 
         BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.navigation);
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
