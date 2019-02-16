@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,23 +25,30 @@ import static com.google.android.gms.common.util.CollectionUtils.listOf;
 
 public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
-    ZXingScannerView qrCodeScanner = findViewById(R.id.qrCodeScanner);
-    ImageView barcodeBackImageView = findViewById(R.id.barcodeBackImageView);
-    ImageView flashOnOffImageView = findViewById(R.id.flashOnOffImageView);
+    ZXingScannerView qrCodeScanner;
+    ImageView barcodeBackImageView;
+    ImageView flashOnOffImageView;
 
-    int MY_CAMERA_REQUEST_CODE = 6515;
+    int MY_CAMERA_REQUEST_CODE;
 
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_scan);
+
+        qrCodeScanner = findViewById(R.id.qrCodeScanner);
+        //barcodeBackImageView = findViewById(R.id.barcodeBackImageView);
+        flashOnOffImageView = findViewById(R.id.flashOnOffImageView);
+        MY_CAMERA_REQUEST_CODE = 6515;
+
         scannerInit();
 
         barcodeBackImageView.setOnClickListener( new View.OnClickListener(){
@@ -57,7 +63,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v){
 
                 Context cont = getApplicationContext();
-                if(qrCodeScanner.getFlash() == true){
+                if(qrCodeScanner.getFlash()){
                     qrCodeScanner.setFlash(false);
                     flashOnOffImageView.setBackground(ContextCompat.getDrawable(cont,R.drawable.flash_off_vector_icon));
                 }else{
@@ -111,7 +117,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(Result p0){
         if(p0!=null){
-            Toast.makeText(this,p0.getText(),Toast.LENGTH_LONG).show();
+            //startActivity();
+            resumeCamera();
         }
     }
 
@@ -126,6 +133,17 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
             }
         }
+    }
+
+    private void resumeCamera(){
+        Handler handler = new Handler();
+        final Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                qrCodeScanner.resumeCameraPreview(ScanActivity.this);
+            }
+        };
+        handler.postDelayed(r,2000);
     }
 
 
