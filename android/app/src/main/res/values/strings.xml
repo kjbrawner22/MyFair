@@ -15,6 +15,8 @@
     <string name="scanned_qr_code_result">Scanned Qr Code result</string>
     <string name="first_name">Fullname :</string>
     <string name="age">Age :</string>
+    <string name="full_name">Full name</string>
+    <string name="user_age">Age</string>
 
 
 </resources>

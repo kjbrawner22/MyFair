@@ -14,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -26,7 +25,7 @@ import static com.google.android.gms.common.util.CollectionUtils.listOf;
 public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     ZXingScannerView qrCodeScanner;
-    ImageView barcodeBackImageView;
+    //ImageView barcodeBackImageView;
     ImageView flashOnOffImageView;
 
     int MY_CAMERA_REQUEST_CODE;
@@ -51,12 +50,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         scannerInit();
 
-        barcodeBackImageView.setOnClickListener( new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                onBackPressed();
-            }
-        } );
 
         flashOnOffImageView.setOnClickListener( new View.OnClickListener(){
             @Override
@@ -117,7 +110,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(Result p0){
         if(p0!=null){
-            //startActivity();
+            ScannedActivity s = new ScannedActivity();
+            startActivity(s.getScannedActivity(this,p0.getText()));
             resumeCamera();
         }
     }
