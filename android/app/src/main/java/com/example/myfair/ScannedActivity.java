@@ -2,13 +2,14 @@ package com.example.myfair;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.myfair.ModelsandHelpers.EncryptionHelper;
 import com.example.myfair.ModelsandHelpers.UserObject;
 import com.google.gson.Gson;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class ScannedActivity extends AppCompatActivity {
