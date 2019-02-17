@@ -16,14 +16,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "CardCreationActivity";
     private EditText etName, etCompany, etPosition, etUniversity, etMajor;
     private String fullName, company, position, university, major;
-    private Button btnUniversity, btnCompany, btnBack, btnDone;
+    private Button btnBack;
+    private Button btnDone;
     private ConstraintLayout lytSelect, lytUniversity, lytCompany;
     FirebaseFirestore db;
     FirebaseUser user;
@@ -46,9 +46,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         etUniversity = findViewById(R.id.etUniversity);
         etMajor = findViewById(R.id.etMajor);
 
-
-        btnUniversity = findViewById(R.id.btnUniversity);
-        btnCompany = findViewById(R.id.btnCompany);
+        Button btnUniversity = findViewById(R.id.btnUniversity);
+        Button btnCompany = findViewById(R.id.btnCompany);
         btnBack = findViewById(R.id.btnBack1);
         btnDone = findViewById(R.id.btnDone);
 
