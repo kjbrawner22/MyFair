@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -23,6 +22,8 @@ import com.example.myfair.ModelsandHelpers.UserObject;
 import com.google.gson.Gson;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class GenerateActivity extends AppCompatActivity {

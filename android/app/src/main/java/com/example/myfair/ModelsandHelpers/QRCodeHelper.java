@@ -2,7 +2,6 @@ package com.example.myfair.ModelsandHelpers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.annotation.IntRange;
 import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
@@ -15,9 +14,11 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.IntRange;
+
 /**
  * Created by Ahsen Saeed on 1/10/2018.
- * <p>
+ *
  * This class generate the user qrcode.It is also implemented using builder pattern.
  */
 
