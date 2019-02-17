@@ -1,22 +1,19 @@
 package com.example.myfair;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,17 +27,21 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements
         CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
-        CollectionsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener {
+        CollectionsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener {
 
     private FirebaseUser user;
     private FirebaseAuth mAuth;
     private boolean profileCreated;
 
-    Fragment fragmentHistory;
-    Fragment fragmentCollections;
-    Fragment fragmentCreate;
-    Fragment fragmentAnalytics;
-    FragmentManager fm;
+    private Toolbar toolbar;
+
+    private Fragment fragmentHistory;
+    private Fragment fragmentCollections;
+    private Fragment fragmentCreate;
+    private Fragment fragmentAnalytics;
+    private Fragment fragmentProfile;
+    private FragmentManager fm;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,17 +50,20 @@ public class MainActivity extends AppCompatActivity implements
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
-                    switchToFragment(fragmentHistory);
+                    switchToFragment(fragmentHistory, HistoryFragment.NAME);
                     return true;
 
                 case R.id.navigation_collections:
-                    switchToFragment(fragmentCollections);
+                    switchToFragment(fragmentCollections, CollectionsFragment.NAME);
                     return true;
                 case R.id.navigation_create:
-                    switchToFragment(fragmentCreate);
+                    switchToFragment(fragmentCreate, CreateFragment.NAME);
                     return true;
                 case R.id.navigation_analytics:
-                    switchToFragment(fragmentAnalytics);
+                    switchToFragment(fragmentAnalytics, AnalyticsFragment.NAME);
+                    return true;
+                case R.id.navigation_profile:
+                    switchToFragment(fragmentProfile, ProfileFragment.NAME);
                     return true;
             }
             return false;
@@ -67,17 +71,21 @@ public class MainActivity extends AppCompatActivity implements
 
     };
 
-    private void switchToFragment(Fragment fragment) {
+    private void switchToFragment(Fragment fragment, String title) {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.fragmentLayout, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+        toolbar.setTitle(title);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -88,12 +96,15 @@ public class MainActivity extends AppCompatActivity implements
         fragmentCollections = new CollectionsFragment();
         fragmentCreate = new CreateFragment();
         fragmentAnalytics = new AnalyticsFragment();
+        fragmentProfile = new ProfileFragment();
 
         fm = getSupportFragmentManager();
 
         BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.navigation);
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
+        toolbar.setTitle(ProfileFragment.NAME);
         fm.beginTransaction().add(R.id.fragmentLayout, fragmentCollections).commit();
     }
 
@@ -109,25 +120,16 @@ public class MainActivity extends AppCompatActivity implements
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+                    if (document != null && document.exists()) {
                         // document snapshot succeeded
-                        Map<String, Object> data;
-                        User localUser = new User();
-                        data = document.getData();
-                        localUser.setMap(data);
+                        User localUser = new User(document.getData());
 
-                        if(profileComplete(localUser)) {
+                        if(localUser.profileCreated()) {
                             profileCreated = true;
                         } else {
                             profileCreated = false;
                             updateUI();
                         }
-
-                        // log statements
-                        // Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        // Log.d(TAG, "Data stored: " + data);
-                        // Log.d(TAG, "User stored: " + localUser.getValue(localUser.FIELD_FIRST_NAME) + " " + localUser.getValue(localUser.FIELD_LAST_NAME));
-
 
                     } else {  // document doesn't exist yet
                         profileCreated = false;
@@ -141,15 +143,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         });
-    }
-
-    private boolean profileComplete(User localUser){
-        boolean a = localUser.containsKey(User.FIELD_PROFILE_CREATED);
-
-        if(a){      // localUser contains profile flag, check flag
-            return localUser.getValue(User.FIELD_PROFILE_CREATED).equals(User.VALUE_TRUE);
-        }
-        return a;   // profile flag was never set, no need to check
     }
 
     private void updateUI() {

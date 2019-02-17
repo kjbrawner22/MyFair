@@ -3,7 +3,7 @@ package com.example.myfair;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,7 @@ public class HistoryFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    static final String NAME = "history_fragment";
+    static final String NAME = "History";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
