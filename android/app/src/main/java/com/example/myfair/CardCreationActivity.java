@@ -93,11 +93,11 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             localCard.setValue(Card.FIELD_UNIVERSITY_MAJOR, major);
         }
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
-        sendToDatabase(localCard);
+        createCardInDatabase(localCard);
     }
 
-    private void sendToDatabase(Card card) {
-        DocumentReference docRef = db.collection("cards").document();
+    private void createCardInDatabase(Card card) {
+        DocumentReference docRef = db.collection("users").document(user.getUid()).collection("cards").document();
 
         Log.d("CardCreationLog", "DocRef: " + docRef);
         docRef.set(card.getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
