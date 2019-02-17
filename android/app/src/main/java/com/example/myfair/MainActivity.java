@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements
                 case R.id.navigation_history:
                     switchToFragment(fragmentHistory, HistoryFragment.NAME);
                     return true;
-
                 case R.id.navigation_collections:
                     switchToFragment(fragmentCollections, CollectionsFragment.NAME);
                     return true;
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements
 
         fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
         toolbar.setTitle(ProfileFragment.NAME);
-        fm.beginTransaction().add(R.id.fragmentLayout, fragmentCollections).commit();
     }
 
     private void checkProfile(){
@@ -143,6 +141,13 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 
     private void updateUI() {
