@@ -28,6 +28,9 @@ public class CreateFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private Button btnLibrary, btnNewCard;
 
+    private String mParam1;
+    private String mParam2;
+
     static final String NAME = "Create";
 
     private OnFragmentInteractionListener mListener;
