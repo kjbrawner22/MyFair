@@ -2,6 +2,7 @@ package com.example.myfair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class User {
     public static final String FIELD_FIRST_NAME = "first_name";
@@ -13,10 +14,16 @@ public class User {
     public static final String FIELD_COMPANY_POSITION = "company_position";
     public static final String FIELD_USERNAME ="username";
 
+    public static final String VALUE_TRUE = "true";
+
     private HashMap<String, Object> map;
 
     public User() {
         map = new HashMap<>();
+    }
+
+    User(Map<String, Object> newMap) {
+        map = (HashMap<String, Object>) newMap;
     }
 
     public User(String firstName, String lastName) {
@@ -29,7 +36,7 @@ public class User {
         return map;
     }
 
-    public void setMap(Map newMap){
+    public void setMap(Map<String, Object> newMap){
         if(!newMap.isEmpty()) {
             map.putAll(newMap);
         }
@@ -48,4 +55,10 @@ public class User {
         return map.containsKey(key);
     }
 
+    boolean profileCreated() {
+        if (map.containsKey(FIELD_PROFILE_CREATED)) {
+            return Objects.equals(map.get(FIELD_PROFILE_CREATED), VALUE_TRUE);
+        }
+        return false;
+    }
 }
