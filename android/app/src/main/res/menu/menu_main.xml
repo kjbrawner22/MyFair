@@ -9,7 +9,6 @@
         android:id="@+id/navigation_collections"
         android:icon="@drawable/ic_collections"
         android:title="@string/title_collections" />
-
     <item
         android:id="@+id/navigation_create"
         android:icon="@drawable/ic_create"
@@ -18,10 +17,8 @@
         android:id="@+id/navigation_history"
         android:icon="@drawable/ic_history"
         android:title="@string/title_history" />
-
     <item
         android:id="@+id/navigation_analytics"
         android:icon="@drawable/ic_analytics"
         android:title="@string/title_analytics" />
-
 </menu>

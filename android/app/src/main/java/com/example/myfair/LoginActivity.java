@@ -10,6 +10,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,7 +32,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         // ensure that the sign-in form is displayed first
+        ConstraintLayout lytEmailVerification = findViewById(R.id.lytEmailVerification);
+        lytEmailVerification.setVisibility(View.GONE);
         changeForm(R.id.btnSignInForm);
+
         // grab an instance of the firebase authentication
         mAuth = FirebaseAuth.getInstance();
 
@@ -37,12 +44,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Button btnSignUp = findViewById(R.id.btnSignUp);
         Button btnSignUpForm = findViewById(R.id.btnSignUpForm);
         Button btnSignInForm = findViewById(R.id.btnSignInForm);
+        Button btnResendEmail = findViewById(R.id.btnResend);
+        Button btnVerifyDone = findViewById(R.id.btnVerifyDone);
 
         //set the click listeners
         btnSignUpForm.setOnClickListener(this);
         btnSignInForm.setOnClickListener(this);
         btnSignUp.setOnClickListener(this);
         btnSignIn.setOnClickListener(this);
+        btnResendEmail.setOnClickListener(this);
+        btnVerifyDone.setOnClickListener(this);
     }
 
     // Handle all the click listeners
@@ -59,6 +70,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (validSignUpFields()) {
                     signUp();
                 }
+                break;
+            case R.id.btnResend:
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    user.reload();
+                    if (!user.isEmailVerified()) {
+                        sendVerificationEmail(user);
+                    } else {
+                        updateUI();
+                    }
+                }
+                break;
+            case R.id.btnVerifyDone:
+                updateUI();
                 break;
             case R.id.btnSignInForm:
             case R.id.btnSignUpForm:
@@ -156,6 +181,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("SIGN_UP_USER", "createUserWithEmail:success");
+                            sendVerificationEmail(mAuth.getCurrentUser());
                             updateUI();
                         } else {
                             Log.d("SIGN_UP_USER", "createUserWithEmail:failure");
@@ -165,6 +191,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
                 });
+    }
+
+    // send a verification email to the current user
+    private void sendVerificationEmail(FirebaseUser user) {
+        if (user == null) {
+            Toast.makeText(LoginActivity.this,
+                    "Error occurred. Please try again later.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this,
+                            "Verification email sent!",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this,
+                            "Email couldn't be sent at this time. Please try again later.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     // change to either the sign-in or sign-up form view
@@ -179,6 +230,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             lytSignUp.setVisibility(View.GONE);
             lytSignIn.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void showEmailVerificationView(String email) {
+        ConstraintLayout lytSignIn = findViewById(R.id.lytSignIn);
+        ConstraintLayout lytSignUp = findViewById(R.id.lytSignUp);
+        ConstraintLayout lytEmailVerification = findViewById(R.id.lytEmailVerification);
+        TextView tvInfo = findViewById(R.id.tvInfo);
+
+        lytSignIn.setVisibility(View.GONE);
+        lytSignUp.setVisibility(View.GONE);
+
+        String info = "We've sent an email to " + email + ".\nPlease check your inbox.";
+        tvInfo.setText(info);
+
+        lytEmailVerification.setVisibility(View.VISIBLE);
     }
 
     // check auth state on start of application
@@ -200,9 +266,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            user.reload();
+            if (user.isEmailVerified()) {
+                Log.d("UPDATE_UI", "User is email verified and signed in");
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Log.d("UPDATE_UI", "User is not email verified.");
+                showEmailVerificationView(user.getEmail());
+            }
         }
     }
 }

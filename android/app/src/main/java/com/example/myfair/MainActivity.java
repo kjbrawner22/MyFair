@@ -23,6 +23,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity implements
         CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
         CollectionsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener,
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements
 
         fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
         toolbar.setTitle(ProfileFragment.NAME);
+        fm.beginTransaction().add(R.id.fragmentLayout, fragmentCollections).commit();
     }
 
     private void checkProfile(){
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements
                             profileCreated = false;
                             updateUI();
                         }
+
                     } else {  // document doesn't exist yet
                         profileCreated = false;
                         Log.d(TAG, "No such document");
