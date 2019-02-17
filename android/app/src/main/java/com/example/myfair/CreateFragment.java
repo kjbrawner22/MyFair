@@ -1,12 +1,16 @@
 package com.example.myfair;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.firebase.auth.FirebaseUser;
 
 
 /**
@@ -22,6 +26,7 @@ public class CreateFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Button btnLibrary, btnNewCard;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -64,14 +69,45 @@ public class CreateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create, container, false);
+        View view = inflater.inflate(R.layout.fragment_create, container, false);
+
+        btnLibrary = (Button) view.findViewById(R.id.btnLibrary);
+        btnNewCard = (Button) view.findViewById(R.id.btnNewCard);
+
+        btnLibrary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLibrary();
+            }
+        });
+
+        btnNewCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCardCreation();
+            }
+        });
+
+        return view;
     }
+
+    private void openLibrary() {
+        Intent intent = new Intent(getActivity(), UserLibraryActivity.class);
+        startActivity(intent);
+    }
+
+    private void openCardCreation() {
+        Intent intent = new Intent(getActivity(), CardCreationActivity.class);
+        startActivity(intent);
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+
     }
 
     @Override

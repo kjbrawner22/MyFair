@@ -7,5 +7,16 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="myCards">User Library</string>
+    <string name="title_newCard">New Card</string>
+    <string name="title_UserLib">My Cards</string>
+    <string name="companyCard">Business Card</string>
+    <string name="studentCard">Student Card</string>
+    <string name="back">Back</string>
+    <string name="EnterName">Name On Card</string>
+    <string name="EnterCompany">Company Name</string>
+    <string name="Position">Position</string>
+    <string name="done">Done</string>
+    <string name="UniversityName">University Name</string>
+    <string name="Major">Major</string>
 </resources>

@@ -3,26 +3,23 @@ package com.example.myfair;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User {
-    public static final String FIELD_FIRST_NAME = "first_name";
-    public static final String FIELD_LAST_NAME = "last_name";
+public class Card {
+    public static final String FIELD_NAME = "name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
     public static final String FIELD_UNIVERSITY_MAJOR = "university_major";
-    public static final String FIELD_PROFILE_CREATED = "profile_created";
     public static final String FIELD_COMPANY_NAME = "company_name";
     public static final String FIELD_COMPANY_POSITION = "company_position";
-    public static final String FIELD_USERNAME ="username";
+    public static final String FIELD_CARD_OWNER = "card_owner";
 
     private HashMap<String, Object> map;
 
-    public User() {
+    public Card() {
         map = new HashMap<>();
     }
 
-    public User(String firstName, String lastName) {
+    public Card(String name) {
         map = new HashMap<>();
-        map.put(FIELD_FIRST_NAME, firstName);
-        map.put(FIELD_LAST_NAME, lastName);
+        map.put(FIELD_NAME, name);
     }
 
     public HashMap<String, Object> getMap() {
