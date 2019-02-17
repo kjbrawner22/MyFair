@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
