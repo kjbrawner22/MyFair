@@ -98,9 +98,10 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void sendToDatabase(Card card) {
-        DocumentReference docRef = db.collection("cards").document("card1");
+        DocumentReference docRef = db.collection("cards").document();
+
         Log.d("CardCreationLog", "DocRef: " + docRef);
-        docRef.set(card.getMap(), SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        docRef.set(card.getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
