@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity implements
         BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.navigation);
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        fm.beginTransaction().add(R.id.fragmentLayout, fragmentCollections).commit();
-        toolbar.setTitle(CollectionsFragment.NAME);
+        fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
+        toolbar.setTitle(ProfileFragment.NAME);
     }
 
     private void checkProfile(){
