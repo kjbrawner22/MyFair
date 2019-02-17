@@ -1,5 +1,23 @@
 <resources>
     <string name="app_name">MyFair</string>
+    <string name="btnScan">Scan</string>
+    <string name="btnGen">Generate</string>
+    <string name="btnHome">Home</string>
+    <string name="qrImage">qrImage</string>
+    <string name="qrInput">Input</string>
+    <string name="btnSave">Save</string>
+
+    <string name="generate_qr_code">Generate Qr Code</string>
+    <string name="scan_qr_code">Scan Qr Code</string>
+    <string name="barcode_reader">QrCode Reader</string>
+    <string name="app_needs_your_camera_permission_in_order_to_scan_qr_code">App needs your camera permission in order to scan qr code.</string>
+    <string name="scanned_qr_code_result">Scanned Qr Code result</string>
+    <string name="first_name">Fullname :</string>
+    <string name="age">Age :</string>
+    <string name="full_name">Full name</string>
+    <string name="user_age">Age</string>
+
+    <string name="app_name">MyFair</string>
     <string name="profile_Creation">Profile Creation</string>
     <string name="back">Back</string>
     <string name="btnUpdate">Update</string>
