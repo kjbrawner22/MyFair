@@ -7,7 +7,6 @@
     <string name="qrInput">Input</string>
     <string name="btnSave">Save</string>
 
-
     <string name="generate_qr_code">Generate Qr Code</string>
     <string name="scan_qr_code">Scan Qr Code</string>
     <string name="barcode_reader">QrCode Reader</string>
@@ -18,5 +17,29 @@
     <string name="full_name">Full name</string>
     <string name="user_age">Age</string>
 
-
+    <string name="app_name">MyFair</string>
+    <string name="profile_Creation">Profile Creation</string>
+    <string name="back">Back</string>
+    <string name="btnUpdate">Update</string>
+    <string name="typeEntry">Enter user type</string>
+    <string name="fnameEntry">First name</string>
+    <string name="lnameEntry">Last name</string>
+    <string name="name_entry">Enter Your Name</string>
+    <string name="usernameEntry">Choose a Username</string>
+    <string name="title_history">History</string>
+    <string name="title_collections">Collections</string>
+    <string name="title_create">Create</string>
+    <string name="title_analytics">Analytics</string>
+    <string name="myCards">User Library</string>
+    <string name="title_newCard">New Card</string>
+    <string name="title_UserLib">My Cards</string>
+    <string name="companyCard">Business Card</string>
+    <string name="studentCard">Student Card</string>
+    <string name="EnterName">Name On Card</string>
+    <string name="EnterCompany">Company Name</string>
+    <string name="Position">Position</string>
+    <string name="done">Done</string>
+    <string name="UniversityName">University Name</string>
+    <string name="Major">Major</string>
+    <string name="title_profile">Profile</string>
 </resources>
