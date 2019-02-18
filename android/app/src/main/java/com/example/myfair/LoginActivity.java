@@ -14,17 +14,68 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myfair.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
+import java.util.concurrent.ExecutionException;
+
+import static com.google.android.gms.tasks.Tasks.await;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "LoginActivity";
+
+    private ProgressBar progressBar;
+
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private FirebaseUser user;
+
+    // after user's information is reloaded from firebase, attempt to sign them in
+    // and check if the email is verified and their profile is created
+    private final OnCompleteListener<Void> userReloadListener = new OnCompleteListener<Void>() {
+        @Override
+        public void onComplete(@NonNull Task<Void> task) {
+            if (user.isEmailVerified()) {
+                Log.d("UPDATE_UI", "User is email verified and signed in");
+                db.document("users/" + user.getUid()).get()
+                        .addOnCompleteListener(navigateUserListener);
+            } else {
+                Log.d("UPDATE_UI", "User is not email verified.");
+                showEmailVerificationView(user.getEmail());
+            }
+        }
+    };
+
+    // logic to navigate user to either profile creation or the main activity
+    private final OnCompleteListener<DocumentSnapshot> navigateUserListener = new OnCompleteListener<DocumentSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if (task.isSuccessful()) {
+                DocumentSnapshot snapshot = task.getResult();
+                if (snapshot != null && snapshot.exists()) {
+                    User user = new User(snapshot.getData());
+                    Intent intent;
+                    if (user.profileCreated()) {
+                        intent = new Intent(LoginActivity.this, MainActivity.class);
+                    } else {
+                        intent = new Intent(LoginActivity.this, ProfileCreationActivity.class);
+                        intent.putExtra(User.FIELD_PROFILE_CREATED, false);
+                    }
+                    startActivity(intent);
+                    finish();
+                }
+            } else {
+                Log.d(TAG, "Couldn't access database.");
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +89,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // grab an instance of the firebase authentication
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        user = mAuth.getCurrentUser();
 
         //find all the buttons
         Button btnSignIn = findViewById(R.id.btnSignIn);
@@ -264,18 +317,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // check auth state, and if the user is authenticated,
     // proceed to the main activity
     private void updateUI() {
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
         if (user != null) {
-            user.reload();
-            if (user.isEmailVerified()) {
-                Log.d("UPDATE_UI", "User is email verified and signed in");
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Log.d("UPDATE_UI", "User is not email verified.");
-                showEmailVerificationView(user.getEmail());
-            }
+            user.reload().addOnCompleteListener(userReloadListener);
         }
     }
 }

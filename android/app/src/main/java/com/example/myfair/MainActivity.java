@@ -18,14 +18,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements
         CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
@@ -33,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements
         ProfileFragment.OnFragmentInteractionListener {
 
     private FirebaseAuth mAuth;
+    private User user;
 
     private Toolbar toolbar;
 
@@ -88,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements
 
         mAuth = FirebaseAuth.getInstance();
 
-        checkProfile();
+        user = new User();
+        user.setFromDb();
       
         fragmentHistory = new HistoryFragment();
         fragmentCollections = new CollectionsFragment();
@@ -105,13 +100,15 @@ public class MainActivity extends AppCompatActivity implements
         toolbar.setTitle(ProfileFragment.NAME);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     private void checkProfile(){
-        User u = new User();
-        u.setFromDb();
+        Log.d("getCardInfo", "Stored Boolean: " + user.profileCreated());
 
-        Log.d("getCardInfo", "Stored Boolean: " + u.profileCreated());
-
-        if (!u.profileCreated()){
+        if (!user.profileCreated()){
             Log.d("getCardInfo", "Update UI");
             updateUI();
         }
@@ -123,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updateUI() {
-        Intent intent = new Intent(MainActivity.this, ProfileCreation.class);
+        Intent intent = new Intent(MainActivity.this, ProfileCreationActivity.class);
         startActivity(intent);
     }
 

@@ -8,11 +8,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 import androidx.annotation.NonNull;
 
@@ -68,40 +72,33 @@ public class User {
     }
 
     public boolean profileCreated() {
-        boolean a;
         if (map.containsKey(FIELD_PROFILE_CREATED)) {
-            String boolString = (String) map.get(FIELD_PROFILE_CREATED);
-            Log.d("getCardInfo", "Stored String: " + boolString);
-            a = boolString.equals("true");
-            Log.d("getCardInfo", "Stored Boolean: " + a);
-            return a;
+            return map.get(FIELD_PROFILE_CREATED).equals(VALUE_TRUE);
         }
-        Log.d("getCardInfo", "Doenat contain key");
+        Log.d("getCardInfo", "Doesnt contain key");
         return false;
     }
 
     public void setFromDb(){
-        final String TAG = "getCardInfo";
+        final String TAG = "getUserInfo";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        user.reload();
+        if (user == null) {
+            return;
+        }
 
         DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        // document snapshot succeeded
-                        setMap(document.getData());
-                        Log.d(TAG, "Document data " + document.getData());
-                    } else {  // document doesn't exist yet
-                        Log.d(TAG, "No such document");
-                    }
-                } else {  // document snapshot failed
-                    Log.d(TAG, "get failed with ", task.getException());
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.");
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d(TAG, "User snapshot updated");
+                    setMap(snapshot.getData());
                 }
             }
         });
