@@ -76,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/collectionItemMoreInfo"
+                android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/collectionItem_image"
@@ -115,8 +116,9 @@
     </HorizontalScrollView>
 
     <GridView
-        android:layout_width="0dp"
-        android:layout_height="match_constraint"
+        android:id="@+id/rCollectionsGridView"
+        android:layout_width="396dp"
+        android:layout_height="431dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"

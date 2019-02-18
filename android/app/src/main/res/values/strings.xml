@@ -26,6 +26,7 @@
     <string name="name_entry">Enter Your Name</string>
     <string name="usernameEntry">Choose a Username</string>
     <string name="title_history">History</string>
+    <string name="title_allCollections">All Collections</string>
     <string name="title_myCollections">My Collections</string>
     <string name="title_receivedCollections">Received Collections</string>
     <string name="title_create">Create</string>
