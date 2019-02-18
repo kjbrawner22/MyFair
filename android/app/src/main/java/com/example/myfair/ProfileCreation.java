@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myfair.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileCreation extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "ProfileCreation";
+    private static final String TAG = "ProfileCreationTag";
 
 
     private FirebaseUser user;
@@ -152,8 +153,6 @@ public class ProfileCreation extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateUI() {
-        Intent intent = new Intent(ProfileCreation.this, MainActivity.class);
-        startActivity(intent);
         finish();
     }
 }

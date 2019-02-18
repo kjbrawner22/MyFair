@@ -2,8 +2,6 @@ package com.example.myfair;
 
 import android.content.Intent;
 
-import android.provider.Settings;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.net.Uri;
 
+import com.example.myfair.db.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -24,23 +23,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import com.google.protobuf.GeneratedMessageLite;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements
         CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
         CollectionsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener {
 
-    private FirebaseUser user;
     private FirebaseAuth mAuth;
-    private boolean profileCreated;
 
     private Toolbar toolbar;
 
@@ -95,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
         mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
 
         checkProfile();
       
@@ -115,54 +106,25 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void checkProfile(){
-        final String TAG = "checkProfileCreated";
-        final String uID = user.getUid();
-                        // check if null
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        User u = new User();
+        u.setFromDb();
 
-        DocumentReference docRef = db.collection("users").document(uID);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-                        // document snapshot succeeded
-                        User localUser = new User(document.getData());
+        Log.d("getCardInfo", "Stored Boolean: " + u.profileCreated());
 
-                        if(localUser.profileCreated()) {
-                            profileCreated = true;
-                        } else {
-                            profileCreated = false;
-                            updateUI();
-                        }
-
-                    } else {  // document doesn't exist yet
-                        profileCreated = false;
-                        Log.d(TAG, "No such document");
-                        updateUI();
-                    }
-                } else {  // document snapshot failed
-                    profileCreated = false;
-                    Log.d(TAG, "get failed with ", task.getException());
-                    updateUI();
-                }
-            }
-        });
-
+        if (!u.profileCreated()){
+            Log.d("getCardInfo", "Update UI");
+            updateUI();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
     private void updateUI() {
         Intent intent = new Intent(MainActivity.this, ProfileCreation.class);
         startActivity(intent);
-        finish();
     }
 
     @Override

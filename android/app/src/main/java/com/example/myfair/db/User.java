@@ -1,8 +1,20 @@
-package com.example.myfair;
+package com.example.myfair.db;
+
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
 
 public class User {
     public static final String FIELD_FIRST_NAME = "first_name";
@@ -22,7 +34,7 @@ public class User {
         map = new HashMap<>();
     }
 
-    User(Map<String, Object> newMap) {
+    public User(Map<String, Object> newMap) {
         map = (HashMap<String, Object>) newMap;
     }
 
@@ -55,10 +67,43 @@ public class User {
         return map.containsKey(key);
     }
 
-    boolean profileCreated() {
+    public boolean profileCreated() {
+        boolean a;
         if (map.containsKey(FIELD_PROFILE_CREATED)) {
-            return Objects.equals(map.get(FIELD_PROFILE_CREATED), VALUE_TRUE);
+            String boolString = (String) map.get(FIELD_PROFILE_CREATED);
+            Log.d("getCardInfo", "Stored String: " + boolString);
+            a = boolString.equals("true");
+            Log.d("getCardInfo", "Stored Boolean: " + a);
+            return a;
         }
+        Log.d("getCardInfo", "Doenat contain key");
         return false;
+    }
+
+    public void setFromDb(){
+        final String TAG = "getCardInfo";
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.reload();
+
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // document snapshot succeeded
+                        setMap(document.getData());
+                        Log.d(TAG, "Document data " + document.getData());
+                    } else {  // document doesn't exist yet
+                        Log.d(TAG, "No such document");
+                    }
+                } else {  // document snapshot failed
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }
