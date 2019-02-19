@@ -19,8 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/full_name" />
+        android:hint="@string/uID"
+        android:inputType="text"
+        />
 
     <EditText
         android:id="@+id/ageEditText"
@@ -28,8 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/fullNameEditText"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/user_age" />
+        android:hint="@string/cID"
+        android:inputType="text"
+        />
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -30,13 +30,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/first_name"
+            android:text="@string/c_name"
             android:textColor="@color/colorDivider"
             android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/scannedFullNameTextView"
+            android:id="@+id/scannedNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -57,13 +57,40 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/age"
+            android:text="@string/c_university"
             android:textColor="@color/colorDivider"
             android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/scannedAgeTextView"
+            android:id="@+id/scannedUniCompTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/c_major"
+            android:textColor="@color/colorDivider"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/scannedMajPosTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"

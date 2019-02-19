@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.myfair.ModelsandHelpers.EncryptionHelper;
 import com.example.myfair.ModelsandHelpers.QRCodeHelper;
-import com.example.myfair.ModelsandHelpers.UserObject;
+import com.example.myfair.ModelsandHelpers.qrObject;
 import com.google.gson.Gson;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -59,7 +59,7 @@ public class GenerateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(checkEditText()){
                     hideKeyboard();
-                    UserObject user = new UserObject(fullNameEditText.getText().toString(), Integer.parseInt(ageEditText.getText().toString()));
+                    qrObject user = new qrObject(fullNameEditText.getText().toString(), ageEditText.getText().toString());
                     String serializeString = new Gson().toJson(user);
                     String encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
                     setImageBitmap(encryptedString);

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.myfair.ModelsandHelpers.EncryptionHelper;
-import com.example.myfair.ModelsandHelpers.UserObject;
+import com.example.myfair.ModelsandHelpers.qrObject;
 import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +18,9 @@ public class ScannedActivity extends AppCompatActivity {
     Intent getScannedActivity(Context callingClassContext, String encryptedString){
         return new Intent(callingClassContext,ScannedActivity.class).putExtra(SCANNED_STRING,encryptedString);
     }
-    TextView scannedFullNameTextView;
-    TextView scannedAgeTextView;
+    TextView scannedNameTextView;
+    TextView scannedUniCompTextView;
+    TextView scannedMajPosTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +28,30 @@ public class ScannedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanned);
 
         //SCANNED_STRING = "scanned_string";
-        scannedAgeTextView = findViewById(R.id.scannedAgeTextView);
-        scannedFullNameTextView = findViewById(R.id.scannedFullNameTextView);
+
+        scannedNameTextView = findViewById(R.id.scannedNameTextView);
+        scannedUniCompTextView = findViewById(R.id.scannedUniCompTextView);
+        scannedMajPosTextView = findViewById(R.id.scannedMajPosTextView);
 
         if(getIntent().getSerializableExtra(SCANNED_STRING) == null) throw new RuntimeException("No encrypted string found in intent");
 
         String decryptedString = EncryptionHelper.getInstance().getDecryptionString(getIntent().getStringExtra(SCANNED_STRING));
-        UserObject userObject = new Gson().fromJson(decryptedString,UserObject.class);
-        String age = Integer.toString(userObject.getAge());
-        String fN = userObject.getFullName();
+        qrObject qrObject = new Gson().fromJson(decryptedString, qrObject.class);
+        String cID = qrObject.getCardID();
+        String uID = qrObject.getUserID();
 
-        scannedFullNameTextView.setText(fN);
-        scannedAgeTextView.setText(age);
+        //Run the request to get the info from firebase
+
+        /*
+        If detect Company instead of University{
+            set String in unicomp to Company
+            set String in MajPos to Position
+        }
+        else{
+            set the other way
+        }
+        Present data
+        */
 
 
     }
