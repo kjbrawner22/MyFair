@@ -83,9 +83,6 @@ public class MainActivity extends AppCompatActivity implements
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
         mAuth = FirebaseAuth.getInstance();
-
-        user = new User();
-        user.setFromDb();
       
         fragmentHistory = new HistoryFragment();
         fragmentCollections = new CollectionsFragment();
@@ -107,15 +104,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    private void checkProfile(){
-        Log.d("getCardInfo", "Stored Boolean: " + user.profileCreated());
-
-        if (!user.profileCreated()){
-            Log.d("getCardInfo", "Update UI");
-            updateUI();
-        }
     }
 
     @Override
