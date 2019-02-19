@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements
                     switchToFragment(fragmentHistory, HistoryFragment.NAME);
                     return true;
                 case R.id.navigation_collections:
-                    switchToFragment(fragmentCollections, CollectionsFragment.NAME);
+                    switchToFragment(fragmentCollections, getResources().getString(R.string.title_allCollections));
                     return true;
                 case R.id.navigation_create:
                     switchToFragment(fragmentCreate, CreateFragment.NAME);

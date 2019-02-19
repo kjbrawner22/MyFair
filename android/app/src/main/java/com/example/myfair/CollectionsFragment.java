@@ -23,7 +23,7 @@ public class CollectionsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    static final String NAME = "Collections";
+    static final String NAME = "All Collections";
 
     // TODO: Rename and change types of parameters
     private String mParam1;

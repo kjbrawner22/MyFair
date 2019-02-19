@@ -26,7 +26,9 @@
     <string name="name_entry">Enter Your Name</string>
     <string name="usernameEntry">Choose a Username</string>
     <string name="title_history">History</string>
-    <string name="title_collections">Collections</string>
+    <string name="title_allCollections">All Collections</string>
+    <string name="title_myCollections">My Collections</string>
+    <string name="title_receivedCollections">Received Collections</string>
     <string name="title_create">Create</string>
     <string name="title_analytics">Analytics</string>
     <string name="myCards">User Library</string>
@@ -41,4 +43,8 @@
     <string name="UniversityName">University Name</string>
     <string name="Major">Major</string>
     <string name="title_profile">Profile</string>
+
+    <string name="collectionItemDefaultName">Null name</string>
+    <string name="collectionItemIconDescription">Collection Icon</string>
+    <string name="collectionItemMoreInfo">More Information</string>
 </resources>
