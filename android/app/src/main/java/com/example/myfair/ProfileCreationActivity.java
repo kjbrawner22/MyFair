@@ -81,18 +81,8 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
 
     private void updateUser() {
         dbUser.setValue(User.FIELD_PROFILE_CREATED, User.VALUE_TRUE);
-        DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.set(dbUser.getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "DocumentSnapshot successfully updated!");
-                    updateUI();
-                } else {
-                    Log.d(TAG, "Error updating document");
-                }
-            }
-        });
+        dbUser.sendToDb();
+        updateUI();
     }
 
     private boolean validProfileFields() {
