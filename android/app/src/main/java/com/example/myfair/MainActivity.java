@@ -17,7 +17,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements
@@ -81,9 +83,6 @@ public class MainActivity extends AppCompatActivity implements
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
         mAuth = FirebaseAuth.getInstance();
-
-        user = new User();
-        user.setFromDb();
       
         fragmentHistory = new HistoryFragment();
         fragmentCollections = new CollectionsFragment();
@@ -98,20 +97,13 @@ public class MainActivity extends AppCompatActivity implements
 
         fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
         toolbar.setTitle(ProfileFragment.NAME);
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    private void checkProfile(){
-        Log.d("getCardInfo", "Stored Boolean: " + user.profileCreated());
-
-        if (!user.profileCreated()){
-            Log.d("getCardInfo", "Update UI");
-            updateUI();
-        }
     }
 
     @Override
