@@ -20,8 +20,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/uID"
-        android:inputType="text"
-        />
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/ageEditText"
@@ -30,29 +29,28 @@
         android:layout_below="@+id/fullNameEditText"
         android:ems="10"
         android:hint="@string/cID"
-        android:inputType="text"
-        />
+        android:inputType="text" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/generateQrCodeButton"
         android:layout_below="@+id/ageEditText"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <ImageView
             android:id="@+id/qrCodeImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="25dp"
             android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
             android:contentDescription="@null" />
     </FrameLayout>
+
     <Button
         android:id="@+id/generateQrCodeButton"
-        style="?android:buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

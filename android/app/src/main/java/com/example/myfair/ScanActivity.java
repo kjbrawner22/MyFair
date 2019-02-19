@@ -74,6 +74,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ScanActivity.this, MainActivity.class);
+                onPause();
                 startActivity(intent);
                 finish();
             }

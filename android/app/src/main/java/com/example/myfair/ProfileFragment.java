@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.myfair.db.User;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -100,6 +101,15 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
                 Objects.requireNonNull(getActivity()).finish();
+            }
+        });
+
+        FloatingActionButton scanButton = v.findViewById(R.id.scanFAB);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),ScanActivity.class);
+                startActivity(intent);
             }
         });
 

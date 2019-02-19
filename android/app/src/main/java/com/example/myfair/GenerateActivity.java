@@ -34,6 +34,9 @@ public class GenerateActivity extends AppCompatActivity {
     EditText ageEditText;
     Button btnHome;
 
+    String c = "Uam9fiPu3njaBxbkO3D7";
+    String u = "4j6fK7UvU7MLDXwqHoFCtWw97Qy2";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +62,7 @@ public class GenerateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(checkEditText()){
                     hideKeyboard();
-                    qrObject user = new qrObject(fullNameEditText.getText().toString(), ageEditText.getText().toString());
+                    qrObject user = new qrObject(u, c);
                     String serializeString = new Gson().toJson(user);
                     String encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
                     setImageBitmap(encryptedString);

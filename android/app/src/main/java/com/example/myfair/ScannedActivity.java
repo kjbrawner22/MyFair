@@ -3,10 +3,14 @@ package com.example.myfair;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myfair.ModelsandHelpers.EncryptionHelper;
 import com.example.myfair.ModelsandHelpers.qrObject;
+import com.example.myfair.db.Card;
 import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +26,10 @@ public class ScannedActivity extends AppCompatActivity {
     TextView scannedUniCompTextView;
     TextView scannedMajPosTextView;
 
+    TextView scannedName;
+    TextView scannedUniComp;
+    TextView scannedMajPos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +41,9 @@ public class ScannedActivity extends AppCompatActivity {
         scannedUniCompTextView = findViewById(R.id.scannedUniCompTextView);
         scannedMajPosTextView = findViewById(R.id.scannedMajPosTextView);
 
+        scannedUniComp = findViewById(R.id.scannedUniComp);
+        scannedMajPos = findViewById(R.id.scannedMajPos);
+
         if(getIntent().getSerializableExtra(SCANNED_STRING) == null) throw new RuntimeException("No encrypted string found in intent");
 
         String decryptedString = EncryptionHelper.getInstance().getDecryptionString(getIntent().getStringExtra(SCANNED_STRING));
@@ -41,17 +52,28 @@ public class ScannedActivity extends AppCompatActivity {
         String uID = qrObject.getUserID();
 
         //Run the request to get the info from firebase
+        Card sharedCard = new Card();
+        Log.d("Scanned", "Checking Ids "+uID+" "+cID);
 
-        /*
-        If detect Company instead of University{
-            set String in unicomp to Company
-            set String in MajPos to Position
+        sharedCard.setFromDb(uID,cID);
+
+        Log.d("Scanned","Object info" + sharedCard.getMap());
+        scannedNameTextView.setText(sharedCard.getValue(Card.FIELD_NAME));
+
+        if(sharedCard.containsKey(Card.FIELD_UNIVERSITY_NAME)){
+            scannedUniComp.setText(getResources().getString(R.string.c_university));
+            scannedMajPos.setText(getResources().getString(R.string.c_major));
+
+            scannedUniCompTextView.setText(sharedCard.getValue(Card.FIELD_UNIVERSITY_NAME));
+            scannedMajPosTextView.setText(sharedCard.getValue(Card.FIELD_UNIVERSITY_MAJOR));
         }
         else{
-            set the other way
+            scannedUniComp.setText(getResources().getString(R.string.c_company));
+            scannedMajPos.setText(getResources().getString(R.string.c_position));
+
+            scannedUniCompTextView.setText(sharedCard.getValue(Card.FIELD_COMPANY_NAME));
+            scannedMajPosTextView.setText(sharedCard.getValue(Card.FIELD_COMPANY_POSITION));
         }
-        Present data
-        */
 
 
     }
