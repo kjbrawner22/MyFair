@@ -22,6 +22,8 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static com.google.android.gms.common.util.CollectionUtils.listOf;
 
+
+
 public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     ZXingScannerView qrCodeScanner;
@@ -67,15 +69,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         });
 
 
-        Button goHome = findViewById(R.id.scanbtnHome);
-        goHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ScanActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+
     }
 
     private void scannerInit(){
@@ -140,5 +134,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         handler.postDelayed(r,2000);
     }
 
-
+    @Override
+    public void onBackPressed(){
+        Intent returnToMain = new Intent(this,MainActivity.class);
+        startActivity(returnToMain);
+    }
 }

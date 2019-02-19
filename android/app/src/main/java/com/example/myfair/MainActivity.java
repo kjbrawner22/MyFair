@@ -17,7 +17,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements
 
         fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
         toolbar.setTitle(ProfileFragment.NAME);
+
+
     }
 
     @Override

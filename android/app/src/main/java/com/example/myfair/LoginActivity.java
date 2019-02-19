@@ -70,6 +70,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                     startActivity(intent);
                     finish();
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, ProfileCreationActivity.class);
+                    intent.putExtra(User.FIELD_PROFILE_CREATED, false);
+                    startActivity(intent);
+                    finish();
                 }
             } else {
                 Log.d(TAG, "Couldn't access database.");

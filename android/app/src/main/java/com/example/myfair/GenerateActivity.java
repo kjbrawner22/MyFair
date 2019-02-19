@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.myfair.ModelsandHelpers.EncryptionHelper;
 import com.example.myfair.ModelsandHelpers.QRCodeHelper;
-import com.example.myfair.ModelsandHelpers.UserObject;
+import com.example.myfair.ModelsandHelpers.qrObject;
 import com.google.gson.Gson;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -34,32 +34,28 @@ public class GenerateActivity extends AppCompatActivity {
     EditText ageEditText;
     Button btnHome;
 
+    String c = "Uam9fiPu3njaBxbkO3D7";
+    String u = "4j6fK7UvU7MLDXwqHoFCtWw97Qy2";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate);
 
-        btnHome = findViewById(R.id.genBtnHome);
+
         generateQRCodeButton = findViewById(R.id.generateQrCodeButton);
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
         fullNameEditText = findViewById(R.id.fullNameEditText);
         ageEditText = findViewById(R.id.ageEditText);
 
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GenerateActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+
 
         generateQRCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkEditText()){
                     hideKeyboard();
-                    UserObject user = new UserObject(fullNameEditText.getText().toString(), Integer.parseInt(ageEditText.getText().toString()));
+                    qrObject user = new qrObject(u, c);
                     String serializeString = new Gson().toJson(user);
                     String encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
                     setImageBitmap(encryptedString);
@@ -96,6 +92,12 @@ public class GenerateActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent returnToMain = new Intent(this,MainActivity.class);
+        startActivity(returnToMain);
     }
 
 }
