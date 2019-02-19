@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.myfair.db.User;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -80,7 +81,18 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        Button btnCreateProfile = v.findViewById(R.id.btnCreateProfile);
         Button btnSignOut = v.findViewById(R.id.btnSignOut);
+
+        btnCreateProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ProfileCreationActivity.class);
+                intent.putExtra(User.FIELD_PROFILE_CREATED, true);
+                startActivity(intent);
+            }
+        });
+
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

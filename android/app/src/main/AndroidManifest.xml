@@ -18,7 +18,7 @@
         <activity android:name=".ScanActivity" />
         <activity android:name=".CardCreationActivity" />
         <activity android:name=".UserLibraryActivity" />
-        <activity android:name=".ProfileCreation" />
+        <activity android:name=".ProfileCreationActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
