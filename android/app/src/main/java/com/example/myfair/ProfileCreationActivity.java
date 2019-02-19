@@ -10,22 +10,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myfair.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class ProfileCreation extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "ProfileCreation";
+public class ProfileCreationActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "ProfileCreationTag";
 
 
     private FirebaseUser user;
     private FirebaseFirestore db;
     private EditText etFname, etLname, etUsername;
-    private ConstraintLayout lytName, lytSocial, lytWelcome;
-    private String firstName, lastName, username;
+    FloatingActionButton btnBack, btnForward;
+    private ConstraintLayout lytName, lytSocial;
+    private User dbUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +38,11 @@ public class ProfileCreation extends AppCompatActivity implements View.OnClickLi
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
-        Button btnBack = findViewById(R.id.btnBack);
-        Button btnUpdateInfo = findViewById(R.id.btnUpdateInfo);
+        dbUser = new User();
+        btnBack = findViewById(R.id.btnBack);
+        btnForward = findViewById(R.id.btnForward);
         lytName = findViewById(R.id.lytName);
         lytSocial = findViewById(R.id.lytSocial);
-        lytWelcome = findViewById(R.id.lytWelcome);
         etFname = findViewById(R.id.etFname);
         etLname = findViewById(R.id.etLname);
         etUsername = findViewById(R.id.etUsername);
@@ -46,7 +50,7 @@ public class ProfileCreation extends AppCompatActivity implements View.OnClickLi
         changeForm(1);
 
         btnBack.setOnClickListener(this);
-        btnUpdateInfo.setOnClickListener(this);
+        btnForward.setOnClickListener(this);
     }
 
     @Override
@@ -54,40 +58,31 @@ public class ProfileCreation extends AppCompatActivity implements View.OnClickLi
         int id = v.getId();
 
         int state = getFormState();
-        switch (state){
+        switch (state) {
             case 1:
-                if(id == R.id.btnUpdateInfo) {
-                    firstName = etFname.getText().toString();
-                    lastName = etLname.getText().toString();
-                    changeForm(2);
+                if(id == R.id.btnForward) {
+                    if (validProfileFields()) {
+                        dbUser.setValue(User.FIELD_FIRST_NAME, etFname.getText().toString());
+                        dbUser.setValue(User.FIELD_LAST_NAME, etLname.getText().toString());
+                        changeForm(2);
+                    }
                 }
                 break;
             case 2:
-                if(id == R.id.btnUpdateInfo){
-                    username = etUsername.getText().toString();
-                    changeForm(3);
-                }
-                else if (id == R.id.btnBack){
+                if(id == R.id.btnForward){
+                    dbUser.setValue(User.FIELD_USERNAME, etUsername.getText().toString());
+                    updateUser();
+                } else if (id == R.id.btnBack){
                     changeForm(1);
-                }
-                break;
-            case 3:
-                if(id == R.id.btnUpdateInfo){
-                    User usrObj = new User(firstName, lastName);
-                    usrObj.setValue(User.FIELD_USERNAME, username);
-                    usrObj.setValue(User.FIELD_PROFILE_CREATED, "true");
-                    updateUser(usrObj);
-                }
-                else if(id == R.id.btnBack){
-                    changeForm(2);
                 }
                 break;
         }
     }
 
-    private void updateUser(User usrObj) {
+    private void updateUser() {
+        dbUser.setValue(User.FIELD_PROFILE_CREATED, User.VALUE_TRUE);
         DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.set(usrObj.getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        docRef.set(dbUser.getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -118,32 +113,25 @@ public class ProfileCreation extends AppCompatActivity implements View.OnClickLi
     }
 
     private int getFormState(){
-        if(lytName.getVisibility() == View.VISIBLE) return 1;
-        else if (lytSocial.getVisibility() == View.VISIBLE) return 2;
-        else return 3;
+        if(lytName.getVisibility() == View.VISIBLE) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
     // change form view
     private void changeForm(int state) {
-        Button btnBack = findViewById(R.id.btnBack);
         switch (state){
             case 1:
-                btnBack.setVisibility(View.GONE);
+                btnBack.hide();
                 lytName.setVisibility(View.VISIBLE);
                 lytSocial.setVisibility(View.GONE);
-                lytWelcome.setVisibility(View.GONE);
                 break;
             case 2:
-                btnBack.setVisibility(View.VISIBLE);
+                btnBack.show();
                 lytName.setVisibility(View.GONE);
                 lytSocial.setVisibility(View.VISIBLE);
-                lytWelcome.setVisibility(View.GONE);
-                break;
-            case 3:
-                btnBack.setVisibility(View.VISIBLE);
-                lytName.setVisibility(View.GONE);
-                lytSocial.setVisibility(View.GONE);
-                lytWelcome.setVisibility(View.VISIBLE);
                 break;
             default:
                 Log.d("PC ChangeForm", "wrong input param");
@@ -152,8 +140,15 @@ public class ProfileCreation extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateUI() {
-        Intent intent = new Intent(ProfileCreation.this, MainActivity.class);
-        startActivity(intent);
+        boolean returnToMain = getIntent().getBooleanExtra(User.FIELD_PROFILE_CREATED, false);
+
+        // if profile hasn't already been created, create a new main activity instance
+        // otherwise, just finish this activity and go back to the previous
+        // main activity instance
+        if (!returnToMain) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
         finish();
     }
 }
