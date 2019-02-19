@@ -69,16 +69,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         });
 
 
-        Button goHome = findViewById(R.id.scanbtnHome);
-        goHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ScanActivity.this, MainActivity.class);
-                onPause();
-                startActivity(intent);
-                finish();
-            }
-        });
+
     }
 
     private void scannerInit(){

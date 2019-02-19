@@ -42,20 +42,13 @@ public class GenerateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate);
 
-        btnHome = findViewById(R.id.genBtnHome);
+
         generateQRCodeButton = findViewById(R.id.generateQrCodeButton);
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
         fullNameEditText = findViewById(R.id.fullNameEditText);
         ageEditText = findViewById(R.id.ageEditText);
 
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GenerateActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+
 
         generateQRCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override

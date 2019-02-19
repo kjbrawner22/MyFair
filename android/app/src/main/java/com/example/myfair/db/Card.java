@@ -68,29 +68,17 @@ public class Card {
         return map.containsKey(key);
     }
 
-    public void setFromDb(String cID){
+    public DocumentReference setFromDb(String uID, String cID){
         final String TAG = "getCardInfo";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
             return;
         }
-
-        DocumentReference docRef = db.collection("users").document(user.getUid()).collection("cards").document(cID);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.");
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d(TAG, "User snapshot updated");
-                    setMap(snapshot.getData());
-                }
-            }
-        });
+        */
+        DocumentReference docRef = db.collection("users").document(uID).collection("cards").document(cID);
+        return docRef;
     }
 
     public void sendToDb(String cID){

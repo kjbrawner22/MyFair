@@ -6,13 +6,7 @@
     android:background="@color/colorPrimary"
     tools:context=".GenerateActivity">
 
-    <Button
-        android:id="@+id/genBtnHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="107dp"
-        android:layout_toEndOf="@+id/fullNameEditText"
-        android:text="@string/btnHome" />
+
 
     <EditText
         android:id="@+id/fullNameEditText"

@@ -11,7 +11,13 @@ import android.widget.Toast;
 import com.example.myfair.ModelsandHelpers.EncryptionHelper;
 import com.example.myfair.ModelsandHelpers.qrObject;
 import com.example.myfair.db.Card;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.gson.Gson;
+
+import javax.annotation.Nullable;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,29 +58,39 @@ public class ScannedActivity extends AppCompatActivity {
         String uID = qrObject.getUserID();
 
         //Run the request to get the info from firebase
-        Card sharedCard = new Card();
+        final Card sharedCard = new Card();
         Log.d("Scanned", "Checking Ids "+uID+" "+cID);
 
-        sharedCard.setFromDb(uID,cID);
+        DocumentReference ref = sharedCard.setFromDb(uID,cID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("Scanned", "Listen failed.");
+                }
 
-        Log.d("Scanned","Object info" + sharedCard.getMap());
-        scannedNameTextView.setText(sharedCard.getValue(Card.FIELD_NAME));
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d("Scanned", "User snapshot updated");
+                    sharedCard.setMap(snapshot.getData());
+                    Log.d("Scanned","Object info" + sharedCard.getMap());
+                    scannedNameTextView.setText(sharedCard.getValue(Card.FIELD_NAME));
 
-        if(sharedCard.containsKey(Card.FIELD_UNIVERSITY_NAME)){
-            scannedUniComp.setText(getResources().getString(R.string.c_university));
-            scannedMajPos.setText(getResources().getString(R.string.c_major));
+                    if(sharedCard.containsKey(Card.FIELD_UNIVERSITY_NAME)){
+                        scannedUniComp.setText(getResources().getString(R.string.c_university));
+                        scannedMajPos.setText(getResources().getString(R.string.c_major));
 
-            scannedUniCompTextView.setText(sharedCard.getValue(Card.FIELD_UNIVERSITY_NAME));
-            scannedMajPosTextView.setText(sharedCard.getValue(Card.FIELD_UNIVERSITY_MAJOR));
-        }
-        else{
-            scannedUniComp.setText(getResources().getString(R.string.c_company));
-            scannedMajPos.setText(getResources().getString(R.string.c_position));
+                        scannedUniCompTextView.setText(sharedCard.getValue(Card.FIELD_UNIVERSITY_NAME));
+                        scannedMajPosTextView.setText(sharedCard.getValue(Card.FIELD_UNIVERSITY_MAJOR));
+                    }
+                    else{
+                        scannedUniComp.setText(getResources().getString(R.string.c_company));
+                        scannedMajPos.setText(getResources().getString(R.string.c_position));
 
-            scannedUniCompTextView.setText(sharedCard.getValue(Card.FIELD_COMPANY_NAME));
-            scannedMajPosTextView.setText(sharedCard.getValue(Card.FIELD_COMPANY_POSITION));
-        }
-
-
+                        scannedUniCompTextView.setText(sharedCard.getValue(Card.FIELD_COMPANY_NAME));
+                        scannedMajPosTextView.setText(sharedCard.getValue(Card.FIELD_COMPANY_POSITION));
+                    }
+                }
+            }
+        });
     }
 }
