@@ -103,4 +103,27 @@ public class User {
             }
         });
     }
+
+    public void sendToDb() {
+        final String TAG = "sendUserInfo";
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
+
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.set(getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                } else {
+                    Log.d(TAG, "Error updating document");
+                }
+            }
+        });
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.myfair;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -87,15 +88,23 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         Card localCard = new Card(fullName);
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
         if(getForm() == 2){
+            localCard.setValue(Card.FIELD_TYPE, Card.VALUE_TYPE_BUSINESS);
             localCard.setValue(Card.FIELD_COMPANY_NAME, company);
             localCard.setValue(Card.FIELD_COMPANY_POSITION, position);
         }
         else if(getForm() == 3){
+            localCard.setValue(Card.FIELD_TYPE, Card.VALUE_TYPE_UNIVERSITY);
             localCard.setValue(Card.FIELD_UNIVERSITY_NAME, university);
             localCard.setValue(Card.FIELD_UNIVERSITY_MAJOR, major);
         }
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
-        createCardInDatabase(localCard);
+        localCard.sendToDb(Card.VALUE_NEW_CARD);
+        updateUI();
+    }
+    private void updateUI() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void createCardInDatabase(Card card) {
