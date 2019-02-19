@@ -98,4 +98,10 @@ public class GenerateActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent returnToMain = new Intent(this,MainActivity.class);
+        startActivity(returnToMain);
+    }
+
 }
