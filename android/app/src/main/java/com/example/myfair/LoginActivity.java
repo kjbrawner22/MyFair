@@ -42,13 +42,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final OnCompleteListener<Void> userReloadListener = new OnCompleteListener<Void>() {
         @Override
         public void onComplete(@NonNull Task<Void> task) {
-            if (user.isEmailVerified()) {
-                Log.d("UPDATE_UI", "User is email verified and signed in");
-                db.document("users/" + user.getUid()).get()
-                        .addOnCompleteListener(navigateUserListener);
-            } else {
-                Log.d("UPDATE_UI", "User is not email verified.");
-                showEmailVerificationView(user.getEmail());
+            if (task.isSuccessful()) {
+                if (user.isEmailVerified()) {
+                    Log.d("UPDATE_UI", "User is email verified and signed in");
+                    db.document("users/" + user.getUid()).get()
+                            .addOnCompleteListener(navigateUserListener);
+                } else {
+                    Log.d("UPDATE_UI", "User is not email verified.");
+                    showEmailVerificationView(user.getEmail());
+                }
             }
         }
     };

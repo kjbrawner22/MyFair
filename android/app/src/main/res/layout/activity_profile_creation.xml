@@ -7,38 +7,6 @@
     android:background="@color/colorWhite"
     tools:context=".ProfileCreationActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnForward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="330dp"
-        android:backgroundTint="@color/colorWhite"
-        android:clickable="true"
-        android:elevation="20dp"
-        android:focusable="true"
-        app:elevation="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/lytName"
-        app:layout_constraintTop_toBottomOf="@+id/lytTopLevel"
-        app:srcCompat="@drawable/forward_arrow" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="330dp"
-        android:backgroundTint="@color/colorWhite"
-        android:clickable="true"
-        android:elevation="20dp"
-        android:focusable="true"
-        app:elevation="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/lytSocial"
-        app:layout_constraintTop_toBottomOf="@+id/lytTopLevel"
-        app:srcCompat="@drawable/back_arrow" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytTopLevel"
         android:layout_width="match_parent"
@@ -62,52 +30,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/lytSocial"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/layout_top_rounded"
-        android:elevation="10dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lytTopLevel">
-
-        <EditText
-            android:id="@+id/etUsername"
-            android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="204dp"
-            android:layout_marginEnd="80dp"
-            android:layout_marginBottom="210dp"
-            android:paddingStart="10dp"
-            android:background="#11000000"
-            android:ems="10"
-            android:hint="@string/usernameEntry"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/textHint"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytName"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/layout_top_rounded"
         android:elevation="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -159,5 +87,74 @@
             app:layout_constraintTop_toBottomOf="@+id/etFname" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytSocial"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/layout_top_rounded"
+        android:elevation="10dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lytTopLevel"
+        app:layout_constraintVertical_bias="0.0">
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="80dp"
+            android:layout_marginBottom="210dp"
+            android:background="#11000000"
+            android:ems="10"
+            android:hint="@string/usernameEntry"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/textHint"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="201dp"
+        android:backgroundTint="@color/colorWhite"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:focusable="true"
+        app:elevation="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/back_arrow" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnForward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="201dp"
+        android:backgroundTint="@color/colorWhite"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:focusable="true"
+        app:elevation="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/forward_arrow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
