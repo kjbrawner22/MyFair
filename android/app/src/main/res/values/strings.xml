@@ -1,4 +1,14 @@
 <resources>
+    <string name="action_menu_collections_search">Search</string>
+    <string name="action_menu_collections_filter">Filter</string>
+
+    <string name="fragment_title_analytics">Analytics</string>
+    <string name="fragment_title_create">Create</string>
+    <string name="fragment_title_collections">Collections</string>
+    <string name="fragment_title_history">History</string>
+    <string name="fragment_title_profile">Profile</string>
+
+
     <string name="btnScan">Scan</string>
     <string name="btnGen">Generate</string>
     <string name="btnHome">Home</string>
@@ -30,7 +40,6 @@
     <string name="name_entry">Enter Your Name</string>
     <string name="usernameEntry">Choose a Username</string>
     <string name="title_history">History</string>
-    <string name="title_allCollections">All Collections</string>
     <string name="title_myCollections">My Collections</string>
     <string name="title_receivedCollections">Received Collections</string>
     <string name="title_create">Create</string>

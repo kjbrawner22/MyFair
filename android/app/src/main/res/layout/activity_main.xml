@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".activities.MainActivity"
     style="@style/AppThemeActionBar">
 
     <androidx.appcompat.widget.Toolbar
@@ -17,7 +17,8 @@
         app:layout_constraintBottom_toTopOf="@+id/fragmentLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/colorWhite" />
 
     <FrameLayout
         android:id="@+id/fragmentLayout"

@@ -1,4 +1,4 @@
-package com.example.myfair;
+package com.example.myfair.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.myfair.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 

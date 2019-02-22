@@ -7,8 +7,7 @@
         android:title="@string/title_profile" />
     <item
         android:id="@+id/navigation_collections"
-        android:icon="@drawable/ic_collections"
-        android:title="@string/title_allCollections" />
+        android:icon="@drawable/ic_collections" />
     <item
         android:id="@+id/navigation_create"
         android:icon="@drawable/ic_create"
