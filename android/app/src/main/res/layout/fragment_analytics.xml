@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-medium"
         android:padding="10sp"
-        android:text="@string/title_analytics"
+        android:text="@string/fragment_title_analytics"
         android:textAlignment="center"
         android:textSize="36sp"
         android:textStyle="bold"
