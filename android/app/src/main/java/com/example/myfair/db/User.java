@@ -33,8 +33,6 @@ public class User extends DbObject{
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
 
-    private HashMap<String, Object> map;
-
     public User() {
         super();
     }
@@ -44,10 +42,10 @@ public class User extends DbObject{
     }
 
     public boolean profileCreated() {
-        if (map.containsKey(FIELD_PROFILE_CREATED)) {
-            return map.get(FIELD_PROFILE_CREATED).equals(VALUE_TRUE);
+        if (containsKey(FIELD_PROFILE_CREATED)) {
+            return getValue(FIELD_PROFILE_CREATED).equals(VALUE_TRUE);
         }
-        Log.d("getCardInfo", "Doesnt contain key");
+        Log.d("getCardInfo", "Doesn't contain key");
         return false;
     }
 
