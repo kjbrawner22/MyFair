@@ -19,6 +19,10 @@ public class DbObject {
             map = new HashMap<>();
         }
 
+        public DbObject(Map<String, Object> newMap) {
+            map = (HashMap<String, Object>) newMap;
+        }
+
         public HashMap<String, Object> getMap() {
             return map;
         }

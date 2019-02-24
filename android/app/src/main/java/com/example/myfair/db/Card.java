@@ -38,9 +38,8 @@ public class Card extends DbObject{
         super();
     }
 
-    public Card(String name) {
-        super();
-        getMap().put(FIELD_NAME, name);
+    public Card(Map<String, Object> newMap) {
+        super(newMap);
     }
 
     public DocumentReference setFromDb(String uID, String cID){
