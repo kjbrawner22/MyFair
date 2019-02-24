@@ -1,0 +1,86 @@
+package com.example.myfair.db;
+
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
+import androidx.annotation.NonNull;
+
+public class DbObject {
+        private HashMap<String, Object> map;
+
+        public DbObject() {
+            map = new HashMap<>();
+        }
+
+        public HashMap<String, Object> getMap() {
+            return map;
+        }
+
+        public void setMap(Map<String, Object> newMap){
+            if(!newMap.isEmpty()) {
+                map.putAll(newMap);
+            }
+        }
+
+        public boolean setValue(String key, Object value) {
+            map.put(key, value);
+            return true;
+        }
+
+        public String getValue(String key){
+            return (String) map.get(key);
+        }
+
+        public boolean containsKey(String key){
+            return map.containsKey(key);
+        }
+
+        public DocumentReference setFromDb(String uID, String cID){
+            final String TAG = "getCardInfo";
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
+        */
+            DocumentReference docRef = db.collection("users").document(uID).collection("cards").document(cID);
+            return docRef;
+        }
+
+        public void sendToDb(String cID){
+            final String TAG = "sendCardInfo";
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user == null) {
+                return;
+            }
+            DocumentReference docRef;
+
+            if (cID.equals(com.example.myfair.db.Card.VALUE_NEW_CARD))
+                docRef = db.collection("users").document(user.getUid()).collection("cards").document();
+            else
+                docRef = db.collection("users").document(user.getUid()).collection("cards").document(cID);
+
+            docRef.set(getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    } else {
+                        Log.d(TAG, "Error updating document");
+                    }
+                }
+            });
+        }
+
+}
+

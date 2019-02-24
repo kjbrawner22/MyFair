@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import androidx.annotation.NonNull;
 
-public class Card {
+public class Card extends DbObject{
     public static final String FIELD_NAME = "name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
     public static final String FIELD_UNIVERSITY_MAJOR = "university_major";
@@ -34,77 +34,14 @@ public class Card {
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
 
-    private HashMap<String, Object> map;
+    DbObject card;
 
     public Card() {
-        map = new HashMap<>();
+        card = new DbObject();
     }
 
     public Card(String name) {
-        map = new HashMap<>();
-        map.put(FIELD_NAME, name);
-    }
-
-    public HashMap<String, Object> getMap() {
-        return map;
-    }
-
-    public void setMap(Map<String, Object> newMap){
-        if(!newMap.isEmpty()) {
-            map.putAll(newMap);
-        }
-    }
-
-    public boolean setValue(String key, Object value) {
-        map.put(key, value);
-        return true;
-    }
-
-    public String getValue(String key){
-        return (String) map.get(key);
-    }
-
-    public boolean containsKey(String key){
-        return map.containsKey(key);
-    }
-
-    public DocumentReference setFromDb(String uID, String cID){
-        final String TAG = "getCardInfo";
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user == null) {
-            return;
-        }
-        */
-        DocumentReference docRef = db.collection("users").document(uID).collection("cards").document(cID);
-        return docRef;
-    }
-
-    public void sendToDb(String cID){
-        final String TAG = "sendCardInfo";
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user == null) {
-            return;
-        }
-        DocumentReference docRef;
-
-        if (cID.equals(Card.VALUE_NEW_CARD))
-            docRef = db.collection("users").document(user.getUid()).collection("cards").document();
-        else
-            docRef = db.collection("users").document(user.getUid()).collection("cards").document(cID);
-
-        docRef.set(getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "DocumentSnapshot successfully updated!");
-                } else {
-                    Log.d(TAG, "Error updating document");
-                }
-            }
-        });
+        card = new DbObject();
+        card.getMap().put(FIELD_NAME, name);;
     }
 }
