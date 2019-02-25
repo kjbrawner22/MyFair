@@ -15,6 +15,7 @@ import android.widget.Button;
 import com.example.myfair.activities.LoginActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
 import com.example.myfair.R;
+import com.example.myfair.activities.ProfileEditingActivity;
 import com.example.myfair.activities.ScanActivity;
 import com.example.myfair.db.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -86,6 +87,8 @@ public class ProfileFragment extends Fragment {
 
         Button btnCreateProfile = v.findViewById(R.id.btnCreateProfile);
         Button btnSignOut = v.findViewById(R.id.btnSignOut);
+        FloatingActionButton scanButton = v.findViewById(R.id.scanFAB);
+        Button btnEditProfile = v.findViewById(R.id.btnEditProfile);
 
         btnCreateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,11 +109,18 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        FloatingActionButton scanButton = v.findViewById(R.id.scanFAB);
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ScanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ProfileEditingActivity.class);
                 startActivity(intent);
             }
         });
