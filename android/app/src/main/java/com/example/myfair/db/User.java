@@ -14,8 +14,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 
 public class User extends DatabaseObject {
-    public static final String FIELD_FIRST_NAME = "first_name";
-    public static final String FIELD_LAST_NAME = "last_name";
+    public static final String FIELD_NAME = "name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
     public static final String FIELD_UNIVERSITY_MAJOR = "university_major";
     public static final String FIELD_PROFILE_CREATED = "profile_created";
@@ -28,6 +27,10 @@ public class User extends DatabaseObject {
 
     public User() {
         super();
+    }
+
+    public User(String name){
+        super.setValue(User.FIELD_NAME, name);
     }
 
     public User(Map<String, Object> newMap) {
