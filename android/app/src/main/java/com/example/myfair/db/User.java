@@ -13,7 +13,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 
-public class User extends DatabaseMap {
+public class User extends DatabaseObject {
     public static final String FIELD_FIRST_NAME = "first_name";
     public static final String FIELD_LAST_NAME = "last_name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";

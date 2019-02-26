@@ -3,15 +3,15 @@ package com.example.myfair.db;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabaseMap {
+public class DatabaseObject {
         private String id;
         private HashMap<String, Object> map;
 
-        public DatabaseMap() {
+        public DatabaseObject() {
             map = new HashMap<>();
         }
 
-        public DatabaseMap(Map<String, Object> newMap) {
+        public DatabaseObject(Map<String, Object> newMap) {
             map = (HashMap<String, Object>) newMap;
         }
 
@@ -44,6 +44,10 @@ public class DatabaseMap {
 
         public void setId(String newId){
             id = newId;
+        }
+
+        public String display(){
+            return getMap().toString();
         }
 }
 
