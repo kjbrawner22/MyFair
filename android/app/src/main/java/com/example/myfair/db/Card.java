@@ -9,12 +9,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 
-public class Card extends DbObject{
+public class Card extends DatabaseMap {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
     public static final String FIELD_UNIVERSITY_MAJOR = "university_major";

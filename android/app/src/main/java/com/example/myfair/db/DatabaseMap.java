@@ -1,25 +1,17 @@
 package com.example.myfair.db;
 
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
-import androidx.annotation.NonNull;
 
-public class DbObject {
+public class DatabaseMap {
+        private String id;
         private HashMap<String, Object> map;
 
-        public DbObject() {
+        public DatabaseMap() {
             map = new HashMap<>();
         }
 
-        public DbObject(Map<String, Object> newMap) {
+        public DatabaseMap(Map<String, Object> newMap) {
             map = (HashMap<String, Object>) newMap;
         }
 
@@ -46,5 +38,12 @@ public class DbObject {
             return map.containsKey(key);
         }
 
+        public String getId(){
+            return id;
+        }
+
+        public void setId(String newId){
+            id = newId;
+        }
 }
 
