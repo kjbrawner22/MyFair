@@ -31,6 +31,11 @@ public class Card extends DbObject{
         super();
     }
 
+    public Card(String fullName){
+        super();
+        this.setValue(Card.FIELD_NAME, fullName);
+    }
+
     public Card(Map<String, Object> newMap) {
         super(newMap);
     }

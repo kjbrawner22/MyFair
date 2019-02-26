@@ -49,29 +49,17 @@ public class User extends DbObject{
         return false;
     }
 
-    public void setFromDb(){
+    public DocumentReference setFromDb(){
         final String TAG = "getUserInfo";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
-            return;
+            return null;
         }
 
         DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.");
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d(TAG, "User snapshot updated");
-                    setMap(snapshot.getData());
-                }
-            }
-        });
+        return docRef;
     }
 
     public void sendToDb() {
