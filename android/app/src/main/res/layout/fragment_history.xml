@@ -7,7 +7,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    tools:context=".HistoryFragment">
+    tools:context=".fragments.HistoryFragment">
 
     <TextView
         android:id="@+id/textView5"
@@ -18,7 +18,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-medium"
         android:padding="10sp"
-        android:text="@string/title_history"
+        android:text="@string/fragment_title_history"
         android:textAlignment="center"
         android:textSize="36sp"
         android:textStyle="bold"

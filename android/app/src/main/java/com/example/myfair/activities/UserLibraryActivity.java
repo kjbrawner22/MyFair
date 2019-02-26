@@ -1,6 +1,8 @@
-package com.example.myfair;
+package com.example.myfair.activities;
 
 import android.os.Bundle;
+
+import com.example.myfair.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 

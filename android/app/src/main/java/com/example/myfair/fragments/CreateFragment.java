@@ -1,4 +1,4 @@
-package com.example.myfair;
+package com.example.myfair.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseUser;
+import com.example.myfair.activities.CardCreationActivity;
+import com.example.myfair.R;
+import com.example.myfair.activities.UserLibraryActivity;
 
 
 /**
@@ -30,8 +32,6 @@ public class CreateFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-
-    static final String NAME = "Create";
 
     private OnFragmentInteractionListener mListener;
 
@@ -129,9 +129,9 @@ public class CreateFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
+     * This interface must be implemented by com.example.myfair.activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
+     * to the activity and potentially other com.example.myfair.fragments contained in that
      * activity.
      * <p>
      * See the Android Training lesson <a href=

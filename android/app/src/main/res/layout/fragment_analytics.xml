@@ -5,7 +5,7 @@
     android:id="@+id/fragmentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AnalyticsFragment">
+    tools:context=".fragments.AnalyticsFragment">
 
     <TextView
         android:id="@+id/textView3"
@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-medium"
         android:padding="10sp"
-        android:text="@string/title_analytics"
+        android:text="@string/fragment_title_analytics"
         android:textAlignment="center"
         android:textSize="36sp"
         android:textStyle="bold"

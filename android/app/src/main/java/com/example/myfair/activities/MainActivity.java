@@ -1,4 +1,4 @@
-package com.example.myfair;
+package com.example.myfair.activities;
 
 import android.content.Intent;
 
@@ -7,19 +7,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.net.Uri;
 
+import com.example.myfair.R;
 import com.example.myfair.db.User;
+import com.example.myfair.fragments.AnalyticsFragment;
+import com.example.myfair.fragments.CollectionsFragment;
+import com.example.myfair.fragments.CreateFragment;
+import com.example.myfair.fragments.HistoryFragment;
+import com.example.myfair.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements
@@ -39,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements
     private Fragment fragmentProfile;
     private FragmentManager fm;
 
+    private Resources res;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -46,19 +54,19 @@ public class MainActivity extends AppCompatActivity implements
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
-                    switchToFragment(fragmentHistory, HistoryFragment.NAME);
+                    switchToFragment(fragmentHistory, res.getString(R.string.fragment_title_history));
                     return true;
                 case R.id.navigation_collections:
-                    switchToFragment(fragmentCollections, getResources().getString(R.string.title_allCollections));
+                    switchToFragment(fragmentCollections, res.getString(R.string.fragment_title_collections));
                     return true;
                 case R.id.navigation_create:
-                    switchToFragment(fragmentCreate, CreateFragment.NAME);
+                    switchToFragment(fragmentCreate, res.getString(R.string.fragment_title_create));
                     return true;
                 case R.id.navigation_analytics:
-                    switchToFragment(fragmentAnalytics, AnalyticsFragment.NAME);
+                    switchToFragment(fragmentAnalytics, res.getString(R.string.fragment_title_analytics));
                     return true;
                 case R.id.navigation_profile:
-                    switchToFragment(fragmentProfile, ProfileFragment.NAME);
+                    switchToFragment(fragmentProfile, res.getString(R.string.fragment_title_profile));
                     return true;
             }
             return false;
@@ -79,11 +87,14 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        res = getResources();
+
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
+        toolbar.setTitle(res.getString(R.string.fragment_title_profile));
+        setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
-      
+
         fragmentHistory = new HistoryFragment();
         fragmentCollections = new CollectionsFragment();
         fragmentCreate = new CreateFragment();
@@ -96,9 +107,6 @@ public class MainActivity extends AppCompatActivity implements
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
-        toolbar.setTitle(ProfileFragment.NAME);
-
-
     }
 
     @Override
