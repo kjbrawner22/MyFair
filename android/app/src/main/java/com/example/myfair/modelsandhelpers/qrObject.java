@@ -1,4 +1,4 @@
-package com.example.myfair.ModelsandHelpers;
+package com.example.myfair.modelsandhelpers;
 
 public class qrObject {
     private String userID;

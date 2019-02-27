@@ -16,9 +16,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.myfair.ModelsandHelpers.EncryptionHelper;
-import com.example.myfair.ModelsandHelpers.QRCodeHelper;
-import com.example.myfair.ModelsandHelpers.qrObject;
+import com.example.myfair.modelsandhelpers.EncryptionHelper;
+import com.example.myfair.modelsandhelpers.QRCodeHelper;
+import com.example.myfair.modelsandhelpers.qrObject;
 import com.example.myfair.R;
 import com.google.gson.Gson;
 
