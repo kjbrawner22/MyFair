@@ -1,4 +1,4 @@
-package com.example.myfair;
+package com.example.myfair.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.myfair.ModelsandHelpers.EncryptionHelper;
 import com.example.myfair.ModelsandHelpers.qrObject;
+import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;

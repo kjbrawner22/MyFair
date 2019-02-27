@@ -13,14 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ScannedActivity"/>
-        <activity android:name=".GenerateActivity" />
-        <activity android:name=".ScanActivity" />
-        <activity android:name=".CardCreationActivity" />
-        <activity android:name=".UserLibraryActivity" />
-        <activity android:name=".ProfileCreationActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activities.ScannedActivity"/>
+        <activity android:name=".activities.GenerateActivity" />
+        <activity android:name=".activities.ScanActivity" />
+        <activity android:name=".activities.CardCreationActivity" />
+        <activity android:name=".activities.UserLibraryActivity" />
+        <activity android:name=".activities.ProfileCreationActivity" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

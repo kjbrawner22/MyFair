@@ -1,27 +1,19 @@
 package com.example.myfair.db;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.myfair.CardCreationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nullable;
 
 import androidx.annotation.NonNull;
 
-public class Card {
+public class Card extends DatabaseObject {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
     public static final String FIELD_UNIVERSITY_MAJOR = "university_major";
@@ -34,38 +26,17 @@ public class Card {
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
 
-    private HashMap<String, Object> map;
-
     public Card() {
-        map = new HashMap<>();
+        super();
     }
 
-    public Card(String name) {
-        map = new HashMap<>();
-        map.put(FIELD_NAME, name);
+    public Card(String fullName){
+        super();
+        this.setValue(Card.FIELD_NAME, fullName);
     }
 
-    public HashMap<String, Object> getMap() {
-        return map;
-    }
-
-    public void setMap(Map<String, Object> newMap){
-        if(!newMap.isEmpty()) {
-            map.putAll(newMap);
-        }
-    }
-
-    public boolean setValue(String key, Object value) {
-        map.put(key, value);
-        return true;
-    }
-
-    public String getValue(String key){
-        return (String) map.get(key);
-    }
-
-    public boolean containsKey(String key){
-        return map.containsKey(key);
+    public Card(Map<String, Object> newMap) {
+        super(newMap);
     }
 
     public DocumentReference setFromDb(String uID, String cID){
@@ -91,7 +62,7 @@ public class Card {
         }
         DocumentReference docRef;
 
-        if (cID.equals(Card.VALUE_NEW_CARD))
+        if (cID.equals(com.example.myfair.db.Card.VALUE_NEW_CARD))
             docRef = db.collection("users").document(user.getUid()).collection("cards").document();
         else
             docRef = db.collection("users").document(user.getUid()).collection("cards").document(cID);
