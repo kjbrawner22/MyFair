@@ -36,53 +36,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseFirestore db;
     private FirebaseUser user;
 
-    // after user's information is reloaded from firebase, attempt to sign them in
-    // and check if the email is verified and their profile is created
-    private final OnCompleteListener<Void> userReloadListener = new OnCompleteListener<Void>() {
-        @Override
-        public void onComplete(@NonNull Task<Void> task) {
-            if (task.isSuccessful()) {
-                if (user.isEmailVerified()) {
-                    Log.d("UPDATE_UI", "User is email verified and signed in");
-                    db.document("users/" + user.getUid()).get()
-                            .addOnCompleteListener(navigateUserListener);
-                } else {
-                    Log.d("UPDATE_UI", "User is not email verified.");
-                    showEmailVerificationView(user.getEmail());
-                }
-            }
-        }
-    };
-
-    // logic to navigate user to either profile creation or the main activity
-    private final OnCompleteListener<DocumentSnapshot> navigateUserListener = new OnCompleteListener<DocumentSnapshot>() {
-        @Override
-        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-            if (task.isSuccessful()) {
-                DocumentSnapshot snapshot = task.getResult();
-                if (snapshot != null && snapshot.exists()) {
-                    User user = new User(snapshot.getData());
-                    Intent intent;
-                    if (user.profileCreated()) {
-                        intent = new Intent(LoginActivity.this, MainActivity.class);
-                    } else {
-                        intent = new Intent(LoginActivity.this, ProfileCreationActivity.class);
-                        intent.putExtra(User.FIELD_PROFILE_CREATED, false);
-                    }
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Intent intent = new Intent(LoginActivity.this, ProfileCreationActivity.class);
-                    intent.putExtra(User.FIELD_PROFILE_CREATED, false);
-                    startActivity(intent);
-                    finish();
-                }
-            } else {
-                Log.d(TAG, "Couldn't access database.");
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -319,6 +272,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onResume();
         updateUI();
     }
+
+    // after user's information is reloaded from firebase, attempt to sign them in
+    // and check if the email is verified and their profile is created
+    private final OnCompleteListener<Void> userReloadListener = new OnCompleteListener<Void>() {
+        @Override
+        public void onComplete(@NonNull Task<Void> task) {
+            if (task.isSuccessful()) {
+                if (user.isEmailVerified()) {
+                    Log.d("UPDATE_UI", "User is email verified and signed in");
+                    db.document("users/" + user.getUid()).get()
+                            .addOnCompleteListener(navigateUserListener);
+                } else {
+                    Log.d("UPDATE_UI", "User is not email verified.");
+                    showEmailVerificationView(user.getEmail());
+                }
+            }
+        }
+    };
+
+    // logic to navigate user to either profile creation or the main activity
+    private final OnCompleteListener<DocumentSnapshot> navigateUserListener = new OnCompleteListener<DocumentSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if (task.isSuccessful()) {
+                DocumentSnapshot snapshot = task.getResult();
+                if (snapshot != null && snapshot.exists()) {
+                    User user = new User(snapshot.getData());
+                    Intent intent;
+                    if (user.profileCreated()) {
+                        intent = new Intent(LoginActivity.this, MainActivity.class);
+                    } else {
+                        intent = new Intent(LoginActivity.this, ProfileCreationActivity.class);
+                        intent.putExtra(User.FIELD_PROFILE_CREATED, false);
+                    }
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, ProfileCreationActivity.class);
+                    intent.putExtra(User.FIELD_PROFILE_CREATED, false);
+                    startActivity(intent);
+                    finish();
+                }
+            } else {
+                Log.d(TAG, "Couldn't access database.");
+            }
+        }
+    };
 
     // check auth state, and if the user is authenticated,
     // proceed to the main activity

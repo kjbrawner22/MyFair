@@ -1,6 +1,8 @@
 package com.example.myfair.views;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
@@ -29,16 +31,26 @@ public class ProfileEditField extends LinearLayout {
         initializeViews(context);
     }
 
-    private void initializeViews(Context context) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.view_profile_edit_field, this);
+    public ProfileEditField(Context context, AttributeSet attrs, int defStyle, int defStyleRes) {
+        super(context, attrs, defStyle, defStyleRes);
+        initializeViews(context);
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    private void initializeViews(Context context) {
+        this.setOrientation(VERTICAL);
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.view_profile_edit_field, this);
 
         label = findViewById(R.id.tvLabel);
         field = findViewById(R.id.etField);
+    }
+
+    public void setLabel(String label) {
+        this.label.setText(label);
+    }
+
+    public void setField(String field) {
+        this.field.setText(field);
     }
 }
