@@ -17,8 +17,7 @@
         android:backgroundTint="@color/colorPrimaryDark"
         android:layout_marginBottom="20dp"
         android:ems="10"
-        android:hint="Some hint..."
         android:inputType="text"
-        android:textColor="@color/colorPrimaryLight"
+        android:textColor="@color/colorPrimary"
         android:textColorHint="@color/colorPrimaryLight" />
 </merge>

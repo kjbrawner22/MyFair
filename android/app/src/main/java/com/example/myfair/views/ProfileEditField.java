@@ -50,7 +50,15 @@ public class ProfileEditField extends LinearLayout {
         this.label.setText(label);
     }
 
+    public String getLabel() {
+        return label.getText().toString();
+    }
+
     public void setField(String field) {
         this.field.setText(field);
+    }
+
+    public String getField() {
+        return field.getText().toString();
     }
 }

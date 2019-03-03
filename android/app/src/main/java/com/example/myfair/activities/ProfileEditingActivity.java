@@ -22,6 +22,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -32,17 +33,15 @@ import javax.annotation.Nullable;
 public class ProfileEditingActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileEditingActivity";
-    private FirebaseUser user;
-    private FirebaseFirestore db;
     private LinearLayout lytEditFields;
+    private ArrayList<ProfileEditField> editFields;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_editing);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
+        editFields = new ArrayList<>();
 
         lytEditFields = findViewById(R.id.lytEditFields);
 
@@ -76,7 +75,6 @@ public class ProfileEditingActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_save:
-                // handle saving data here
                 saveChanges();
                 finish();
                 return true;
@@ -92,6 +90,10 @@ public class ProfileEditingActivity extends AppCompatActivity {
 
     private void setEditFields(HashMap<String, Object> map) {
         for (Map.Entry pair : map.entrySet()) {
+            if (User.isPrivateField((String) pair.getKey())) {
+                continue;
+            }
+
             ProfileEditField editField = new ProfileEditField(this);
             lytEditFields.addView(editField);
             editField.setLabel((String) pair.getKey());
@@ -99,15 +101,18 @@ public class ProfileEditingActivity extends AppCompatActivity {
             editField.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
+            editFields.add(editField);
         }
     }
 
-    private HashMap<String, Object> getUpdatedFields() {
-        return null;
-    }
-
     private void saveChanges() {
-        HashMap<String, Object> map = getUpdatedFields();
-        //TODO: save changes for Firestore
+        User u = new User();
+        HashMap<String, Object> map = new HashMap<>();
+        for (ProfileEditField field : editFields) {
+            map.put(field.getLabel(), field.getField());
+        }
+
+        u.setMap(map);
+        u.sendToDb();
     }
 }

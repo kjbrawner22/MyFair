@@ -77,4 +77,12 @@ public class User extends DatabaseObject {
         });
     }
 
+    public static boolean isPrivateField(String key) {
+        if (key.equals(FIELD_PROFILE_CREATED)) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
