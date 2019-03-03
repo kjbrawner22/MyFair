@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +18,15 @@ import android.view.ViewGroup;
 
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
+import com.example.myfair.db.Card;
+import com.example.myfair.db.CardList;
+import com.example.myfair.db.FirebaseDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 /**
@@ -34,6 +46,10 @@ public class CollectionsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    static final String TAG = "CollectionsFragmentLog";
+    FirebaseDatabase db;
+    CardList list;
 
     private OnFragmentInteractionListener mListener;
 
@@ -113,6 +129,12 @@ public class CollectionsFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        db = new FirebaseDatabase();
+        list = new CardList();
+
+        getIdList();
+
         return v;
     }
 
@@ -153,5 +175,29 @@ public class CollectionsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void getIdList(){
+        CollectionReference ref = db.personalCollection();
+
+        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Card c = new Card();
+                        c.setId(document.getId());
+                        c.setMap(document.getData());
+                        list.add(c);
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                    }
+                    list.displayIDs();
+                    list.displayWithContents();
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
     }
 }
