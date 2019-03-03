@@ -1,4 +1,4 @@
-package com.example.myfair.ModelsandHelpers;
+package com.example.myfair.modelsandhelpers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +17,10 @@ import java.util.Map;
 import androidx.annotation.IntRange;
 
 /**
- * Created by Ahsen Saeed on 1/10/2018.
+ * Built with reference to a tutorial by Ahsen Saeed
+ * Any further development is built upon this platform
+ *
+ * Original Created by Ahsen Saeed on 1/10/2018.
  *
  * This class generate the user qrcode.It is also implemented using builder pattern.
  */

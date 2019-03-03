@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.myfair.ModelsandHelpers.EncryptionHelper;
-import com.example.myfair.ModelsandHelpers.qrObject;
+import com.example.myfair.modelsandhelpers.EncryptionHelper;
+import com.example.myfair.modelsandhelpers.qrObject;
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.google.firebase.firestore.DocumentReference;
@@ -31,10 +31,13 @@ public class ScannedActivity extends AppCompatActivity {
     TextView scannedUniCompTextView;
     TextView scannedMajPosTextView;
 
-    TextView scannedName;
     TextView scannedUniComp;
     TextView scannedMajPos;
 
+    /**
+     * Decode the QR Code and display the contents of the map received from Firebase
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

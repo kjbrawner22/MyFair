@@ -1,4 +1,8 @@
-package com.example.myfair.ModelsandHelpers;
+package com.example.myfair.modelsandhelpers;
+
+/**
+ * Basic object for serialization of user and card id to be encrypted in a QR code
+ */
 
 public class qrObject {
     private String userID;
