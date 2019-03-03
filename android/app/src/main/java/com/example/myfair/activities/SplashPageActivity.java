@@ -1,16 +1,15 @@
 package com.example.myfair.activities;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.example.myfair.db.User;
-
-
 import com.example.myfair.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +29,13 @@ public class SplashPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_page);
+
+        ImageView img = findViewById(R.id.spinnyLogo);
+        img.setBackgroundResource(R.drawable.icon_spin_animation);
+
+        AnimationDrawable frameAnim = (AnimationDrawable) img.getBackground();
+
+        frameAnim.start();
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -77,6 +83,8 @@ public class SplashPageActivity extends AppCompatActivity {
             }
             else{
                 Log.e("userReloadListener","onComplete: Failed=" + task.getException().getMessage());
+                Intent intent = new Intent(SplashPageActivity.this, com.example.myfair.activities.LoginActivity.class);
+                startActivity(intent);
             }
         }
     };
@@ -91,15 +99,15 @@ public class SplashPageActivity extends AppCompatActivity {
                     User user = new User(snapshot.getData());
                     Intent intent;
                     if (user.profileCreated()) {
-                        intent = new Intent(SplashPageActivity.this, MainActivity.class);
+                        intent = new Intent(SplashPageActivity.this, com.example.myfair.activities.MainActivity.class);
                     } else {
-                        intent = new Intent(SplashPageActivity.this, LoginActivity.class);
+                        intent = new Intent(SplashPageActivity.this, com.example.myfair.activities.LoginActivity.class);
                         intent.putExtra(User.FIELD_PROFILE_CREATED, false);
                     }
                     startActivity(intent);
                     finish();
                 } else {
-                    Intent intent = new Intent(SplashPageActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(SplashPageActivity.this, com.example.myfair.activities.LoginActivity.class);
                     intent.putExtra(User.FIELD_PROFILE_CREATED, false);
                     startActivity(intent);
                     finish();
