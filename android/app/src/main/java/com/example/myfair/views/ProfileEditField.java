@@ -1,8 +1,6 @@
 package com.example.myfair.views;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
@@ -18,25 +16,25 @@ public class ProfileEditField extends LinearLayout {
 
     public  ProfileEditField(Context context) {
         super(context);
-        initializeViews(context);
+        initialize(context);
     }
 
     public ProfileEditField(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initializeViews(context);
+        initialize(context);
     }
 
     public ProfileEditField(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initializeViews(context);
+        initialize(context);
     }
 
     public ProfileEditField(Context context, AttributeSet attrs, int defStyle, int defStyleRes) {
         super(context, attrs, defStyle, defStyleRes);
-        initializeViews(context);
+        initialize(context);
     }
 
-    private void initializeViews(Context context) {
+    private void initialize(Context context) {
         this.setOrientation(VERTICAL);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
