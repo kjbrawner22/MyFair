@@ -16,10 +16,10 @@
         <activity android:name=".activities.SplashPageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ProfileEditingActivity" />
         <activity android:name=".activities.ScannedActivity" />
         <activity android:name=".activities.GenerateActivity" />
         <activity android:name=".activities.ScanActivity" />
