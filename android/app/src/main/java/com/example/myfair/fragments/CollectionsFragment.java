@@ -15,12 +15,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.CardList;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.views.BusinessCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +52,8 @@ public class CollectionsFragment extends Fragment {
     static final String TAG = "CollectionsFragmentLog";
     FirebaseDatabase db;
     CardList list;
+
+    private LinearLayout lytListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -121,6 +125,8 @@ public class CollectionsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_collections, container, false);
 
+        lytListView = v.findViewById(R.id.lytListView);
+
         FloatingActionButton shareFAB = v.findViewById(R.id.shareFAB);
         shareFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,6 +183,12 @@ public class CollectionsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    private void createCardView(Card c) {
+        BusinessCardView v = new BusinessCardView(getContext(), null, R.style.BusinessCardView);
+        lytListView.addView(v);
+        v.setFromCardModel(c);
+    }
+
     private void getIdList(){
         CollectionReference ref = db.personalCollection();
 
@@ -189,6 +201,7 @@ public class CollectionsFragment extends Fragment {
                         c.setId(document.getId());
                         c.setMap(document.getData());
                         list.add(c);
+                        createCardView(c);
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                     list.displayIDs();
