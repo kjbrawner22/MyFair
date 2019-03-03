@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/logospin" android:oneshot="false">
+    <item android:drawable="@drawable/icon_logo_frame1" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame2" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame3" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame4" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame5" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame6" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame7" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame8" android:duration="50" />
+    <item android:drawable="@drawable/icon_logo_frame9" android:duration="50" />
+
+</animation-list>
