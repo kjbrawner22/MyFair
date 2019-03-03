@@ -46,13 +46,14 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         setContentView(R.layout.activity_scan);
 
         qrCodeScanner = findViewById(R.id.qrCodeScanner);
-        //barcodeBackImageView = findViewById(R.id.barcodeBackImageView);
         flashOnOffImageView = findViewById(R.id.flashOnOffImageView);
         MY_CAMERA_REQUEST_CODE = 6515;
 
-        scannerInit();
+        scannerInit(); // Initialize the QR scanning
 
-
+        /*
+         * Button for turning the flash on and off
+         */
         flashOnOffImageView.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -78,11 +79,16 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         qrCodeScanner.setLaserColor(R.color.colorAccent);
         qrCodeScanner.setMaskColor(R.color.colorAccent);
     }
+
+    /**
+     *  onResume overrides the built in onResume and adds the functionality
+     *  of restarting the camera and reassigning the result Handler
+     */
     @Override
     protected void onResume(){
         super.onResume();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){ //Determine permissions
                 requestPermissions(new String[]{Manifest.permission.CAMERA},MY_CAMERA_REQUEST_CODE);
             }
         }
@@ -90,17 +96,29 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         qrCodeScanner.setResultHandler(ScanActivity.this);
     }
 
+    /**
+     * Pausing camera on pause
+     */
     @Override
     protected void onPause(){
         super.onPause();
         qrCodeScanner.stopCamera();
     }
 
+    /**
+     * Initializing camera and the result handler
+     */
     private void openCamera(){
         qrCodeScanner.startCamera();
         qrCodeScanner.setResultHandler(this);
     }
 
+    /**
+     * Code for assigning the result handler.
+     * Takes a context which is the current activity as per the implementation of the result
+     * handler
+     * @param p0
+     */
     @Override
     public void handleResult(Result p0){
         if(p0!=null){
@@ -123,6 +141,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
+    /**
+     * Timer for restarting the camera after a code has been scanned
+     */
     private void resumeCamera(){
         Handler handler = new Handler();
         final Runnable r = new Runnable() {
@@ -134,6 +155,10 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         handler.postDelayed(r,2000);
     }
 
+
+    /**
+     * Return the user to the main menu on pressing the back button
+     */
     @Override
     public void onBackPressed(){
         Intent returnToMain = new Intent(this,MainActivity.class);

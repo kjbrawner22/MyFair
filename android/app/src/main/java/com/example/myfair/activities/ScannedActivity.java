@@ -31,10 +31,13 @@ public class ScannedActivity extends AppCompatActivity {
     TextView scannedUniCompTextView;
     TextView scannedMajPosTextView;
 
-    TextView scannedName;
     TextView scannedUniComp;
     TextView scannedMajPos;
 
+    /**
+     * Decode the QR Code and display the contents of the map received from Firebase
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

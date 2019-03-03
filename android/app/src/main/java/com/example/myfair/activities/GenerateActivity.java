@@ -33,10 +33,9 @@ public class GenerateActivity extends AppCompatActivity {
     ImageView qrCodeImageView;
     EditText fullNameEditText;
     EditText ageEditText;
-    Button btnHome;
 
-    String c = "Uam9fiPu3njaBxbkO3D7";
-    String u = "4j6fK7UvU7MLDXwqHoFCtWw97Qy2";
+    String c = "Uam9fiPu3njaBxbkO3D7"; //Hard coded value for demo purposes
+    String u = "4j6fK7UvU7MLDXwqHoFCtWw97Qy2"; //Hard coded value for demo purposes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +45,17 @@ public class GenerateActivity extends AppCompatActivity {
 
         generateQRCodeButton = findViewById(R.id.generateQrCodeButton);
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
-        fullNameEditText = findViewById(R.id.fullNameEditText);
-        ageEditText = findViewById(R.id.ageEditText);
+        fullNameEditText = findViewById(R.id.fullNameEditText); //Will be removed in future version
+        ageEditText = findViewById(R.id.ageEditText); //Will be removed in future version
 
 
-
+        /*
+         * generateQRCodeButton
+         * Sends the userId and cardId to be first serialized into a QRObject Structure
+         * The QR Object is then sent to be Encrypted. The Encrypted QR Object is then sent as a
+         * param to setImageBitmap
+         *
+         */
         generateQRCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,26 +68,33 @@ public class GenerateActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
     }
 
+    /**
+     * setImageBitmap creates the QR code via the QRCodeHelper Class
+     * @param encrypted
+     */
     private void setImageBitmap(String encrypted){
         Bitmap bitmap = QRCodeHelper.newInstance(this).setContent(encrypted).setErrorCorrectionLevel(ErrorCorrectionLevel.Q).setMargin(2).getQRCOde();
         qrCodeImageView.setImageBitmap(bitmap);
     }
 
+    /**
+     * Utility function to hide the keyBoard following text input
+     */
     private void hideKeyboard(){
         View view = this.getCurrentFocus();
         if(view != null){
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0); // Hide Keyboard
         }
     }
 
+    /**
+     * Determines whether text has been input into the two entry fields on the screen.
+     * Will be removed in next version of the generate activity to enhance streamline functionality
+     * @return Boolean
+     */
     private Boolean checkEditText(){
         if(TextUtils.isEmpty(fullNameEditText.getText().toString())){
             Toast.makeText(this, "fullName field cannot be empty!", Toast.LENGTH_SHORT).show();
@@ -95,6 +107,9 @@ public class GenerateActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Return user to the main screen on back button
+     */
     @Override
     public void onBackPressed(){
         Intent returnToMain = new Intent(this,MainActivity.class);
