@@ -59,8 +59,8 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
             case 1:
                 if(id == R.id.btnForward) {
                     if (validProfileFields()) {
-                        dbUser.setValue(User.FIELD_FIRST_NAME, etFname.getText().toString());
-                        dbUser.setValue(User.FIELD_LAST_NAME, etLname.getText().toString());
+                        String name = etFname.getText().toString() + " " + etLname.getText().toString();
+                        dbUser.setValue(User.FIELD_NAME, name);
                         changeForm(2);
                     }
                 }
