@@ -23,6 +23,12 @@ public class User extends DatabaseObject {
     public static final String FIELD_COMPANY_POSITION = "company_position";
     public static final String FIELD_USERNAME ="username";
 
+    // social media username fields
+    public static final String FIELD_TWITTER_USERNAME ="twitter_username";
+    public static final String FIELD_GITHUB_USERNAME ="github_username";
+    public static final String FIELD_LINKED_IN_USERNAME ="linked_in_username";
+    public static final String FIELD_INSTAGRAM_USERNAME ="instagram_username";
+
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
 
