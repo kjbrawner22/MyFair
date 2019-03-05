@@ -184,9 +184,10 @@ public class CollectionsFragment extends Fragment {
     }
 
     private void createCardView(Card c) {
-        BusinessCardView v = new BusinessCardView(getContext(), null, R.style.BusinessCardView);
+        BusinessCardView v = new BusinessCardView(getContext());
         lytListView.addView(v);
         v.setFromCardModel(c);
+        v.setMargins();
     }
 
     private void getIdList(){

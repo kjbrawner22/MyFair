@@ -2,6 +2,8 @@ package com.example.myfair.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,6 +46,18 @@ public class BusinessCardView extends CardView {
         name = findViewById(R.id.tvName);
         company = findViewById(R.id.tvCompany);
         position = findViewById(R.id.tvPosition);
+    }
+
+    public void setMargins() {
+        MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
+
+        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+
+        params.setMargins(margin, 0,margin, margin);
+
+        setLayoutParams(params);
+
+        Log.d("MARGINS", "" + margin);
     }
 
     public void setFromCardModel(Card card) {
