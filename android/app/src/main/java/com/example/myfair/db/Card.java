@@ -3,12 +3,18 @@ package com.example.myfair.db;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -60,20 +66,54 @@ public class Card extends DatabaseObject {
         if (user == null) {
             return;
         }
-        DocumentReference docRef;
 
-        if (cID.equals(com.example.myfair.db.Card.VALUE_NEW_CARD))
-            docRef = db.collection("users").document(user.getUid()).collection("cards").document();
-        else
-            docRef = db.collection("users").document(user.getUid()).collection("cards").document(cID);
+        if (cID.equals(com.example.myfair.db.Card.VALUE_NEW_CARD)) {
+             final CollectionReference colRef = db.collection("users").document(user.getUid()).collection("cards");
+             colRef.add(getMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                 @Override
+                 public void onSuccess(DocumentReference documentReference) {
+                     Log.d(TAG, "DocumentSnapshot card info with ID: " + documentReference.getId());
+                     createMetadata(documentReference);
+                 }
+             }).addOnFailureListener(new OnFailureListener() {
+                 @Override
+                 public void onFailure(@NonNull Exception e) {
+                     Log.w(TAG, "Error adding document", e);
+                 }
+             });
+        }
+        else {
+            DocumentReference docRef = db.collection("users").document(user.getUid()).collection("cards").document(cID);
 
-        docRef.set(getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            docRef.set(getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "DocumentSnapshot card info successfully updated!");
+                    } else {
+                        Log.d(TAG, "Error updating card info document");
+                    }
+                }
+            });
+        }
+    }
+
+    private void createMetadata(DocumentReference docRef){
+        final String TAG = "sendCardInfo";
+        DocumentReference metaDoc = docRef.collection("cdata").document("metadata");
+        HashMap<String, Object> data = new HashMap<>();
+        Date currentTime = Calendar.getInstance().getTime();
+        data.put("created", currentTime);
+        data.put("shared", 0);
+
+        Log.d("CardCreationLog", "Current Time: " + currentTime);
+        metaDoc.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    Log.d(TAG, "DocumentSnapshot metadata successfully updated!");
                 } else {
-                    Log.d(TAG, "Error updating document");
+                    Log.d(TAG, "Error updating metadata document");
                 }
             }
         });
