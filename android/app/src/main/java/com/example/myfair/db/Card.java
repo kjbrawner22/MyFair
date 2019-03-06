@@ -32,6 +32,8 @@ public class Card extends DatabaseObject {
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
 
+    private String cID;
+
     public Card() {
         super();
     }
@@ -55,6 +57,7 @@ public class Card extends DatabaseObject {
         }
         */
         DocumentReference docRef = db.collection("users").document(uID).collection("cards").document(cID);
+        setCardID(cID);
         return docRef;
     }
 
@@ -117,5 +120,13 @@ public class Card extends DatabaseObject {
                 }
             }
         });
+    }
+
+    public String getCardID(){
+        return cID;
+    }
+
+    public void setCardID(String ID){
+        cID = ID;
     }
 }

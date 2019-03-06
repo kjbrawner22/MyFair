@@ -13,8 +13,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,7 +33,7 @@ public class UserLibraryActivity extends AppCompatActivity {
     }
 
     private void getIdList(){
-        CollectionReference ref = db.personalCollection();
+        CollectionReference ref = db.ownCards();
 
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
