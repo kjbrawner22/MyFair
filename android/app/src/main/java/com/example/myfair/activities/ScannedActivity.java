@@ -70,9 +70,9 @@ public class ScannedActivity extends AppCompatActivity {
         String uID = qrObject.getUserID();
 
         //Run the request to get the info from firebase
-        final Card sharedCard = new Card();
-        Log.d("Scanned", "Checking Ids "+uID+" "+cID);
 
+        Log.d("Scanned", "Checking Ids "+uID+" "+cID);
+        final Card sharedCard = new Card();
         DocumentReference ref = sharedCard.setFromDb(uID,cID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override

@@ -191,7 +191,7 @@ public class CollectionsFragment extends Fragment {
     }
 
     private void getIdList(){
-        CollectionReference ref = db.ownCards();
+        CollectionReference ref = db.cardCollection();
 
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

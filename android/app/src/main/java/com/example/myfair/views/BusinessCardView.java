@@ -61,9 +61,16 @@ public class BusinessCardView extends CardView {
     }
 
     public void setFromCardModel(Card card) {
-        setName(card.getValue(Card.FIELD_NAME));
-        setCompany(card.getValue(Card.FIELD_COMPANY_NAME));
-        setPosition(card.getValue(Card.FIELD_COMPANY_POSITION));
+        if(card.getValue(Card.FIELD_TYPE).equals(Card.VALUE_TYPE_BUSINESS)) {
+            setName(card.getValue(Card.FIELD_NAME));
+            setCompany(card.getValue(Card.FIELD_COMPANY_NAME));
+            setPosition(card.getValue(Card.FIELD_COMPANY_POSITION));
+        }
+        else{
+            setName(card.getValue(Card.FIELD_NAME));
+            setCompany(card.getValue(Card.FIELD_UNIVERSITY_NAME));
+            setPosition(card.getValue(Card.FIELD_UNIVERSITY_MAJOR));
+        }
     }
 
     public void setName(String name) {
