@@ -161,7 +161,7 @@ public class AnalyticsFragment extends Fragment {
     //Statistics Suite
 
     //Number of Cards Scanned
-
+    
     //User Card with most scans
 
     //Graphing. Most likely using GraphView OpenSource Graph Plotting
