@@ -1,21 +1,17 @@
 package com.example.myfair.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myfair.R;
-import com.example.myfair.db.FirebaseDatabase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -92,7 +88,7 @@ public class AnalyticsFragment extends Fragment {
         usersCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Push to Expanded View
             }
         });
 
@@ -100,7 +96,7 @@ public class AnalyticsFragment extends Fragment {
         scannedCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Push to Expanded View
             }
         });
 
@@ -108,7 +104,7 @@ public class AnalyticsFragment extends Fragment {
         historyCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Push to Expanded view
             }
         });
 
@@ -116,7 +112,7 @@ public class AnalyticsFragment extends Fragment {
         graphCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Push to Expanded View
             }
         });
         return v;
@@ -160,4 +156,15 @@ public class AnalyticsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    //Statistics Suite
+
+    //Number of Cards Scanned
+
+    //User Card with most scans
+
+    //Graphing. Most likely using GraphView OpenSource Graph Plotting
+
+    //Show most recent card scanned and a timestamp
 }

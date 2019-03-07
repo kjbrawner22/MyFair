@@ -1,4 +1,4 @@
-package com.example.myfair.modelsandhelpers;
+package com.example.myfair.qrcode;
 
 import android.util.Base64;
 

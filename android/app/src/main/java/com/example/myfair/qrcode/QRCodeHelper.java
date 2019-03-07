@@ -1,4 +1,4 @@
-package com.example.myfair.modelsandhelpers;
+package com.example.myfair.qrcode;
 
 import android.content.Context;
 import android.graphics.Bitmap;
