@@ -5,8 +5,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
@@ -19,24 +21,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
-public class BusinessCardView extends CardView {
+public class BusinessCardView extends CardView implements View.OnClickListener {
     private TextView name;
     private TextView company;
     private TextView position;
+    private Context context;
 
     public BusinessCardView(@NonNull Context context) {
         super(context);
+        this.context = context;
         initialize(context);
     }
 
     public BusinessCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         initialize(context);
     }
 
     public BusinessCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         initialize(context);
+    }
+
+    public void onClick(View arg0){
+        Toast.makeText(context, "View clicked.", Toast.LENGTH_SHORT).show();
     }
 
     private void initialize(Context context) {
@@ -46,6 +56,8 @@ public class BusinessCardView extends CardView {
         name = findViewById(R.id.tvName);
         company = findViewById(R.id.tvCompany);
         position = findViewById(R.id.tvPosition);
+
+        setOnClickListener(this);
     }
 
     public void setMargins() {
