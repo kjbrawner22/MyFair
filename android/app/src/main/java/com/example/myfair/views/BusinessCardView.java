@@ -22,6 +22,9 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 public class BusinessCardView extends CardView implements View.OnClickListener {
+    private static final String TAG = "CardViewLog";
+    private String cID, uID;
+
     private TextView name;
     private TextView company;
     private TextView position;
@@ -46,6 +49,12 @@ public class BusinessCardView extends CardView implements View.OnClickListener {
     }
 
     public void onClick(View arg0){
+        StringBuilder msg = new StringBuilder();
+
+        msg.append("View clicked: ").append("[ User: ").append(getUserID()).append(" ]");
+        msg.append(", [ Card: ").append(getCardID()).append(" ]");
+        Log.d(TAG, msg.toString());
+
         Toast.makeText(context, "View clicked.", Toast.LENGTH_SHORT).show();
     }
 
@@ -73,6 +82,8 @@ public class BusinessCardView extends CardView implements View.OnClickListener {
     }
 
     public void setFromCardModel(Card card) {
+        setUserID(card.getValue(Card.FIELD_CARD_OWNER));
+        setCardID(card.getCardID());
         if(card.getValue(Card.FIELD_TYPE).equals(Card.VALUE_TYPE_BUSINESS)) {
             setName(card.getValue(Card.FIELD_NAME));
             setCompany(card.getValue(Card.FIELD_COMPANY_NAME));
@@ -96,4 +107,9 @@ public class BusinessCardView extends CardView implements View.OnClickListener {
     public void setPosition(String position) {
         this.position.setText(position);
     }
+
+    public String getCardID(){return cID;}
+    public void setCardID(String id){cID = id;}
+    public String getUserID(){return uID;}
+    public void setUserID(String id){uID = id;}
 }
