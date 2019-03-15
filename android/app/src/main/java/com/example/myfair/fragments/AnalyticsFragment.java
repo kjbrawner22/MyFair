@@ -84,7 +84,7 @@ public class AnalyticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_analytics, container, false);
 
-        CardView usersCard = v.findViewById(R.id.analyticsOwnedCard);
+        CardView usersCard = v.findViewById(R.id.ownedCard);
         usersCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +92,7 @@ public class AnalyticsFragment extends Fragment {
             }
         });
 
-        CardView scannedCard = v.findViewById(R.id.analyticsScannedCard);
+        CardView scannedCard = v.findViewById(R.id.scannedCard);
         scannedCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +100,7 @@ public class AnalyticsFragment extends Fragment {
             }
         });
 
-        CardView historyCard = v.findViewById(R.id.analyticsHistoryCard);
+        CardView historyCard = v.findViewById(R.id.historyCard);
         historyCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +108,7 @@ public class AnalyticsFragment extends Fragment {
             }
         });
 
-        CardView graphCard = v.findViewById(R.id.analyticsGraphsCard);
+        CardView graphCard = v.findViewById(R.id.graphCard);
         graphCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
