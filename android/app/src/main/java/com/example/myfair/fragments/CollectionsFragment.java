@@ -199,7 +199,7 @@ public class CollectionsFragment extends Fragment {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Card c = new Card();
-                        c.setId(document.getId());
+                        c.setCardID(document.getId());
                         c.setMap(document.getData());
                         list.add(c);
                         createCardView(c);

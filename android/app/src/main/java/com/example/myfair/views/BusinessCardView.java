@@ -1,6 +1,7 @@
 package com.example.myfair.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myfair.R;
+import com.example.myfair.activities.GenerateActivity;
+import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
 
 import org.w3c.dom.Text;
@@ -54,8 +57,12 @@ public class BusinessCardView extends CardView implements View.OnClickListener {
         msg.append("View clicked: ").append("[ User: ").append(getUserID()).append(" ]");
         msg.append(", [ Card: ").append(getCardID()).append(" ]");
         Log.d(TAG, msg.toString());
-
         Toast.makeText(context, "View clicked.", Toast.LENGTH_SHORT).show();
+
+        Intent i = new Intent(context, GenerateActivity.class);
+        i.putExtra("cID", getCardID());
+        i.putExtra("uID", getUserID());
+        context.startActivity(i);
     }
 
     private void initialize(Context context) {

@@ -34,14 +34,25 @@ public class GenerateActivity extends AppCompatActivity {
     EditText fullNameEditText;
     EditText ageEditText;
 
-    String c = "Uam9fiPu3njaBxbkO3D7"; //Hard coded value for demo purposes
-    String u = "4j6fK7UvU7MLDXwqHoFCtWw97Qy2"; //Hard coded value for demo purposes
+    // info send from onClick BusinessCardView -- sends cID & uID with putExtra.
+    // private vars (BusinessCardView -> cID / uID) should be set properly
+    // using database info at initialization.
+
+
+    String c;
+    String u;
+
+    //String c = "Uam9fiPu3njaBxbkO3D7"; //Hard coded value for demo purposes
+    //String u = "4j6fK7UvU7MLDXwqHoFCtWw97Qy2"; //Hard coded value for demo purposes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate);
 
+        Intent intent = getIntent();
+        c = intent.getExtras().getString("cID");
+        u = intent.getExtras().getString("uID");
 
         generateQRCodeButton = findViewById(R.id.generateQrCodeButton);
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
