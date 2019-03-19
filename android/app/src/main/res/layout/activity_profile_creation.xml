@@ -86,6 +86,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etFname" />
 
+        <TextView
+            android:id="@+id/tvNameHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="24dp"
+            android:text="What's your name?"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,28 +114,40 @@
         app:layout_constraintTop_toBottomOf="@+id/lytTopLevel"
         app:layout_constraintVertical_bias="0.0">
 
-        <EditText
-            android:id="@+id/etUsername"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="80dp"
-            android:layout_marginBottom="210dp"
-            android:background="#11000000"
-            android:ems="10"
-            android:hint="@string/usernameEntry"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            android:paddingStart="10dp"
-            android:textAlignment="textStart"
+        <com.example.myfair.views.SocialUsernameField
+            android:id="@+id/socialUsernameField"
+            android:layout_width="348dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="116dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSocialHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:layout_marginTop="24dp"
+            android:text="Add connections"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/colorWhite"
-            android:textColorHint="@color/textHint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="395dp"
+            android:layout_height="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toBottomOf="@+id/socialUsernameField" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -131,8 +155,8 @@
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="201dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorWhite"
         android:clickable="true"
         android:elevation="20dp"
@@ -146,8 +170,8 @@
         android:id="@+id/btnForward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="201dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorWhite"
         android:clickable="true"
         android:elevation="20dp"

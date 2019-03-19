@@ -5,7 +5,8 @@
         android:id="@+id/spinner"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:spinnerMode="dialog" />
 
     <EditText
         android:id="@+id/etUsernameField"
@@ -14,6 +15,9 @@
         android:layout_marginStart="10dp"
         android:layout_weight="1"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textNoSuggestions"
+        android:hint="Username"
+        style="@style/EditTextTheme"
+        android:paddingStart="10dp"
         android:text="" />
 </merge>

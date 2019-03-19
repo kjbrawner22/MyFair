@@ -22,7 +22,7 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
 
     private FirebaseUser user;
     private FirebaseFirestore db;
-    private EditText etFname, etLname, etUsername;
+    private EditText etFname, etLname;
     FloatingActionButton btnBack, btnForward;
     private ConstraintLayout lytName, lytSocial;
     private User dbUser;
@@ -42,7 +42,6 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         lytSocial = findViewById(R.id.lytSocial);
         etFname = findViewById(R.id.etFname);
         etLname = findViewById(R.id.etLname);
-        etUsername = findViewById(R.id.etUsername);
 
         changeForm(1);
 
@@ -67,7 +66,6 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
                 break;
             case 2:
                 if(id == R.id.btnForward){
-                    dbUser.setValue(User.FIELD_USERNAME, etUsername.getText().toString());
                     updateUser();
                 } else if (id == R.id.btnBack){
                     changeForm(1);
