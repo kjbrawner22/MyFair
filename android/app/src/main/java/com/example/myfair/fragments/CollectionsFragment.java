@@ -15,7 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
@@ -23,6 +26,7 @@ import com.example.myfair.db.Card;
 import com.example.myfair.db.CardList;
 import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.views.BusinessCardView;
+import com.example.myfair.views.CardInfoView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,10 +52,13 @@ public class CollectionsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private CardInfoView cardInfo;
 
     static final String TAG = "CollectionsFragmentLog";
     FirebaseDatabase db;
     CardList list;
+
+    private ImageButton btnBack;
 
     private LinearLayout lytListView;
 
@@ -139,6 +146,10 @@ public class CollectionsFragment extends Fragment {
         db = new FirebaseDatabase();
         list = new CardList();
 
+        cardInfo = v.findViewById(R.id.cardInfo);
+        btnBack = cardInfo.findViewById(R.id.btnInfoBack);
+        btnBack.setOnClickListener(backButtonListener);
+
         getIdList();
 
         return v;
@@ -183,11 +194,28 @@ public class CollectionsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    private View.OnClickListener cardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            cardInfo.setVisibility(View.VISIBLE);
+            cardInfo.setFromBusinessCardView((BusinessCardView) view);
+            Log.d("CardInfoCreated", "card Info Visible");
+        }
+    };
+
+    private View.OnClickListener backButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            cardInfo.setVisibility(View.GONE);
+        }
+    };
+
     private void createCardView(Card c) {
         BusinessCardView v = new BusinessCardView(getContext());
         lytListView.addView(v);
         v.setFromCardModel(c);
         v.setMargins();
+        v.setOnClickListener(cardClickListener);
     }
 
     private void getIdList(){

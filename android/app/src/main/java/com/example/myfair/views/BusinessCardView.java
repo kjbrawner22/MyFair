@@ -7,62 +7,40 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myfair.R;
 import com.example.myfair.activities.GenerateActivity;
-import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
-
-import org.w3c.dom.Text;
-
-import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
-public class BusinessCardView extends CardView implements View.OnClickListener {
+public class BusinessCardView extends CardView {
     private static final String TAG = "CardViewLog";
     private String cID, uID;
 
     private TextView name;
     private TextView company;
     private TextView position;
-    private Context context;
+    private String strName, str2, str3;
 
     public BusinessCardView(@NonNull Context context) {
         super(context);
-        this.context = context;
         initialize(context);
     }
 
     public BusinessCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
         initialize(context);
     }
 
     public BusinessCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context = context;
         initialize(context);
-    }
-
-    public void onClick(View arg0){
-        StringBuilder msg = new StringBuilder();
-
-        msg.append("View clicked: ").append("[ User: ").append(getUserID()).append(" ]");
-        msg.append(", [ Card: ").append(getCardID()).append(" ]");
-        Log.d(TAG, msg.toString());
-        Toast.makeText(context, "View clicked.", Toast.LENGTH_SHORT).show();
-
-        Intent i = new Intent(context, GenerateActivity.class);
-        i.putExtra("cID", getCardID());
-        i.putExtra("uID", getUserID());
-        context.startActivity(i);
     }
 
     private void initialize(Context context) {
@@ -72,8 +50,6 @@ public class BusinessCardView extends CardView implements View.OnClickListener {
         name = findViewById(R.id.tvName);
         company = findViewById(R.id.tvCompany);
         position = findViewById(R.id.tvPosition);
-
-        setOnClickListener(this);
     }
 
     public void setMargins() {
@@ -91,32 +67,40 @@ public class BusinessCardView extends CardView implements View.OnClickListener {
     public void setFromCardModel(Card card) {
         setUserID(card.getValue(Card.FIELD_CARD_OWNER));
         setCardID(card.getCardID());
+        strName = card.getValue(Card.FIELD_NAME);
         if(card.getValue(Card.FIELD_TYPE).equals(Card.VALUE_TYPE_BUSINESS)) {
-            setName(card.getValue(Card.FIELD_NAME));
-            setCompany(card.getValue(Card.FIELD_COMPANY_NAME));
-            setPosition(card.getValue(Card.FIELD_COMPANY_POSITION));
+            setName(strName);
+            str2 = card.getValue(Card.FIELD_COMPANY_NAME);
+            str3 = card.getValue(Card.FIELD_COMPANY_POSITION);
         }
         else{
-            setName(card.getValue(Card.FIELD_NAME));
-            setCompany(card.getValue(Card.FIELD_UNIVERSITY_NAME));
-            setPosition(card.getValue(Card.FIELD_UNIVERSITY_MAJOR));
+            setName(strName);
+            str2 = card.getValue(Card.FIELD_UNIVERSITY_NAME);
+            str3 = card.getValue(Card.FIELD_UNIVERSITY_MAJOR);
         }
+        setCompany(str2);
+        setPosition(str3);
     }
 
+    public String getName() { return this.name.toString(); }
     public void setName(String name) {
         this.name.setText(name);
     }
-
+    public String getCompany() { return this.company.toString(); }
     public void setCompany(String company) {
         this.company.setText(company);
     }
-
+    public String getPosition() { return this.position.toString(); }
     public void setPosition(String position) {
         this.position.setText(position);
     }
-
     public String getCardID(){return cID;}
     public void setCardID(String id){cID = id;}
     public String getUserID(){return uID;}
     public void setUserID(String id){uID = id;}
+
+    public String getStrName() {return strName;}
+    public String getStr2() {return str2;}
+
+    public String getStr3() { return str3; }
 }
