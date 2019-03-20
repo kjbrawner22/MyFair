@@ -1,17 +1,20 @@
 package com.example.myfair.views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.myfair.modelsandhelpers.EncryptionHelper;
+import com.example.myfair.modelsandhelpers.QRCodeHelper;
+import com.example.myfair.modelsandhelpers.qrObject;
+import com.google.gson.Gson;
+
 import com.example.myfair.R;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,6 +25,7 @@ public class CardInfoView extends ConstraintLayout {
     private TextView name;
     private TextView company;
     private TextView position;
+    private ImageView qrCode;
 
     public CardInfoView(Context context) {
         super(context);
@@ -45,30 +49,25 @@ public class CardInfoView extends ConstraintLayout {
         name = findViewById(R.id.tvInfoName);
         company = findViewById(R.id.tvInfoCompany);
         position = findViewById(R.id.tvInfoPosition);
+        qrCode = findViewById(R.id.ImageQRCode);
 
         Log.d("CardInfoView", "Initialization called.");
         Log.d("CardInfoView", "name field: " + name);
     }
 
-    public void setFromBusinessCardView(BusinessCardView cardView){
+    public void setFromBusinessCardView(BusinessCardView cardView, Context context){
         Log.d("SetName", cardView.getStrName());
         setName(cardView.getStrName());
         setCompany(cardView.getStr2());
         setPosition(cardView.getStr3());
+        setQR(cardView.getEncryptedString(), context);
     }
 
-    public void setMargins() {
-        MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
-
-        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
-
-        params.setMargins(margin, 0,margin, margin);
-
-        setLayoutParams(params);
-
-        Log.d("MARGINS", "" + margin);
+    private void setQR(String encrypted, Context context){
+        Bitmap bitmap = QRCodeHelper.newInstance(context).setContent(encrypted).setErrorCorrectionLevel(ErrorCorrectionLevel.Q).setMargin(2).getQRCOde();
+        qrCode.setImageBitmap(bitmap);
+        Log.d("SetQRCode", encrypted);
     }
-
     public void setName(String name) {
         this.name.setText(name);
     }
@@ -76,5 +75,6 @@ public class CardInfoView extends ConstraintLayout {
         this.company.setText(name);
     }
     public void setPosition(String name) { this.position.setText(name); }
-
+    public void setcID(String cID) { this.cID = cID; }
+    public void setuID(String uID) { this.uID = uID; }
 }

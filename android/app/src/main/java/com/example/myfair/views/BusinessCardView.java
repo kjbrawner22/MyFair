@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.example.myfair.R;
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.db.Card;
+import com.example.myfair.modelsandhelpers.EncryptionHelper;
+import com.example.myfair.modelsandhelpers.qrObject;
+import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +30,7 @@ public class BusinessCardView extends CardView {
     private TextView company;
     private TextView position;
     private String strName, str2, str3;
+    private String encryptedString;
 
     public BusinessCardView(@NonNull Context context) {
         super(context);
@@ -50,6 +54,13 @@ public class BusinessCardView extends CardView {
         name = findViewById(R.id.tvName);
         company = findViewById(R.id.tvCompany);
         position = findViewById(R.id.tvPosition);
+    }
+
+    public void setQrString(){
+        qrObject user = new qrObject(uID, cID);
+        String serializeString = new Gson().toJson(user);
+        encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
+        Log.d("SetQrCode", "CardInfoView: " + encryptedString);
     }
 
     public void setMargins() {
@@ -80,6 +91,8 @@ public class BusinessCardView extends CardView {
         }
         setCompany(str2);
         setPosition(str3);
+
+        setQrString();
     }
 
     public String getName() { return this.name.toString(); }
@@ -101,6 +114,6 @@ public class BusinessCardView extends CardView {
 
     public String getStrName() {return strName;}
     public String getStr2() {return str2;}
-
     public String getStr3() { return str3; }
+    public String getEncryptedString() { return encryptedString; }
 }
