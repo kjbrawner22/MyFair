@@ -7,11 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.QRCodeHelper;
-import com.example.myfair.modelsandhelpers.qrObject;
-import com.google.gson.Gson;
 
 import com.example.myfair.R;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -20,8 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class CardInfoView extends ConstraintLayout {
-    private String cID, uID;
-
     private TextView name;
     private TextView company;
     private TextView position;
@@ -75,6 +69,4 @@ public class CardInfoView extends ConstraintLayout {
         this.company.setText(name);
     }
     public void setPosition(String name) { this.position.setText(name); }
-    public void setcID(String cID) { this.cID = cID; }
-    public void setuID(String uID) { this.uID = uID; }
 }
