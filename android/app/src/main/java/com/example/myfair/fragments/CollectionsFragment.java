@@ -34,6 +34,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -155,8 +157,8 @@ public class CollectionsFragment extends Fragment {
         btnUser.setOnClickListener(buttonListener);
         btnContacts.setOnClickListener(buttonListener);
 
-        getIdList();
-        getUserCards();
+        getIdList(db.ownCards(), lytListViewUser);
+        getIdList(db.cardCollection(), lytListView);
 
         return v;
     }
@@ -247,9 +249,7 @@ public class CollectionsFragment extends Fragment {
         v.setOnClickListener(cardClickListener);
     }
 
-    private void getIdList(){
-        CollectionReference ref = db.cardCollection();
-
+    private void getIdList(CollectionReference ref, final LinearLayout listView){
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -258,31 +258,8 @@ public class CollectionsFragment extends Fragment {
                         Card c = new Card();
                         c.setCardID(document.getId());
                         c.setMap(document.getData());
-                        list.add(c);
-                        createCardView(c, lytListView);
+                        createCardView(c, listView);
                         Log.d(TAG, document.getId() + " => " + document.getData());
-                    }
-                    list.displayIDs();
-                    list.displayWithContents();
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
-    }
-
-    private void getUserCards(){
-        CollectionReference ref = db.ownCards();
-
-        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Card c = new Card();
-                        c.setCardID(document.getId());
-                        c.setMap(document.getData());
-                        createCardView(c, lytListViewUser);
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
