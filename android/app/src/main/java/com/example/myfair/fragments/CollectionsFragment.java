@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,8 +57,9 @@ public class CollectionsFragment extends Fragment {
     static final String TAG = "CollectionsFragmentLog";
     FirebaseDatabase db;
     CardList list;
+    Button btnUser, btnContacts;
 
-    private LinearLayout lytListView;
+    private LinearLayout lytListView, lytListViewUser;
     private ImageButton btnBack;
     private ImageView qrCode;
     private OnFragmentInteractionListener mListener;
@@ -131,7 +133,7 @@ public class CollectionsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_collections, container, false);
 
         lytListView = v.findViewById(R.id.lytListView);
-
+        lytListViewUser = v.findViewById(R.id.lytListViewUser);
         FloatingActionButton shareFAB = v.findViewById(R.id.shareFAB);
         shareFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,11 +147,16 @@ public class CollectionsFragment extends Fragment {
         list = new CardList();
 
         cardInfo = v.findViewById(R.id.cardInfo);
+        btnUser = v.findViewById(R.id.btnUserLib);
+        btnContacts = v.findViewById(R.id.btnCollection);
         btnBack = cardInfo.findViewById(R.id.btnInfoBack);
         qrCode = cardInfo.findViewById(R.id.ImageQRCode);
-        btnBack.setOnClickListener(backButtonListener);
+        btnBack.setOnClickListener(buttonListener);
+        btnUser.setOnClickListener(buttonListener);
+        btnContacts.setOnClickListener(buttonListener);
 
         getIdList();
+        getUserCards();
 
         return v;
     }
@@ -202,16 +209,39 @@ public class CollectionsFragment extends Fragment {
         }
     };
 
-    private View.OnClickListener backButtonListener = new View.OnClickListener() {
+    private View.OnClickListener buttonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            cardInfo.setVisibility(View.GONE);
+            int id = view.getId();
+            switch(id){
+                case R.id.btnInfoBack:
+                    cardInfo.setVisibility(View.GONE);
+                    break;
+                case R.id.btnCollection:
+                    changeForm(1);
+                    break;
+                case R.id.btnUserLib:
+                    changeForm(2);
+                    break;
+                default:
+                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+            }
         }
     };
 
-    private void createCardView(Card c) {
+    private void changeForm(int form){
+        if(form == 1){
+            lytListView.setVisibility(View.VISIBLE);
+            lytListViewUser.setVisibility(View.GONE);
+        }
+        else if(form == 2){
+            lytListView.setVisibility(View.GONE);
+            lytListViewUser.setVisibility(View.VISIBLE);
+        }
+    }
+    private void createCardView(Card c, LinearLayout listView) {
         BusinessCardView v = new BusinessCardView(getContext());
-        lytListView.addView(v);
+        listView.addView(v);
         v.setFromCardModel(c);
         v.setMargins();
         v.setOnClickListener(cardClickListener);
@@ -229,11 +259,31 @@ public class CollectionsFragment extends Fragment {
                         c.setCardID(document.getId());
                         c.setMap(document.getData());
                         list.add(c);
-                        createCardView(c);
+                        createCardView(c, lytListView);
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                     list.displayIDs();
                     list.displayWithContents();
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void getUserCards(){
+        CollectionReference ref = db.ownCards();
+
+        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Card c = new Card();
+                        c.setCardID(document.getId());
+                        c.setMap(document.getData());
+                        createCardView(c, lytListViewUser);
+                    }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

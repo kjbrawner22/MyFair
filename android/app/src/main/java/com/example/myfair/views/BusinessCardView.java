@@ -85,7 +85,6 @@ public class BusinessCardView extends CardView {
         }
         setCompany(str2);
         setPosition(str3);
-
         setQrString();
     }
 
