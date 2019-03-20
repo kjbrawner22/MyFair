@@ -1,18 +1,13 @@
 package com.example.myfair.views;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.myfair.R;
-import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.db.Card;
 import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.qrObject;
@@ -23,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 public class BusinessCardView extends CardView {
-    private static final String TAG = "CardViewLog";
     private String cID, uID;
 
     private TextView name;

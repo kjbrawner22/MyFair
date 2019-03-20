@@ -2,7 +2,6 @@ package com.example.myfair.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,18 +15,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.CardList;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.modelsandhelpers.QRCodeHelper;
 import com.example.myfair.views.BusinessCardView;
 import com.example.myfair.views.CardInfoView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +32,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 
 /**
@@ -62,11 +57,9 @@ public class CollectionsFragment extends Fragment {
     FirebaseDatabase db;
     CardList list;
 
+    private LinearLayout lytListView;
     private ImageButton btnBack;
     private ImageView qrCode;
-
-    private LinearLayout lytListView;
-
     private OnFragmentInteractionListener mListener;
 
     public CollectionsFragment() {
