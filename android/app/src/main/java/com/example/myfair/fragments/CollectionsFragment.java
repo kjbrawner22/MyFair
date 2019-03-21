@@ -61,6 +61,7 @@ public class CollectionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private CardInfoView cardInfo;
+    private int lastForm;
 
     static final String TAG = "CollectionsFragmentLog";
     private FirebaseDatabase db;
@@ -143,6 +144,7 @@ public class CollectionsFragment extends Fragment {
 
         FragmentActivity mainActivity = getActivity();
         fm = mainActivity.getSupportFragmentManager();
+        lastForm = 1;
 
         lytListView = v.findViewById(R.id.lytListView);
         lytListViewUser = v.findViewById(R.id.lytListViewUser);
@@ -165,7 +167,6 @@ public class CollectionsFragment extends Fragment {
         btnContacts = v.findViewById(R.id.btnCollection);
         btnBack = cardInfo.findViewById(R.id.btnInfoBack);
         btnShare = cardInfo.findViewById(R.id.btnShare);
-        qrCode = cardInfo.findViewById(R.id.ImageQRCode);
         btnBack.setOnClickListener(buttonListener);
         btnUser.setOnClickListener(buttonListener);
         btnContacts.setOnClickListener(buttonListener);
@@ -219,7 +220,7 @@ public class CollectionsFragment extends Fragment {
     private View.OnClickListener cardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            cardInfo.setVisibility(View.VISIBLE);
+            changeForm(3);
             cardInfo.setFromBusinessCardView((BusinessCardView) view, getContext());
             Log.d("CardInfoCreated", "card Info Visible");
         }
@@ -231,7 +232,7 @@ public class CollectionsFragment extends Fragment {
             int id = view.getId();
             switch(id){
                 case R.id.btnInfoBack:
-                    cardInfo.setVisibility(View.GONE);
+                    changeForm(lastForm);
                     break;
                 case R.id.btnCollection:
                     changeForm(1);
@@ -243,7 +244,7 @@ public class CollectionsFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     String str = cardInfo.getQrStr();
                     bundle.putString("encryptedString", str);
-                    Log.d("EncryptedString", str);
+                    //Log.d("EncryptedString", str);
                     BottomSheet bottomSheet = new BottomSheet();
                     bottomSheet.setArguments(bundle);
                     bottomSheet.show(fm, "exampleBottomSheet");
@@ -255,15 +256,35 @@ public class CollectionsFragment extends Fragment {
     };
 
     private void changeForm(int form){
-        if(form == 1){
-            lytListView.setVisibility(View.VISIBLE);
-            lytListViewUser.setVisibility(View.GONE);
-        }
-        else if(form == 2){
-            lytListView.setVisibility(View.GONE);
-            lytListViewUser.setVisibility(View.VISIBLE);
+        switch (form){
+            case 1:
+                lytListView.setVisibility(View.VISIBLE);
+                lytListViewUser.setVisibility(View.GONE);
+                cardInfo.setVisibility(View.GONE);
+                btnContacts.setVisibility(View.VISIBLE);
+                btnUser.setVisibility(View.VISIBLE);
+                lastForm = form;
+                break;
+            case 2:
+                lytListView.setVisibility(View.GONE);
+                lytListViewUser.setVisibility(View.VISIBLE);
+                cardInfo.setVisibility(View.GONE);
+                btnContacts.setVisibility(View.VISIBLE);
+                btnUser.setVisibility(View.VISIBLE);
+                lastForm = form;
+                break;
+            case 3:
+                lytListView.setVisibility(View.GONE);
+                lytListViewUser.setVisibility(View.GONE);
+                cardInfo.setVisibility(View.VISIBLE);
+                btnContacts.setVisibility(View.GONE);
+                btnUser.setVisibility(View.GONE);
+                break;
+            default:
+                Log.d("CollectionsFragmentLog", "form not implemented..");
         }
     }
+
     private void createCardView(Card c, LinearLayout listView) {
         BusinessCardView v = new BusinessCardView(getContext());
         listView.addView(v);

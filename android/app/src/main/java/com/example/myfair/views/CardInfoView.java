@@ -17,11 +17,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class CardInfoView extends ConstraintLayout {
     private String encrypted;
+    private int form;
 
     private TextView name;
     private TextView company;
     private TextView position;
-    private ImageView qrCode;
 
     public CardInfoView(Context context) {
         super(context);
@@ -45,7 +45,6 @@ public class CardInfoView extends ConstraintLayout {
         name = findViewById(R.id.tvInfoName);
         company = findViewById(R.id.tvInfoCompany);
         position = findViewById(R.id.tvInfoPosition);
-        qrCode = findViewById(R.id.ImageQRCode);
 
         Log.d("CardInfoView", "Initialization called.");
         Log.d("CardInfoView", "name field: " + name);
@@ -57,14 +56,9 @@ public class CardInfoView extends ConstraintLayout {
         setCompany(cardView.getStr2());
         setPosition(cardView.getStr3());
         setQrStr(cardView.getEncryptedString());
-        setQR(cardView.getEncryptedString(), context);
+        setForm(form);
     }
 
-    private void setQR(String encrypted, Context context){
-        Bitmap bitmap = QRCodeHelper.newInstance(context).setContent(encrypted).setErrorCorrectionLevel(ErrorCorrectionLevel.Q).setMargin(2).getQRCOde();
-        qrCode.setImageBitmap(bitmap);
-        Log.d("SetQRCode", encrypted);
-    }
     public void setName(String name) {
         this.name.setText(name);
     }
@@ -74,4 +68,6 @@ public class CardInfoView extends ConstraintLayout {
     public void setPosition(String name) { this.position.setText(name); }
     public String getQrStr(){return encrypted;}
     public void setQrStr(String encrypted){this.encrypted = encrypted;}
+    public int getForm() { return form; }
+    public void setForm(int form) { this.form = form; }
 }
