@@ -69,7 +69,7 @@ public class CollectionsFragment extends Fragment {
 
     private LinearLayout lytListView, lytListViewUser;
     private ImageButton btnBack;
-    private ImageView qrCode;
+    private ImageView qrCode, qrCodeBottomSheet;
     private OnFragmentInteractionListener mListener;
     private androidx.fragment.app.FragmentManager fm;
 
@@ -240,7 +240,12 @@ public class CollectionsFragment extends Fragment {
                     changeForm(2);
                     break;
                 case R.id.btnShare:
+                    Bundle bundle = new Bundle();
+                    String str = cardInfo.getQrStr();
+                    bundle.putString("encryptedString", str);
+                    Log.d("EncryptedString", str);
                     BottomSheet bottomSheet = new BottomSheet();
+                    bottomSheet.setArguments(bundle);
                     bottomSheet.show(fm, "exampleBottomSheet");
                     break;
                 default:

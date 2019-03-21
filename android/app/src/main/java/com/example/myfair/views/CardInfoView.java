@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class CardInfoView extends ConstraintLayout {
+    private String encrypted;
+
     private TextView name;
     private TextView company;
     private TextView position;
@@ -54,6 +56,7 @@ public class CardInfoView extends ConstraintLayout {
         setName(cardView.getStrName());
         setCompany(cardView.getStr2());
         setPosition(cardView.getStr3());
+        setQrStr(cardView.getEncryptedString());
         setQR(cardView.getEncryptedString(), context);
     }
 
@@ -69,4 +72,6 @@ public class CardInfoView extends ConstraintLayout {
         this.company.setText(name);
     }
     public void setPosition(String name) { this.position.setText(name); }
+    public String getQrStr(){return encrypted;}
+    public void setQrStr(String encrypted){this.encrypted = encrypted;}
 }
