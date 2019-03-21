@@ -2,6 +2,8 @@ package com.example.myfair.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +18,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 public class BottomSheet extends BottomSheetDialogFragment {
     private ImageView qrCode;
-    private TextView qrEncrypted;
+    //private TextView qrEncrypted;
     private String qrString;
     @Nullable
     @Override
@@ -29,14 +32,16 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         qrString = bundle.getString("encryptedString");
         qrCode = v.findViewById(R.id.bottomSheetQRCode);
-        qrEncrypted = v.findViewById(R.id.tvEncrypted);
-        qrEncrypted.setText(qrString);
+        //qrEncrypted = v.findViewById(R.id.tvEncrypted);
+        //qrEncrypted.setText(qrString);
+        int color = Color.parseColor("#000000");
+        qrCode.setColorFilter( color, PorterDuff.Mode.MULTIPLY);
 
         Log.d("EncryptedString", "Value's value:)  ::: " + bundle);
         Log.d("EncryptedString", "Bottom Sheet: " + qrString);
         Log.d("BottomSheetLog", "qrCode id: " + qrCode);
 
-        //setQrCode();
+        setQrCode();
         return v;
     }
 
