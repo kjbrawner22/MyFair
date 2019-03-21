@@ -1,5 +1,7 @@
 package com.example.myfair.fragments;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +25,11 @@ import android.widget.LinearLayout;
 
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
+import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.CardList;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.views.BottomSheet;
 import com.example.myfair.views.BusinessCardView;
 import com.example.myfair.views.CardInfoView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,19 +57,21 @@ public class CollectionsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    public MainActivity main;
     private String mParam1;
     private String mParam2;
     private CardInfoView cardInfo;
 
     static final String TAG = "CollectionsFragmentLog";
-    FirebaseDatabase db;
-    CardList list;
-    Button btnUser, btnContacts;
+    private FirebaseDatabase db;
+    private Button btnUser, btnContacts;
+    private ImageButton  btnShare;
 
     private LinearLayout lytListView, lytListViewUser;
     private ImageButton btnBack;
     private ImageView qrCode;
     private OnFragmentInteractionListener mListener;
+    private androidx.fragment.app.FragmentManager fm;
 
     public CollectionsFragment() {
         setHasOptionsMenu(true);
@@ -134,8 +141,12 @@ public class CollectionsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_collections, container, false);
 
+        FragmentActivity mainActivity = getActivity();
+        fm = mainActivity.getSupportFragmentManager();
+
         lytListView = v.findViewById(R.id.lytListView);
         lytListViewUser = v.findViewById(R.id.lytListViewUser);
+
         FloatingActionButton shareFAB = v.findViewById(R.id.shareFAB);
         shareFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,16 +157,19 @@ public class CollectionsFragment extends Fragment {
         });
 
         db = new FirebaseDatabase();
-        list = new CardList();
+
+        // Return the fragment manager
 
         cardInfo = v.findViewById(R.id.cardInfo);
         btnUser = v.findViewById(R.id.btnUserLib);
         btnContacts = v.findViewById(R.id.btnCollection);
         btnBack = cardInfo.findViewById(R.id.btnInfoBack);
+        btnShare = cardInfo.findViewById(R.id.btnShare);
         qrCode = cardInfo.findViewById(R.id.ImageQRCode);
         btnBack.setOnClickListener(buttonListener);
         btnUser.setOnClickListener(buttonListener);
         btnContacts.setOnClickListener(buttonListener);
+        btnShare.setOnClickListener(buttonListener);
 
         getIdList(db.ownCards(), lytListViewUser);
         getIdList(db.cardCollection(), lytListView);
@@ -224,6 +238,10 @@ public class CollectionsFragment extends Fragment {
                     break;
                 case R.id.btnUserLib:
                     changeForm(2);
+                    break;
+                case R.id.btnShare:
+                    BottomSheet bottomSheet = new BottomSheet();
+                    bottomSheet.show(fm, "exampleBottomSheet");
                     break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");
