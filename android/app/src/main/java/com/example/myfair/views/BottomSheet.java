@@ -18,8 +18,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.bottom_sheet, container, false);
-        Button btnNum1 = v.findViewById(R.id.btnNum1);
-        Button btnNum2 = v.findViewById(R.id.btnNum2);
+
 
 
         return v;
