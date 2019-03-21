@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/etField"
+        style="@style/EditTextTheme"
+        android:layout_width="339dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        app:srcCompat="@android:drawable/btn_dialog" />
+</LinearLayout>

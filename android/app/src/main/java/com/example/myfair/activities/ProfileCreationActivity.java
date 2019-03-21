@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.User;
+import com.example.myfair.views.AddConnectionsView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +28,8 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
     FloatingActionButton btnBack, btnForward;
     private ConstraintLayout lytName, lytSocial;
     private User dbUser;
+    private AddConnectionsView addConnectionsView;
+    private ScrollView connectionsView;
 
 
     @Override
@@ -42,6 +46,13 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         lytSocial = findViewById(R.id.lytSocial);
         etFname = findViewById(R.id.etFname);
         etLname = findViewById(R.id.etLname);
+
+        addConnectionsView = findViewById(R.id.addConnectionsView);
+        addConnectionsView.setSpinnerAdapter(null);
+
+        connectionsView = findViewById(R.id.connectionsView);
+
+        addConnectionsView.setListView(connectionsView);
 
         changeForm(1);
 

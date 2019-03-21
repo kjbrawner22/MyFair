@@ -9,9 +9,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 public class User extends DatabaseObject {
     public static final String FIELD_FIRST_NAME = "first_name";
@@ -28,6 +30,9 @@ public class User extends DatabaseObject {
     public static final String FIELD_GITHUB_USERNAME ="github_username";
     public static final String FIELD_LINKED_IN_USERNAME ="linked_in_username";
     public static final String FIELD_INSTAGRAM_USERNAME ="instagram_username";
+
+    public static final String[] CONNECTIONS_LIST = {FIELD_TWITTER_USERNAME, FIELD_GITHUB_USERNAME,
+            FIELD_LINKED_IN_USERNAME, FIELD_INSTAGRAM_USERNAME};
 
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
