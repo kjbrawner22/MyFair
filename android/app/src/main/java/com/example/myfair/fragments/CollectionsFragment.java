@@ -1,7 +1,5 @@
 package com.example.myfair.fragments;
 
-import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,7 +25,6 @@ import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
 import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
-import com.example.myfair.db.CardList;
 import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.views.BottomSheet;
 import com.example.myfair.views.BusinessCardView;
@@ -38,8 +35,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
 
 
 /**
@@ -172,8 +167,8 @@ public class CollectionsFragment extends Fragment {
         btnContacts.setOnClickListener(buttonListener);
         btnShare.setOnClickListener(buttonListener);
 
-        getIdList(db.ownCards(), lytListViewUser);
-        getIdList(db.cardCollection(), lytListView);
+        getIdList(db.userCards(), lytListViewUser);
+        getIdList(db.userContacts(), lytListView);
 
         return v;
     }

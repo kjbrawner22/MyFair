@@ -19,11 +19,11 @@ public class FirebaseDatabase {
         return db;
     }
 
-    public CollectionReference ownCards(){
+    public CollectionReference userCards(){
         return db.collection("users").document(currentUser.getUid()).collection("cards");
     }
 
-    public CollectionReference cardCollection(){
+    public CollectionReference userContacts(){
         return db.collection("users").document(currentUser.getUid()).collection("collection");
     }
 

@@ -33,7 +33,7 @@ public class UserLibraryActivity extends AppCompatActivity {
     }
 
     private void getIdList(){
-        CollectionReference ref = db.ownCards();
+        CollectionReference ref = db.userCards();
 
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

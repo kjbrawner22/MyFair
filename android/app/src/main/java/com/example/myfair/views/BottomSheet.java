@@ -1,6 +1,5 @@
 package com.example.myfair.views;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.myfair.R;
 import com.example.myfair.modelsandhelpers.QRCodeHelper;
@@ -18,7 +16,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 public class BottomSheet extends BottomSheetDialogFragment {
     private ImageView qrCode;
