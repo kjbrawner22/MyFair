@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.myfair.db.Card;
 import com.example.myfair.modelsandhelpers.QRCodeHelper;
 
 import com.example.myfair.R;
@@ -17,7 +19,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class CardInfoView extends ConstraintLayout {
     private String encrypted;
-    private int form;
 
     private TextView name;
     private TextView company;
@@ -51,12 +52,11 @@ public class CardInfoView extends ConstraintLayout {
     }
 
     public void setFromBusinessCardView(BusinessCardView cardView, Context context){
-        Log.d("SetName", cardView.getStrName());
-        setName(cardView.getStrName());
-        setCompany(cardView.getStr2());
-        setPosition(cardView.getStr3());
+        Log.d("SetName", cardView.getName());
+        setName(cardView.getName());
+        setCompany(cardView.getCompany());
+        setPosition(cardView.getPosition());
         setQrStr(cardView.getEncryptedString());
-        setForm(form);
     }
 
     public void setName(String name) {
@@ -68,6 +68,4 @@ public class CardInfoView extends ConstraintLayout {
     public void setPosition(String name) { this.position.setText(name); }
     public String getQrStr(){return encrypted;}
     public void setQrStr(String encrypted){this.encrypted = encrypted;}
-    public int getForm() { return form; }
-    public void setForm(int form) { this.form = form; }
 }

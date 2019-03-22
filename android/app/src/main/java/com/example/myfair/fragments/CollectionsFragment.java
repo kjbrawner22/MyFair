@@ -36,6 +36,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -280,10 +282,8 @@ public class CollectionsFragment extends Fragment {
         }
     }
 
-    private void createCardView(Card c, LinearLayout listView) {
-        BusinessCardView v = new BusinessCardView(getContext());
+    private void addCardView(BusinessCardView v, LinearLayout listView) {
         listView.addView(v);
-        v.setFromCardModel(c);
         v.setMargins();
         v.setOnClickListener(cardClickListener);
     }
@@ -294,10 +294,16 @@ public class CollectionsFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Card c = new Card();
-                        c.setCardID(document.getId());
-                        c.setMap(document.getData());
-                        createCardView(c, listView);
+                        String cID = document.getId();
+                        HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
+                        if(map.get(Card.FIELD_TYPE).equals(Card.VALUE_TYPE_BUSINESS)) {
+                            BusinessCardView v = new BusinessCardView(getContext(), cID, map);
+                            addCardView(v, listView);
+                        }
+                        else{
+
+                        }
+
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {

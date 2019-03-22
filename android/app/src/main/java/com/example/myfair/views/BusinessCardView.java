@@ -1,7 +1,6 @@
 package com.example.myfair.views;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -13,32 +12,34 @@ import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.qrObject;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 public class BusinessCardView extends CardView {
     private String cID, uID;
-
+    private String encryptedString;
     private TextView name;
     private TextView company;
     private TextView position;
-    private String strName, str2, str3;
-    private String encryptedString;
+    private HashMap<String,Object> map;
 
     public BusinessCardView(@NonNull Context context) {
         super(context);
         initialize(context);
     }
 
-    public BusinessCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+    public BusinessCardView(@NonNull Context context, String cID, HashMap<String,Object> map){
+        super(context);
         initialize(context);
+        setFromMap(cID, map);
     }
 
-    public BusinessCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public BusinessCardView(@NonNull Context context, Card card){
+        super(context);
         initialize(context);
+        setFromCardModel(card);
     }
 
     private void initialize(Context context) {
@@ -48,65 +49,74 @@ public class BusinessCardView extends CardView {
         name = findViewById(R.id.tvName);
         company = findViewById(R.id.tvCompany);
         position = findViewById(R.id.tvPosition);
+
     }
 
-    public void setQrString(){
+    public void setMargins() {
+        MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
+        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+        params.setMargins(margin, 0,margin, margin);
+        setLayoutParams(params);
+        Log.d("MARGINS", "" + margin);
+    }
+
+    public void setFromCardModel(Card card) {
+        setFromMap(card.getCardID(), card.getMap());
+    }
+
+    private void setQrString(){
         qrObject user = new qrObject(uID, cID);
         String serializeString = new Gson().toJson(user);
         encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
         Log.d("SetQrCode", "CardInfoView: " + encryptedString);
     }
 
-    public void setMargins() {
-        MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
-
-        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
-
-        params.setMargins(margin, 0,margin, margin);
-
-        setLayoutParams(params);
-
-        Log.d("MARGINS", "" + margin);
-    }
-
-    public void setFromCardModel(Card card) {
-        setUserID(card.getValue(Card.FIELD_CARD_OWNER));
-        setCardID(card.getCardID());
-        strName = card.getValue(Card.FIELD_NAME);
-        if(card.getValue(Card.FIELD_TYPE).equals(Card.VALUE_TYPE_BUSINESS)) {
-            setName(strName);
-            str2 = card.getValue(Card.FIELD_COMPANY_NAME);
-            str3 = card.getValue(Card.FIELD_COMPANY_POSITION);
-        }
-        else{
-            setName(strName);
-            str2 = card.getValue(Card.FIELD_UNIVERSITY_NAME);
-            str3 = card.getValue(Card.FIELD_UNIVERSITY_MAJOR);
-        }
-        setCompany(str2);
-        setPosition(str3);
+    /*
+            implementing generic methods
+     */
+    public void setFromMap(String cID, HashMap<String, Object> map){
+        this.map = map;
+        setUserID(getValue(Card.FIELD_CARD_OWNER));
+        setUserID(getValue(Card.FIELD_CARD_OWNER));
+        setCardID(cID);
+        setBusinessCard();
         setQrString();
     }
 
-    public String getName() { return this.name.toString(); }
-    public void setName(String name) {
-        this.name.setText(name);
+    private void setBusinessCard(){
+        setName();
+        setCompany();
+        setPosition();
     }
-    public String getCompany() { return this.company.toString(); }
-    public void setCompany(String company) {
-        this.company.setText(company);
+
+    public String getValue(String key){
+        return (String) map.get(key);
     }
-    public String getPosition() { return this.position.toString(); }
-    public void setPosition(String position) {
-        this.position.setText(position);
+
+
+    public void setName() {
+        this.name.setText(getValue(Card.FIELD_NAME));
     }
+    public void setCompany() {
+        this.company.setText(getValue(Card.FIELD_COMPANY_NAME));
+    }
+    public void setPosition() {
+        this.position.setText(getValue(Card.FIELD_COMPANY_POSITION));
+    }
+    public String getName() {
+        return name.getText().toString();
+    }
+    public String getCompany() {
+        return company.getText().toString();
+    }
+    public String getPosition() {
+        return position.getText().toString();
+    }
+
     public String getCardID(){return cID;}
     public void setCardID(String id){cID = id;}
     public String getUserID(){return uID;}
     public void setUserID(String id){uID = id;}
 
-    public String getStrName() {return strName;}
-    public String getStr2() {return str2;}
-    public String getStr3() { return str3; }
     public String getEncryptedString() { return encryptedString; }
 }
