@@ -32,6 +32,7 @@ public class Card extends DatabaseObject {
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
 
+    private FirebaseDatabase db;
     private String cID;
 
     public Card() {
@@ -40,6 +41,7 @@ public class Card extends DatabaseObject {
 
     public Card(String fullName){
         super();
+        db = new FirebaseDatabase();
         this.setValue(Card.FIELD_NAME, fullName);
     }
 
@@ -63,7 +65,6 @@ public class Card extends DatabaseObject {
 
     public void sendToDb(String cID){
         final String TAG = "sendCardInfo";
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
@@ -71,7 +72,8 @@ public class Card extends DatabaseObject {
         }
 
         if (cID.equals(com.example.myfair.db.Card.VALUE_NEW_CARD)) {
-             final CollectionReference colRef = db.collection("users").document(user.getUid()).collection("cards");
+             final CollectionReference colRef;
+             colRef = db.userCards();
              colRef.add(getMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                  @Override
                  public void onSuccess(DocumentReference documentReference) {
@@ -86,7 +88,7 @@ public class Card extends DatabaseObject {
              });
         }
         else {
-            DocumentReference docRef = db.collection("users").document(user.getUid()).collection("cards").document(cID);
+            DocumentReference docRef = db.getCardRef(null, cID);
 
             docRef.set(getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -104,6 +106,7 @@ public class Card extends DatabaseObject {
     private void createMetadata(DocumentReference docRef){
         final String TAG = "sendCardInfo";
         DocumentReference metaDoc = docRef.collection("cdata").document("metadata");
+
         HashMap<String, Object> data = new HashMap<>();
         Date currentTime = Calendar.getInstance().getTime();
         data.put("created", currentTime);

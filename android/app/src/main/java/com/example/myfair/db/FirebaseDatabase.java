@@ -15,12 +15,8 @@ public class FirebaseDatabase {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public FirebaseFirestore getDb(){
+    private FirebaseFirestore getDb(){
         return db;
-    }
-
-    public CollectionReference userCards(){
-        return db.collection("users").document(currentUser.getUid()).collection("cards");
     }
 
     /*
@@ -29,6 +25,10 @@ public class FirebaseDatabase {
      */
     public CollectionReference cards(String uID){
         return db.collection("users").document(uID).collection("cards");
+    }
+
+    public CollectionReference userCards(){
+        return db.collection("users").document(currentUser.getUid()).collection("cards");
     }
 
     /*
@@ -43,26 +43,18 @@ public class FirebaseDatabase {
 
 
     /*
-            Get database reference for card collection,
-            must pass in user ID
-
-            Use "colRef.add(data);" to set new card
-            get doc ID and add metadata/styles folder
-     */
-    public CollectionReference newCard(){
-        return cards(currentUser.getUid());
-    }
-
-
-    /*
             Get Database reference for a specific card,
             must pass in user ID and card ID
 
             Use this DocumentReference to pull card from db
+            pass in null for uID to get cards belonging to
+            the current user
      */
     public DocumentReference getCardRef(String uID, String cID){
+        if(uID == null){
+            return userCards().document(cID);
+        }
         return cards(uID).document(cID);
     }
-
 
 }
