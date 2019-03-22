@@ -59,6 +59,14 @@ public class CardInfoView extends ConstraintLayout {
         setQrStr(cardView.getEncryptedString());
     }
 
+    public void setFromUniversityCardView(UniversityCardView cardView, Context context){
+        Log.d("SetName", cardView.getName());
+        setName(cardView.getName());
+        setCompany(cardView.getUniversity());
+        setPosition(cardView.getMajor());
+        setQrStr(cardView.getEncryptedString());
+    }
+
     public void setName(String name) {
         this.name.setText(name);
     }

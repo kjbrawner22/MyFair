@@ -216,11 +216,20 @@ public class CollectionsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private View.OnClickListener cardClickListener = new View.OnClickListener() {
+    private View.OnClickListener businessCardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             changeForm(3);
             cardInfo.setFromBusinessCardView((BusinessCardView) view, getContext());
+            Log.d("CardInfoCreated", "card Info Visible");
+        }
+    };
+
+    private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            changeForm(3);
+            cardInfo.setFromUniversityCardView((UniversityCardView) view, getContext());
             Log.d("CardInfoCreated", "card Info Visible");
         }
     };
@@ -287,7 +296,6 @@ public class CollectionsFragment extends Fragment {
     private void addCardView(GenericCardView v, LinearLayout listView) {
         listView.addView(v);
         v.setMargins();
-        v.setOnClickListener(cardClickListener);
     }
 
     private void getIdList(CollectionReference ref, final LinearLayout listView){
@@ -301,10 +309,12 @@ public class CollectionsFragment extends Fragment {
                         String type = (String) map.get(Card.FIELD_TYPE);
                         if(type != null && type.equals(Card.VALUE_TYPE_BUSINESS)) {
                             BusinessCardView v = new BusinessCardView(getContext(), cID, map);
+                            v.setOnClickListener(businessCardClickListener);
                             addCardView(v, listView);
                         }
                         else if(type != null){
                             UniversityCardView v = new UniversityCardView(getContext(), cID, map);
+                            v.setOnClickListener(universityCardClickListener);
                             addCardView(v, listView);
                         }
                         Log.d(TAG, document.getId() + " => " + document.getData());
