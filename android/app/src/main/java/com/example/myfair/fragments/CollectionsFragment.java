@@ -29,6 +29,8 @@ import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.views.BottomSheet;
 import com.example.myfair.views.BusinessCardView;
 import com.example.myfair.views.CardInfoView;
+import com.example.myfair.views.GenericCardView;
+import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -282,7 +284,7 @@ public class CollectionsFragment extends Fragment {
         }
     }
 
-    private void addCardView(BusinessCardView v, LinearLayout listView) {
+    private void addCardView(GenericCardView v, LinearLayout listView) {
         listView.addView(v);
         v.setMargins();
         v.setOnClickListener(cardClickListener);
@@ -296,14 +298,15 @@ public class CollectionsFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String cID = document.getId();
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        if(map.get(Card.FIELD_TYPE).equals(Card.VALUE_TYPE_BUSINESS)) {
+                        String type = (String) map.get(Card.FIELD_TYPE);
+                        if(type != null && type.equals(Card.VALUE_TYPE_BUSINESS)) {
                             BusinessCardView v = new BusinessCardView(getContext(), cID, map);
                             addCardView(v, listView);
                         }
-                        else{
-
+                        else if(type != null){
+                            UniversityCardView v = new UniversityCardView(getContext(), cID, map);
+                            addCardView(v, listView);
                         }
-
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {

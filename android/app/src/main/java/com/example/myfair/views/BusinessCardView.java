@@ -1,29 +1,22 @@
 package com.example.myfair.views;
 
 import android.content.Context;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
-import com.example.myfair.modelsandhelpers.EncryptionHelper;
-import com.example.myfair.modelsandhelpers.qrObject;
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 
-public class BusinessCardView extends CardView {
-    private String cID, uID;
-    private String encryptedString;
+public class BusinessCardView extends GenericCardView {
     private TextView name;
     private TextView company;
     private TextView position;
-    private HashMap<String,Object> map;
+    private TextView university;
+    private TextView major;
 
     public BusinessCardView(@NonNull Context context) {
         super(context);
@@ -49,34 +42,17 @@ public class BusinessCardView extends CardView {
         name = findViewById(R.id.tvName);
         company = findViewById(R.id.tvCompany);
         position = findViewById(R.id.tvPosition);
-
-    }
-
-    public void setMargins() {
-        MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
-        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
-        params.setMargins(margin, 0,margin, margin);
-        setLayoutParams(params);
-        Log.d("MARGINS", "" + margin);
     }
 
     public void setFromCardModel(Card card) {
         setFromMap(card.getCardID(), card.getMap());
     }
 
-    private void setQrString(){
-        qrObject user = new qrObject(uID, cID);
-        String serializeString = new Gson().toJson(user);
-        encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
-        Log.d("SetQrCode", "CardInfoView: " + encryptedString);
-    }
-
     /*
             implementing generic methods
      */
     public void setFromMap(String cID, HashMap<String, Object> map){
-        this.map = map;
-        setUserID(getValue(Card.FIELD_CARD_OWNER));
+        setMap(map);
         setUserID(getValue(Card.FIELD_CARD_OWNER));
         setCardID(cID);
         setBusinessCard();
@@ -88,11 +64,6 @@ public class BusinessCardView extends CardView {
         setCompany();
         setPosition();
     }
-
-    public String getValue(String key){
-        return (String) map.get(key);
-    }
-
 
     public void setName() {
         this.name.setText(getValue(Card.FIELD_NAME));
@@ -112,11 +83,4 @@ public class BusinessCardView extends CardView {
     public String getPosition() {
         return position.getText().toString();
     }
-
-    public String getCardID(){return cID;}
-    public void setCardID(String id){cID = id;}
-    public String getUserID(){return uID;}
-    public void setUserID(String id){uID = id;}
-
-    public String getEncryptedString() { return encryptedString; }
 }
