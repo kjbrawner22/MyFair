@@ -52,7 +52,6 @@ public class CollectionsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    public MainActivity main;
     private String mParam1;
     private String mParam2;
     private CardInfoView cardInfo;
@@ -65,7 +64,6 @@ public class CollectionsFragment extends Fragment {
 
     private LinearLayout lytListView, lytListViewUser;
     private ImageButton btnBack;
-    private ImageView qrCode, qrCodeBottomSheet;
     private OnFragmentInteractionListener mListener;
     private androidx.fragment.app.FragmentManager fm;
 
@@ -139,10 +137,8 @@ public class CollectionsFragment extends Fragment {
 
         FragmentActivity mainActivity = getActivity();
         fm = mainActivity.getSupportFragmentManager();
+        db = new FirebaseDatabase();
         lastForm = 1;
-
-        lytListView = v.findViewById(R.id.lytListView);
-        lytListViewUser = v.findViewById(R.id.lytListViewUser);
 
         FloatingActionButton shareFAB = v.findViewById(R.id.shareFAB);
         shareFAB.setOnClickListener(new View.OnClickListener() {
@@ -153,10 +149,13 @@ public class CollectionsFragment extends Fragment {
             }
         });
 
-        db = new FirebaseDatabase();
 
         // Return the fragment manager
 
+
+        // find views
+        lytListView = v.findViewById(R.id.lytListView);
+        lytListViewUser = v.findViewById(R.id.lytListViewUser);
         cardInfo = v.findViewById(R.id.cardInfo);
         btnUser = v.findViewById(R.id.btnUserLib);
         btnContacts = v.findViewById(R.id.btnCollection);
@@ -167,6 +166,7 @@ public class CollectionsFragment extends Fragment {
         btnContacts.setOnClickListener(buttonListener);
         btnShare.setOnClickListener(buttonListener);
 
+        // pull cards from database
         getIdList(db.userCards(), lytListViewUser);
         getIdList(db.userContacts(), lytListView);
 
