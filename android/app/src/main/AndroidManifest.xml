@@ -13,9 +13,12 @@
         android:roundIcon="@mipmap/ferris_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.analytics.HistoryAnalytics"></activity>
+        <activity android:name=".activities.analytics.UserAnalytics" />
         <activity android:name=".activities.SplashPageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,7 +30,7 @@
         <activity android:name=".activities.UserLibraryActivity" />
         <activity android:name=".activities.ProfileCreationActivity" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.LoginActivity"/>
+        <activity android:name=".activities.LoginActivity" />
     </application>
 
 </manifest>
