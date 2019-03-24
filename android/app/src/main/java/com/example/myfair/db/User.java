@@ -31,9 +31,6 @@ public class User extends DatabaseObject {
     public static final String FIELD_LINKED_IN_USERNAME ="linked_in_username";
     public static final String FIELD_INSTAGRAM_USERNAME ="instagram_username";
 
-    public static final String[] CONNECTIONS_LIST = {FIELD_TWITTER_USERNAME, FIELD_GITHUB_USERNAME,
-            FIELD_LINKED_IN_USERNAME, FIELD_INSTAGRAM_USERNAME};
-
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
 
