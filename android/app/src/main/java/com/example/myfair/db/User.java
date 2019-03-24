@@ -1,7 +1,9 @@
 package com.example.myfair.db;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.example.myfair.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +23,12 @@ public class User extends DatabaseObject {
     public static final String FIELD_COMPANY_NAME = "company_name";
     public static final String FIELD_COMPANY_POSITION = "company_position";
     public static final String FIELD_USERNAME ="username";
+
+    // social media username fields
+    public static final String FIELD_TWITTER_USERNAME ="twitter_username";
+    public static final String FIELD_GITHUB_USERNAME ="github_username";
+    public static final String FIELD_LINKED_IN_USERNAME ="linked_in_username";
+    public static final String FIELD_INSTAGRAM_USERNAME ="instagram_username";
 
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
@@ -46,7 +54,6 @@ public class User extends DatabaseObject {
     }
 
     public DocumentReference setFromDb(){
-        final String TAG = "getUserInfo";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -87,5 +94,4 @@ public class User extends DatabaseObject {
 
         return false;
     }
-
 }
