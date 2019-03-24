@@ -38,4 +38,8 @@
         <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
         <item name="android:textColorSecondary">@color/colorWhite</item>
     </style>
+
+    <style name="BusinessCardView" parent="CardView.Dark">
+        <item name="cardBackgroundColor">@color/colorPrimaryDark</item>
+    </style>
 </resources>
