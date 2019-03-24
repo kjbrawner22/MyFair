@@ -12,7 +12,8 @@
         android:spinnerMode="dialog" />
 
     <EditText
-        android:id="@+id/etUsernameField"
+        android:id="@+id/etField"
+        style="@style/EditTextTheme"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
@@ -20,7 +21,6 @@
         android:ems="10"
         android:hint="Username"
         android:inputType="textNoSuggestions"
-        style="@style/EditTextTheme"
         android:paddingStart="10dp"
         android:text="" />
 

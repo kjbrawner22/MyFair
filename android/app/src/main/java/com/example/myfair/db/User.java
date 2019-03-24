@@ -1,7 +1,9 @@
 package com.example.myfair.db;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.example.myfair.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,11 +11,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 public class User extends DatabaseObject {
     public static final String FIELD_FIRST_NAME = "first_name";
@@ -54,7 +54,6 @@ public class User extends DatabaseObject {
     }
 
     public DocumentReference setFromDb(){
-        final String TAG = "getUserInfo";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -95,5 +94,4 @@ public class User extends DatabaseObject {
 
         return false;
     }
-
 }

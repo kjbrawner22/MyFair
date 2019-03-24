@@ -7,12 +7,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.User;
+import com.example.myfair.modelsandhelpers.Connection;
 import com.example.myfair.views.AddConnectionsView;
+import com.example.myfair.views.ConnectionView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +33,7 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
     private ConstraintLayout lytName, lytSocial;
     private User dbUser;
     private AddConnectionsView addConnectionsView;
-    private ScrollView connectionsView;
+    private LinearLayout connectionsView;
 
 
     @Override
@@ -48,11 +52,11 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         etLname = findViewById(R.id.etLname);
 
         addConnectionsView = findViewById(R.id.addConnectionsView);
-        addConnectionsView.setSpinnerAdapter(null);
+        addConnectionsView.setSpinnerAdapter();
 
-        connectionsView = findViewById(R.id.connectionsView);
+        connectionsView = findViewById(R.id.container);
 
-        addConnectionsView.setListView(connectionsView);
+        addConnectionsView.setAddConnectionClickListener(this, connectionsView);
 
         changeForm(1);
 
@@ -77,11 +81,19 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
                 break;
             case 2:
                 if(id == R.id.btnForward){
+                    addConnectionsToUser();
                     updateUser();
                 } else if (id == R.id.btnBack){
                     changeForm(1);
                 }
                 break;
+        }
+    }
+
+    private void addConnectionsToUser() {
+        for (int i = 0; i < connectionsView.getChildCount(); i++) {
+            ConnectionView view = (ConnectionView) connectionsView.getChildAt(i);
+            dbUser.setValue(view.getConnectionType(), view.getText());
         }
     }
 
@@ -126,8 +138,8 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
                 break;
             case 2:
                 btnBack.show();
-                lytName.setVisibility(View.GONE);
                 lytSocial.setVisibility(View.VISIBLE);
+                lytName.setVisibility(View.GONE);
                 break;
             default:
                 Log.d("PC ChangeForm", "wrong input param");
