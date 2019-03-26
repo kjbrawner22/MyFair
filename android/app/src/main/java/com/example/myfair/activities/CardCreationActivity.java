@@ -10,12 +10,20 @@ import android.widget.Toast;
 
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
+import com.example.myfair.db.FirebaseDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +37,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     private Button btnBack;
     private Button btnDone;
     private ConstraintLayout lytSelect, lytUniversity, lytCompany;
-    FirebaseFirestore db;
+    FirebaseDatabase database;
     FirebaseUser user;
 
     @Override
@@ -37,7 +45,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_creation);
 
-        db = FirebaseFirestore.getInstance();
+        database = new FirebaseDatabase();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         lytSelect = findViewById(R.id.lytSelect);
@@ -106,24 +114,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    private void createCardInDatabase(Card card) {
-        DocumentReference docRef = db.collection("users").document(user.getUid()).collection("cards").document();
-
-        Log.d("CardCreationLog", "DocRef: " + docRef);
-        docRef.set(card.getMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(CardCreationActivity.this, "Successfully updated!", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "DocumentSnapshot successfully updated!");
-                } else {
-                    Toast.makeText(CardCreationActivity.this, "Failed to update.", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Error updating document");
-                }
-            }
-        });
     }
 
     private void setStrings(){
