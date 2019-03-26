@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ferris_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.analytics.HistoryAnalytics"></activity>
+        <activity android:name=".activities.analytics.UserCardAnalyticsActivity"></activity>
+        <activity android:name=".activities.analytics.HistoryAnalytics" />
         <activity android:name=".activities.analytics.UserAnalytics" />
         <activity android:name=".activities.SplashPageActivity">
             <intent-filter>
