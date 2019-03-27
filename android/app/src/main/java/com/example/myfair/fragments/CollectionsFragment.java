@@ -63,11 +63,9 @@ public class CollectionsFragment extends Fragment {
 
     static final String TAG = "CollectionsFragmentLog";
     private FirebaseDatabase db;
-    private Button btnUser, btnContacts;
-    private ImageButton  btnShare;
+    private ImageButton  btnShare, btnBack;
 
-    private LinearLayout lytListView, lytListViewUser;
-    private ImageButton btnBack;
+    private LinearLayout lytListView;
     private OnFragmentInteractionListener mListener;
     private androidx.fragment.app.FragmentManager fm;
 
@@ -159,19 +157,13 @@ public class CollectionsFragment extends Fragment {
 
         // find views
         lytListView = v.findViewById(R.id.lytListView);
-        lytListViewUser = v.findViewById(R.id.lytListViewUser);
         cardInfo = v.findViewById(R.id.cardInfo);
-        btnUser = v.findViewById(R.id.btnUserLib);
-        btnContacts = v.findViewById(R.id.btnCollection);
         btnBack = cardInfo.findViewById(R.id.btnInfoBack);
         btnShare = cardInfo.findViewById(R.id.btnShare);
         btnBack.setOnClickListener(buttonListener);
-        btnUser.setOnClickListener(buttonListener);
-        btnContacts.setOnClickListener(buttonListener);
         btnShare.setOnClickListener(buttonListener);
 
         // pull cards from database
-        getIdList(db.userCards(), lytListViewUser);
         getIdList(db.userContacts(), lytListView);
 
         return v;
@@ -243,12 +235,6 @@ public class CollectionsFragment extends Fragment {
                 case R.id.btnInfoBack:
                     changeForm(lastForm);
                     break;
-                case R.id.btnCollection:
-                    changeForm(1);
-                    break;
-                case R.id.btnUserLib:
-                    changeForm(2);
-                    break;
                 case R.id.btnShare:
                     Bundle bundle = new Bundle();
                     String str = cardInfo.getQrStr();
@@ -269,28 +255,13 @@ public class CollectionsFragment extends Fragment {
             case 1:
                 // Contacts
                 lytListView.setVisibility(View.VISIBLE);
-                lytListViewUser.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.GONE);
-                btnContacts.setVisibility(View.VISIBLE);
-                btnUser.setVisibility(View.VISIBLE);
-                lastForm = form;
-                break;
-            case 2:
-                // user cards
-                lytListView.setVisibility(View.GONE);
-                lytListViewUser.setVisibility(View.VISIBLE);
-                cardInfo.setVisibility(View.GONE);
-                btnContacts.setVisibility(View.VISIBLE);
-                btnUser.setVisibility(View.VISIBLE);
                 lastForm = form;
                 break;
             case 3:
                 // card info
                 lytListView.setVisibility(View.GONE);
-                lytListViewUser.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.VISIBLE);
-                btnContacts.setVisibility(View.GONE);
-                btnUser.setVisibility(View.GONE);
                 break;
             default:
                 Log.d("CollectionsFragmentLog", "form not implemented..");
