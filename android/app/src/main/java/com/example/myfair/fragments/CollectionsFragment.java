@@ -238,6 +238,7 @@ public class CollectionsFragment extends Fragment {
         @Override
         public void onClick(View view) {
             int id = view.getId();
+            Log.d("ButtonIDClicked", "ID: " + id);
             switch(id){
                 case R.id.btnInfoBack:
                     changeForm(lastForm);
@@ -266,6 +267,7 @@ public class CollectionsFragment extends Fragment {
     private void changeForm(int form){
         switch (form){
             case 1:
+                // Contacts
                 lytListView.setVisibility(View.VISIBLE);
                 lytListViewUser.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.GONE);
@@ -274,6 +276,7 @@ public class CollectionsFragment extends Fragment {
                 lastForm = form;
                 break;
             case 2:
+                // user cards
                 lytListView.setVisibility(View.GONE);
                 lytListViewUser.setVisibility(View.VISIBLE);
                 cardInfo.setVisibility(View.GONE);
@@ -282,6 +285,7 @@ public class CollectionsFragment extends Fragment {
                 lastForm = form;
                 break;
             case 3:
+                // card info
                 lytListView.setVisibility(View.GONE);
                 lytListViewUser.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.VISIBLE);
