@@ -92,14 +92,6 @@ public class AnalyticsFragment extends Fragment {
             }
         });
 
-        CardView scannedCard = v.findViewById(R.id.scannedCard);
-        scannedCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Push to Expanded View
-            }
-        });
-
         CardView historyCard = v.findViewById(R.id.historyCard);
         historyCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,13 +100,6 @@ public class AnalyticsFragment extends Fragment {
             }
         });
 
-        CardView graphCard = v.findViewById(R.id.graphCard);
-        graphCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Push to Expanded View
-            }
-        });
         return v;
     }
 
