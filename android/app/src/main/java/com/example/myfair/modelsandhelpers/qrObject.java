@@ -1,4 +1,4 @@
-package com.example.myfair.qrcode;
+package com.example.myfair.modelsandhelpers;
 
 /**
  * Basic object for serialization of user and card id to be encrypted in a QR code
