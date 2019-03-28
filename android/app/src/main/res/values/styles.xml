@@ -34,7 +34,7 @@
 
     <style name="AppTheme.Toolbar" parent="AppTheme">
         <!--This line changes the color of text in Toolbar-->
-        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColorPrimary">#000</item>
         <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
         <item name="android:textColorSecondary">@color/colorWhite</item>
     </style>

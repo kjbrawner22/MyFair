@@ -8,6 +8,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import com.example.myfair.R;
 import com.example.myfair.activities.ProfileEditingActivity;
 import com.example.myfair.activities.ScanActivity;
 import com.example.myfair.db.User;
+import com.example.myfair.views.ProfileEditField;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -47,7 +51,7 @@ public class ProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
-        // Required empty public constructor
+        setHasOptionsMenu(true);
     }
 
     /**
@@ -80,34 +84,45 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_menu_profile_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.action_create:
+                intent = new Intent(getContext(), ProfileCreationActivity.class);
+                break;
+            case R.id.action_edit:
+                intent = new Intent(getContext(), ProfileEditingActivity.class);
+                break;
+            case R.id.action_settings:
+                //TODO: create a settings activity for management stuff
+                intent = new Intent(getContext(), ProfileEditingActivity.class);
+                break;
+            case R.id.action_sign_out:
+                signOut();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button btnCreateProfile = v.findViewById(R.id.btnCreateProfile);
-        Button btnSignOut = v.findViewById(R.id.btnSignOut);
         FloatingActionButton scanButton = v.findViewById(R.id.scanFAB);
-        Button btnEditProfile = v.findViewById(R.id.btnEditProfile);
-
-        btnCreateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ProfileCreationActivity.class);
-                intent.putExtra(User.FIELD_PROFILE_CREATED, true);
-                startActivity(intent);
-            }
-        });
-
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-                Objects.requireNonNull(getActivity()).finish();
-            }
-        });
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,15 +132,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        btnEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ProfileEditingActivity.class);
-                startActivity(intent);
-            }
-        });
-
         return v;
+    }
+
+    private void signOut() {
+        mAuth.signOut();
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+        Objects.requireNonNull(getActivity()).finish();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
