@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.myfair.activities.LoginActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
@@ -61,10 +63,12 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private ImageButton btnBack;
     private ImageButton btnShare;
-    HashMap<String,Object> idListMap;
-    CardInfoView cardInfo;
-    LinearLayout lytCardList;
-    FirebaseDatabase db;
+    private ImageButton btnCardLytBack;
+    private ScrollView profileMenu;
+    private CardInfoView cardInfo;
+    private LinearLayout lytCardList;
+    private FirebaseDatabase db;
+    private CardView profileCards, profileBrochures, profileDocuments;
     private androidx.fragment.app.FragmentManager fm;
 
     private FirebaseAuth mAuth;
@@ -121,12 +125,23 @@ public class ProfileFragment extends Fragment {
         cardInfo = v.findViewById(R.id.profileCardInfo);
         btnBack = cardInfo.findViewById(R.id.btnInfoBack);
         btnShare = cardInfo.findViewById(R.id.btnShare);
+        profileCards = v.findViewById(R.id.cvProfileCards);
+        profileBrochures = v.findViewById(R.id.cvProfileBrochures);
+        profileDocuments = v.findViewById(R.id.cvProfileDocs);
+        profileMenu = v.findViewById(R.id.svProfileMenu);
+        btnCardLytBack = v.findViewById(R.id.btnCardLytBack);
 
         db = new FirebaseDatabase();
         getIdList(db.userCards(), lytCardList);
 
+        changeForm(3);
+
         btnBack.setOnClickListener(buttonListener);
         btnShare.setOnClickListener(buttonListener);
+        btnCardLytBack.setOnClickListener(buttonListener);
+        profileCards.setOnClickListener(menuCardListener);
+        profileBrochures.setOnClickListener(menuCardListener);
+        profileDocuments.setOnClickListener(menuCardListener);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +154,30 @@ public class ProfileFragment extends Fragment {
 
         return v;
     }
+
+    private View.OnClickListener menuCardListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            Log.d("ButtonIDClicked", "ID: " + id);
+            switch(id){
+                case R.id.cvProfileCards:
+                    changeForm(1);
+
+                    break;
+                case R.id.cvProfileBrochures:
+                    changeForm(1);
+
+                    break;
+                case R.id.cvProfileDocs:
+                    changeForm(1);
+
+                    break;
+                default:
+                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+            }
+        }
+    };
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -184,10 +223,17 @@ public class ProfileFragment extends Fragment {
             case 1:
                 lytCardList.setVisibility(View.VISIBLE);
                 cardInfo.setVisibility(View.GONE);
+                profileMenu.setVisibility(View.GONE);
                 break;
             case 2:
                 lytCardList.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.VISIBLE);
+                profileMenu.setVisibility(View.GONE);
+                break;
+            case 3:
+                lytCardList.setVisibility(View.GONE);
+                cardInfo.setVisibility(View.GONE);
+                profileMenu.setVisibility(View.VISIBLE);
                 break;
             default:
                 Log.d("ChangeForm", "Form not implmented");
@@ -200,6 +246,9 @@ public class ProfileFragment extends Fragment {
             int id = view.getId();
             Log.d("ButtonIDClicked", "ID: " + id);
             switch(id){
+                case R.id.btnCardLytBack:
+                    changeForm(3);
+                    break;
                 case R.id.btnInfoBack:
                     changeForm(1);
                     break;
