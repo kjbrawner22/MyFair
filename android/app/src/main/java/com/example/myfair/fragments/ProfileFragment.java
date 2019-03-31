@@ -12,6 +12,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -76,7 +79,7 @@ public class ProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
-        // Required empty public constructor
+        setHasOptionsMenu(true);
     }
 
     /**
@@ -109,14 +112,45 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_menu_profile_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.action_create:
+                intent = new Intent(getContext(), ProfileCreationActivity.class);
+                break;
+            case R.id.action_edit:
+                intent = new Intent(getContext(), ProfileEditingActivity.class);
+                break;
+            case R.id.action_settings:
+                //TODO: create a settings activity for management stuff
+                intent = new Intent(getContext(), ProfileEditingActivity.class);
+                break;
+            case R.id.action_sign_out:
+                signOut();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
         FloatingActionButton scanButton = v.findViewById(R.id.scanFAB);
-
-
 
         FragmentActivity mainActivity = getActivity();
         fm = mainActivity.getSupportFragmentManager();
@@ -151,7 +185,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
         return v;
     }
 
@@ -178,6 +211,13 @@ public class ProfileFragment extends Fragment {
             }
         }
     };
+
+    private void signOut() {
+        mAuth.signOut();
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+        Objects.requireNonNull(getActivity()).finish();
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
