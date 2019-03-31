@@ -111,12 +111,24 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
     }
 
+
+    /**
+     * Inflate the profile fragment action bar menu
+     * @param menu - the Menu on which to inflate the action menu XML
+     * @param inflater - the inflater
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_menu_profile_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+    /**
+     * Handle actions within the action bar
+     * @param item - which item was clicked
+     * @return boolean value on if it was handled or not
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
@@ -212,6 +224,10 @@ public class ProfileFragment extends Fragment {
         }
     };
 
+
+    /**
+     * Sign the user out and go back to the Login Activity
+     */
     private void signOut() {
         mAuth.signOut();
         Intent intent = new Intent(getContext(), LoginActivity.class);
