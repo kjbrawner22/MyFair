@@ -1,6 +1,7 @@
 package com.example.myfair.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -88,7 +89,8 @@ public class AnalyticsFragment extends Fragment {
         usersCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Push to Expanded View
+                Intent intent = new Intent(getContext(), com.example.myfair.activities.analytics.UserAnalytics.class);
+                startActivity(intent);
             }
         });
 
@@ -96,7 +98,8 @@ public class AnalyticsFragment extends Fragment {
         historyCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Push to Expanded view
+                Intent intent = new Intent(getContext(), com.example.myfair.activities.analytics.HistoryAnalytics.class);
+                startActivity(intent);
             }
         });
 

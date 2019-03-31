@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.myfair.R;
+import com.example.myfair.db.FirebaseDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,8 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class HistoryAnalytics extends AppCompatActivity {
 
-    FirebaseFirestore db;
-    FirebaseUser user;
+    FirebaseDatabase firebaseDatabase;
+
     CollectionReference scannedCards;
     String TAG = "history analytic";
     ListView listView;
@@ -33,9 +34,9 @@ public class HistoryAnalytics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_analytics);
 
-        db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        scannedCards =  db.collection("users").document(user.getUid()).collection("collections");
+        firebaseDatabase = new FirebaseDatabase();
+
+        scannedCards = firebaseDatabase.userContacts();
         listView = findViewById(R.id.scannedCardList);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -3,56 +3,91 @@ package com.example.myfair.activities.analytics;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.myfair.R;
+import com.example.myfair.db.Card;
+import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.views.BusinessCardView;
+import com.example.myfair.views.GenericCardView;
+import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
 
 public class UserAnalytics extends AppCompatActivity {
 
-    FirebaseFirestore db;
-    FirebaseUser user;
+    FirebaseDatabase db;
     CollectionReference usersCards;
     String TAG = "usersCards";
-    ListView listView;
+    private LinearLayout listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_analytics);
 
-        db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        usersCards =  db.collection("users").document(user.getUid()).collection("cards");
-
-        usersCards.orderBy("name").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if( task.isSuccessful()){
-                            //Load into list view
-                        }
-                        else{
-                            Log.d(TAG,"Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        db = new FirebaseDatabase();
+        usersCards =  db.userCards();
 
         listView = findViewById(R.id.usersCardListView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        getIdList(usersCards, listView);
+    }
+
+    private View.OnClickListener specificCardAnalyticsListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(UserAnalytics.this, UserCardAnalyticsActivity.class);
+            GenericCardView placeHolder = (GenericCardView) v;
+            String cId = placeHolder.getCardID();
+            intent.putExtra("cId", cId);
+            startActivity(intent);
+        }
+    };
+
+    private void addCardView(GenericCardView v, LinearLayout listView) {
+        listView.addView(v);
+        v.setMargins();
+    }
+
+    private void getIdList(CollectionReference ref, final LinearLayout listView){
+        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Open up a more detailed page of information regarding the created card
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String cID = document.getId();
+                        HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
+                        String type = (String) map.get(Card.FIELD_TYPE);
+                        if(type != null && type.equals(Card.VALUE_TYPE_BUSINESS)) {
+                            BusinessCardView v = new BusinessCardView(UserAnalytics.this, cID, map);
+                            v.setOnClickListener(specificCardAnalyticsListener);
+                            addCardView(v, listView);
+                        }
+                        else if(type != null){
+                            UniversityCardView v = new UniversityCardView(UserAnalytics.this, cID, map);
+                            v.setOnClickListener(specificCardAnalyticsListener);
+                            addCardView(v, listView);
+                        }
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
             }
         });
     }
