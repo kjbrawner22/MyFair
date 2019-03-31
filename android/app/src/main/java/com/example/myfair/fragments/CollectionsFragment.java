@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
@@ -59,11 +61,13 @@ public class CollectionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private CardInfoView cardInfo;
+    private CardView cvCards, cvBrochures, cvDocs;
+    private ScrollView svMenu;
     private int lastForm;
 
     static final String TAG = "CollectionsFragmentLog";
     private FirebaseDatabase db;
-    private ImageButton  btnShare, btnBack;
+    private ImageButton  btnShare, btnBack, btnMenuBack;
 
     private LinearLayout lytListView;
     private OnFragmentInteractionListener mListener;
@@ -160,8 +164,20 @@ public class CollectionsFragment extends Fragment {
         cardInfo = v.findViewById(R.id.cardInfo);
         btnBack = cardInfo.findViewById(R.id.btnInfoBack);
         btnShare = cardInfo.findViewById(R.id.btnShare);
+        cvCards = v.findViewById(R.id.cvProfileCards);
+        cvBrochures = v.findViewById(R.id.cvProfileBrochures);
+        cvDocs = v.findViewById(R.id.cvProfileDocs);
+        svMenu = v.findViewById(R.id.svProfileMenu);
+        btnMenuBack = v.findViewById(R.id.btnMenuBack);
+
         btnBack.setOnClickListener(buttonListener);
         btnShare.setOnClickListener(buttonListener);
+        btnMenuBack.setOnClickListener(buttonListener);
+        cvCards.setOnClickListener(cvListener);
+        cvBrochures.setOnClickListener(cvListener);
+        cvDocs.setOnClickListener(cvListener);
+
+        changeForm(2);
 
         // pull cards from database
         getIdList(db.userContacts(), lytListView);
@@ -226,12 +242,36 @@ public class CollectionsFragment extends Fragment {
         }
     };
 
+    private View.OnClickListener cvListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            switch(id){
+                case R.id.cvProfileCards:
+                    changeForm(1);
+                    break;
+                case R.id.cvProfileBrochures:
+                    changeForm(1);
+                    break;
+                case R.id.cvProfileDocs:
+                    changeForm(1);
+                    break;
+                default:
+                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+            }
+        }
+    };
+
+
     private View.OnClickListener buttonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int id = view.getId();
             Log.d("ButtonIDClicked", "ID: " + id);
             switch(id){
+                case R.id.btnMenuBack:
+                    changeForm(2);
+                    break;
                 case R.id.btnInfoBack:
                     changeForm(lastForm);
                     break;
@@ -256,12 +296,20 @@ public class CollectionsFragment extends Fragment {
                 // Contacts
                 lytListView.setVisibility(View.VISIBLE);
                 cardInfo.setVisibility(View.GONE);
+                svMenu.setVisibility(View.GONE);
                 lastForm = form;
+                break;
+            case 2:
+                //menu
+                lytListView.setVisibility(View.GONE);
+                cardInfo.setVisibility(View.GONE);
+                svMenu.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 // card info
                 lytListView.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.VISIBLE);
+                svMenu.setVisibility(View.GONE);
                 break;
             default:
                 Log.d("CollectionsFragmentLog", "form not implemented..");
