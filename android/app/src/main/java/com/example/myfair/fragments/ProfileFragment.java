@@ -5,22 +5,45 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.myfair.activities.LoginActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
 import com.example.myfair.R;
 import com.example.myfair.activities.ProfileEditingActivity;
 import com.example.myfair.activities.ScanActivity;
+import com.example.myfair.db.Card;
+import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.db.User;
+import com.example.myfair.views.BottomSheet;
+import com.example.myfair.views.BusinessCardView;
+import com.example.myfair.views.CardInfoView;
+import com.example.myfair.views.GenericCardView;
+import com.example.myfair.views.UniversityCardView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -41,13 +64,22 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ImageButton btnBack;
+    private ImageButton btnShare;
+    private ImageButton btnCardLytBack;
+    private ScrollView profileMenu;
+    private CardInfoView cardInfo;
+    private LinearLayout lytCardList;
+    private FirebaseDatabase db;
+    private CardView profileCards, profileBrochures, profileDocuments;
+    private androidx.fragment.app.FragmentManager fm;
 
     private FirebaseAuth mAuth;
 
     private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
-        // Required empty public constructor
+        setHasOptionsMenu(true);
     }
 
     /**
@@ -80,34 +112,70 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_menu_profile_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.action_create:
+                intent = new Intent(getContext(), ProfileCreationActivity.class);
+                break;
+            case R.id.action_edit:
+                intent = new Intent(getContext(), ProfileEditingActivity.class);
+                break;
+            case R.id.action_settings:
+                //TODO: create a settings activity for management stuff
+                intent = new Intent(getContext(), ProfileEditingActivity.class);
+                break;
+            case R.id.action_sign_out:
+                signOut();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button btnCreateProfile = v.findViewById(R.id.btnCreateProfile);
-        Button btnSignOut = v.findViewById(R.id.btnSignOut);
         FloatingActionButton scanButton = v.findViewById(R.id.scanFAB);
-        Button btnEditProfile = v.findViewById(R.id.btnEditProfile);
 
-        btnCreateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ProfileCreationActivity.class);
-                intent.putExtra(User.FIELD_PROFILE_CREATED, true);
-                startActivity(intent);
-            }
-        });
+        FragmentActivity mainActivity = getActivity();
+        fm = mainActivity.getSupportFragmentManager();
 
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-                Objects.requireNonNull(getActivity()).finish();
-            }
-        });
+        lytCardList = v.findViewById(R.id.lytCardList);
+        cardInfo = v.findViewById(R.id.profileCardInfo);
+        btnBack = cardInfo.findViewById(R.id.btnInfoBack);
+        btnShare = cardInfo.findViewById(R.id.btnShare);
+        profileCards = v.findViewById(R.id.cvProfileCards);
+        profileBrochures = v.findViewById(R.id.cvProfileBrochures);
+        profileDocuments = v.findViewById(R.id.cvProfileDocs);
+        profileMenu = v.findViewById(R.id.svProfileMenu);
+        btnCardLytBack = v.findViewById(R.id.btnCardLytBack);
+
+        db = new FirebaseDatabase();
+        getIdList(db.userCards(), lytCardList);
+
+        changeForm(3);
+
+        btnBack.setOnClickListener(buttonListener);
+        btnShare.setOnClickListener(buttonListener);
+        btnCardLytBack.setOnClickListener(buttonListener);
+        profileCards.setOnClickListener(menuCardListener);
+        profileBrochures.setOnClickListener(menuCardListener);
+        profileDocuments.setOnClickListener(menuCardListener);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,15 +185,38 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        btnEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ProfileEditingActivity.class);
-                startActivity(intent);
-            }
-        });
-
         return v;
+    }
+
+    private View.OnClickListener menuCardListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            Log.d("ButtonIDClicked", "ID: " + id);
+            switch(id){
+                case R.id.cvProfileCards:
+                    changeForm(1);
+
+                    break;
+                case R.id.cvProfileBrochures:
+                    changeForm(1);
+
+                    break;
+                case R.id.cvProfileDocs:
+                    changeForm(1);
+
+                    break;
+                default:
+                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+            }
+        }
+    };
+
+    private void signOut() {
+        mAuth.signOut();
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+        Objects.requireNonNull(getActivity()).finish();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -165,5 +256,106 @@ public class ProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void changeForm(int form){
+        switch(form){
+            case 1:
+                lytCardList.setVisibility(View.VISIBLE);
+                cardInfo.setVisibility(View.GONE);
+                profileMenu.setVisibility(View.GONE);
+                break;
+            case 2:
+                lytCardList.setVisibility(View.GONE);
+                cardInfo.setVisibility(View.VISIBLE);
+                profileMenu.setVisibility(View.GONE);
+                break;
+            case 3:
+                lytCardList.setVisibility(View.GONE);
+                cardInfo.setVisibility(View.GONE);
+                profileMenu.setVisibility(View.VISIBLE);
+                break;
+            default:
+                Log.d("ChangeForm", "Form not implmented");
+        }
+    }
+
+    private View.OnClickListener buttonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            Log.d("ButtonIDClicked", "ID: " + id);
+            switch(id){
+                case R.id.btnCardLytBack:
+                    changeForm(3);
+                    break;
+                case R.id.btnInfoBack:
+                    changeForm(1);
+                    break;
+                case R.id.btnShare:
+                    Bundle bundle = new Bundle();
+                    String str = cardInfo.getQrStr();
+                    bundle.putString("encryptedString", str);
+                    //Log.d("EncryptedString", str);
+                    BottomSheet bottomSheet = new BottomSheet();
+                    bottomSheet.setArguments(bundle);
+                    bottomSheet.show(fm, "exampleBottomSheet");
+                    break;
+                default:
+                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+            }
+        }
+    };
+
+    private View.OnClickListener businessCardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            changeForm(2);
+            cardInfo.setFromBusinessCardView((BusinessCardView) view, getContext());
+            Log.d("CardInfoCreated", "card Info Visible");
+        }
+    };
+
+    private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            changeForm(2);
+            cardInfo.setFromUniversityCardView((UniversityCardView) view, getContext());
+            Log.d("CardInfoCreated", "card Info Visible");
+        }
+    };
+
+    private void addCardView(GenericCardView v, LinearLayout listView) {
+        listView.addView(v);
+        v.setMargins();
+    }
+
+    private void getIdList(CollectionReference ref, final LinearLayout listView){
+        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                final String TAG = "profileGetIdList";
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String cID = document.getId();
+                        HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
+                        String type = (String) map.get(Card.FIELD_TYPE);
+                        if(type != null && type.equals(Card.VALUE_TYPE_BUSINESS)) {
+                            BusinessCardView v = new BusinessCardView(getContext(), cID, map);
+                            v.setOnClickListener(businessCardClickListener);
+                            addCardView(v, listView);
+                        }
+                        else if(type != null){
+                            UniversityCardView v = new UniversityCardView(getContext(), cID, map);
+                            v.setOnClickListener(universityCardClickListener);
+                            addCardView(v, listView);
+                        }
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 }

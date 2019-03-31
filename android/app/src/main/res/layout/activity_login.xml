@@ -260,7 +260,7 @@
             android:id="@+id/lytSignIn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -284,13 +284,13 @@
 
             <EditText
                 android:id="@+id/etSignInEmail"
-                android:layout_width="match_parent"
+                style="@style/EditTextTheme"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="60dp"
                 android:layout_marginBottom="30dp"
                 android:autofillHints=""
-                style="@style/EditTextTheme"
                 android:drawableStart="@drawable/icon_email"
                 android:drawablePadding="10dp"
                 android:ems="10"
@@ -303,10 +303,10 @@
 
             <EditText
                 android:id="@+id/etSignInPassword"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="44dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="60dp"
                 android:layout_marginBottom="30dp"
                 android:autofillHints=""
                 android:background="#11000000"
@@ -352,6 +352,72 @@
                 app:layout_constraintHorizontal_bias="0.505"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnSignIn" />
+
+            <ImageButton
+                android:id="@+id/btnResetPasswordForm"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/ic_question_mark"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/etSignInPassword"
+                app:layout_constraintStart_toEndOf="@+id/etSignInPassword"
+                app:layout_constraintTop_toTopOf="@+id/etSignInPassword" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytResetPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/etResetEmail"
+                style="@style/EditTextTheme"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="60dp"
+                android:layout_marginBottom="292dp"
+                android:drawableStart="@drawable/icon_email"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tvPasswordResetHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="46dp"
+                android:layout_marginBottom="41dp"
+                android:text="Reset Your Password"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintBottom_toTopOf="@+id/etResetEmail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btnResetPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="161dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="162dp"
+                android:text="Reset"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etResetEmail" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

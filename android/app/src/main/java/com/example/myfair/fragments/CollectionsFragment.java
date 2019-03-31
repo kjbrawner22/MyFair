@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
@@ -59,15 +61,15 @@ public class CollectionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private CardInfoView cardInfo;
+    private CardView cvCards, cvBrochures, cvDocs;
+    private ScrollView svMenu;
     private int lastForm;
 
     static final String TAG = "CollectionsFragmentLog";
     private FirebaseDatabase db;
-    private Button btnUser, btnContacts;
-    private ImageButton  btnShare;
+    private ImageButton  btnShare, btnBack, btnMenuBack;
 
-    private LinearLayout lytListView, lytListViewUser;
-    private ImageButton btnBack;
+    private LinearLayout lytListView;
     private OnFragmentInteractionListener mListener;
     private androidx.fragment.app.FragmentManager fm;
 
@@ -159,19 +161,25 @@ public class CollectionsFragment extends Fragment {
 
         // find views
         lytListView = v.findViewById(R.id.lytListView);
-        lytListViewUser = v.findViewById(R.id.lytListViewUser);
         cardInfo = v.findViewById(R.id.cardInfo);
-        btnUser = v.findViewById(R.id.btnUserLib);
-        btnContacts = v.findViewById(R.id.btnCollection);
         btnBack = cardInfo.findViewById(R.id.btnInfoBack);
         btnShare = cardInfo.findViewById(R.id.btnShare);
+        cvCards = v.findViewById(R.id.cvProfileCards);
+        cvBrochures = v.findViewById(R.id.cvProfileBrochures);
+        cvDocs = v.findViewById(R.id.cvProfileDocs);
+        svMenu = v.findViewById(R.id.svProfileMenu);
+        btnMenuBack = v.findViewById(R.id.btnMenuBack);
+
         btnBack.setOnClickListener(buttonListener);
-        btnUser.setOnClickListener(buttonListener);
-        btnContacts.setOnClickListener(buttonListener);
         btnShare.setOnClickListener(buttonListener);
+        btnMenuBack.setOnClickListener(buttonListener);
+        cvCards.setOnClickListener(cvListener);
+        cvBrochures.setOnClickListener(cvListener);
+        cvDocs.setOnClickListener(cvListener);
+
+        changeForm(2);
 
         // pull cards from database
-        getIdList(db.userCards(), lytListViewUser);
         getIdList(db.userContacts(), lytListView);
 
         return v;
@@ -234,19 +242,38 @@ public class CollectionsFragment extends Fragment {
         }
     };
 
-    private View.OnClickListener buttonListener = new View.OnClickListener() {
+    private View.OnClickListener cvListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int id = view.getId();
             switch(id){
-                case R.id.btnInfoBack:
-                    changeForm(lastForm);
-                    break;
-                case R.id.btnCollection:
+                case R.id.cvProfileCards:
                     changeForm(1);
                     break;
-                case R.id.btnUserLib:
+                case R.id.cvProfileBrochures:
+                    changeForm(1);
+                    break;
+                case R.id.cvProfileDocs:
+                    changeForm(1);
+                    break;
+                default:
+                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+            }
+        }
+    };
+
+
+    private View.OnClickListener buttonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            Log.d("ButtonIDClicked", "ID: " + id);
+            switch(id){
+                case R.id.btnMenuBack:
                     changeForm(2);
+                    break;
+                case R.id.btnInfoBack:
+                    changeForm(lastForm);
                     break;
                 case R.id.btnShare:
                     Bundle bundle = new Bundle();
@@ -266,27 +293,23 @@ public class CollectionsFragment extends Fragment {
     private void changeForm(int form){
         switch (form){
             case 1:
+                // Contacts
                 lytListView.setVisibility(View.VISIBLE);
-                lytListViewUser.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.GONE);
-                btnContacts.setVisibility(View.VISIBLE);
-                btnUser.setVisibility(View.VISIBLE);
+                svMenu.setVisibility(View.GONE);
                 lastForm = form;
                 break;
             case 2:
+                //menu
                 lytListView.setVisibility(View.GONE);
-                lytListViewUser.setVisibility(View.VISIBLE);
                 cardInfo.setVisibility(View.GONE);
-                btnContacts.setVisibility(View.VISIBLE);
-                btnUser.setVisibility(View.VISIBLE);
-                lastForm = form;
+                svMenu.setVisibility(View.VISIBLE);
                 break;
             case 3:
+                // card info
                 lytListView.setVisibility(View.GONE);
-                lytListViewUser.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.VISIBLE);
-                btnContacts.setVisibility(View.GONE);
-                btnUser.setVisibility(View.GONE);
+                svMenu.setVisibility(View.GONE);
                 break;
             default:
                 Log.d("CollectionsFragmentLog", "form not implemented..");
