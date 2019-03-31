@@ -111,9 +111,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnResetPasswordForm:
                 EditText etEmail = findViewById(R.id.etSignInEmail);
                 showPasswordResetView(etEmail.getText().toString());
+                break;
             case R.id.btnResetPassword:
                 resetPassword();
+                break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        changeForm(R.id.btnSignInForm);
     }
 
     // validate the sign-in fields, and return a boolean of the result
