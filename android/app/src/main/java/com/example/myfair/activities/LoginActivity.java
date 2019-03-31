@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +59,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Button btnSignInForm = findViewById(R.id.btnSignInForm);
         Button btnResendEmail = findViewById(R.id.btnResend);
         Button btnVerifyDone = findViewById(R.id.btnVerifyDone);
+        ImageButton btnResetPasswordForm = findViewById(R.id.btnResetPasswordForm);
+        Button btnResetPassword = findViewById(R.id.btnResetPassword);
 
         //set the click listeners
         btnSignUpForm.setOnClickListener(this);
@@ -66,6 +69,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnSignIn.setOnClickListener(this);
         btnResendEmail.setOnClickListener(this);
         btnVerifyDone.setOnClickListener(this);
+        btnResetPasswordForm.setOnClickListener(this);
+        btnResetPassword.setOnClickListener(this);
     }
 
     // Handle all the click listeners
@@ -103,6 +108,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.d("CHANGE_FORM", "Changing form...");
                 changeForm(id);
                 break;
+            case R.id.btnResetPasswordForm:
+                EditText etEmail = findViewById(R.id.etSignInEmail);
+                showPasswordResetView(etEmail.getText().toString());
+            case R.id.btnResetPassword:
+                resetPassword();
         }
     }
 
@@ -234,13 +244,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void changeForm(int id) {
         ConstraintLayout lytSignIn = findViewById(R.id.lytSignIn);
         ConstraintLayout lytSignUp = findViewById(R.id.lytSignUp);
+        ConstraintLayout lytResetPassword = findViewById(R.id.lytResetPassword);
 
-        if (id == R.id.btnSignUpForm) {
-            lytSignIn.setVisibility(View.GONE);
-            lytSignUp.setVisibility(View.VISIBLE);
+        switch (id) {
+            case R.id.btnSignUpForm:
+                lytResetPassword.setVisibility(View.GONE);
+                lytSignIn.setVisibility(View.GONE);
+                lytSignUp.setVisibility(View.VISIBLE);
+                break;
+            case R.id.btnSignInForm:
+                lytResetPassword.setVisibility(View.GONE);
+                lytSignUp.setVisibility(View.GONE);
+                lytSignIn.setVisibility(View.VISIBLE);
+                break;
+            case R.id.btnResetPasswordForm:
+                lytSignIn.setVisibility(View.GONE);
+                lytSignUp.setVisibility(View.GONE);
+                lytResetPassword.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showPasswordResetView(String email) {
+        if (!email.isEmpty()) {
+            EditText etEmail = findViewById(R.id.etResetEmail);
+            etEmail.setText(email);
+        }
+
+        changeForm(R.id.btnResetPasswordForm);
+    }
+
+    private void resetPassword() {
+        EditText etEmail = findViewById(R.id.etResetEmail);
+        final String email = etEmail.getText().toString();
+
+        if (email.isEmpty()) {
+            etEmail.setError("Email field is required.");
+            etEmail.requestFocus();
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Valid email address required.");
+            etEmail.requestFocus();
         } else {
-            lytSignUp.setVisibility(View.GONE);
-            lytSignIn.setVisibility(View.VISIBLE);
+            mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d("PASSWORD_RESET", "Email sent.");
+                        Toast.makeText(LoginActivity.this,
+                                "An email has been sent to " + email
+                                        + ". Please check your inbox.", Toast.LENGTH_LONG).show();
+                        changeForm(R.id.btnSignInForm);
+                    } else {
+
+                    }
+                }
+            });
         }
     }
 
