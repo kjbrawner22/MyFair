@@ -3,6 +3,7 @@ package com.example.myfair.activities;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +23,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity implements
         CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
