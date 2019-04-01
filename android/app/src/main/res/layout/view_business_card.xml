@@ -1,37 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/lytBusinessCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="4dp"
+        android:textAlignment="center">
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_height="150dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="Card Picture"
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/brochure"
+            tools:srcCompat="@drawable/brochure" />
 
         <TextView
             android:id="@+id/tvName"
-            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:text="null"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvCompany"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:text="null"
+            android:textAlignment="textStart"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:typeface="normal" />
 
         <TextView
             android:id="@+id/tvPosition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="2dp"
+            android:text="null"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:typeface="normal" />
 
     </LinearLayout>
 

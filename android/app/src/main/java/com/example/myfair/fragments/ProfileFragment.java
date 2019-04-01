@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
     private ImageButton btnBack;
     private ImageButton btnShare;
     private ImageButton btnCardLytBack;
-    private ScrollView profileMenu;
+    private ScrollView profileMenu, lookAtCards;
     private CardInfoView cardInfo;
     private LinearLayout lytCardList;
     private FirebaseDatabase db;
@@ -166,6 +166,8 @@ public class ProfileFragment extends Fragment {
 
         FragmentActivity mainActivity = getActivity();
         fm = mainActivity.getSupportFragmentManager();
+
+        lookAtCards = v.findViewById(R.id.svCardScroll);
 
         lytCardList = v.findViewById(R.id.lytCardList);
         cardInfo = v.findViewById(R.id.profileCardInfo);
@@ -277,17 +279,17 @@ public class ProfileFragment extends Fragment {
     private void changeForm(int form){
         switch(form){
             case 1:
-                lytCardList.setVisibility(View.VISIBLE);
+                lookAtCards.setVisibility(View.VISIBLE);
                 cardInfo.setVisibility(View.GONE);
                 profileMenu.setVisibility(View.GONE);
                 break;
             case 2:
-                lytCardList.setVisibility(View.GONE);
+                lookAtCards.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.VISIBLE);
                 profileMenu.setVisibility(View.GONE);
                 break;
             case 3:
-                lytCardList.setVisibility(View.GONE);
+                lookAtCards.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.GONE);
                 profileMenu.setVisibility(View.VISIBLE);
                 break;
