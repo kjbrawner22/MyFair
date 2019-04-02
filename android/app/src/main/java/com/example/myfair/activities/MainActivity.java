@@ -20,6 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+/**
+ * MainActivity that is a central point for the main fragments identified in the 'implements' area
+ */
 public class MainActivity extends AppCompatActivity implements
         CreateFragment.OnFragmentInteractionListener, AnalyticsFragment.OnFragmentInteractionListener,
         CollectionsFragment.OnFragmentInteractionListener,
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private Resources res;
 
+    /**
+     * Handler for the navigation selection's by the user
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -59,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements
 
     };
 
+    /**
+     * @param fragment - Fragment to switch to.
+     * @param title - string title of fragment
+     */
     private void switchToFragment(Fragment fragment, String title) {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.fragmentLayout, fragment);
@@ -67,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements
         toolbar.setTitle(title);
     }
 
+    /**
+     * standard onCreate override. initialize the toolbar, the fragments, and the navbar.
+     * @param savedInstanceState - app's saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,27 +99,13 @@ public class MainActivity extends AppCompatActivity implements
 
         fm = getSupportFragmentManager();
 
-        BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navBar = findViewById(R.id.navigation);
         navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fm.beginTransaction().add(R.id.fragmentLayout, fragmentProfile).commit();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    private void updateUI() {
-        Intent intent = new Intent(MainActivity.this, ProfileCreationActivity.class);
-        startActivity(intent);
-    }
-
+    //Not sure if we will need this
     @Override
     public void onFragmentInteraction(Uri uri) {
         // can leave empty
