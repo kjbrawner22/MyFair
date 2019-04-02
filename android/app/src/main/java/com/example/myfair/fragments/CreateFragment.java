@@ -12,7 +12,6 @@ import android.widget.Button;
 
 import com.example.myfair.activities.CardCreationActivity;
 import com.example.myfair.R;
-import com.example.myfair.activities.UserLibraryActivity;
 
 
 /**
@@ -72,15 +71,7 @@ public class CreateFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create, container, false);
 
-        btnLibrary = (Button) view.findViewById(R.id.btnLibrary);
         btnNewCard = (Button) view.findViewById(R.id.btnNewCard);
-
-        btnLibrary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openLibrary();
-            }
-        });
 
         btnNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,11 +81,6 @@ public class CreateFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private void openLibrary() {
-        Intent intent = new Intent(getActivity(), UserLibraryActivity.class);
-        startActivity(intent);
     }
 
     private void openCardCreation() {

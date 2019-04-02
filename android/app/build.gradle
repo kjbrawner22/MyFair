@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.0-beta01'
+    implementation 'com.yinglan.shadowimageview:shadowimageview:1.0.4'
     testImplementation 'junit:junit:4.12'
 
     //QR Code Scan and Gen Dependency

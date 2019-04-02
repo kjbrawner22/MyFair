@@ -28,7 +28,6 @@
         <activity android:name=".activities.GenerateActivity" />
         <activity android:name=".activities.ScanActivity" />
         <activity android:name=".activities.CardCreationActivity" />
-        <activity android:name=".activities.UserLibraryActivity" />
         <activity android:name=".activities.ProfileCreationActivity" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.LoginActivity" />
