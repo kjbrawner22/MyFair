@@ -43,6 +43,11 @@ public class SplashPageActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        //do nothing
+    }
+
+    @Override
     public void onStart(){
         super.onStart();
         Log.e("Starting","Starting");
