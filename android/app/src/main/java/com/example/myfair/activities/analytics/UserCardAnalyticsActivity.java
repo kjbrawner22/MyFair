@@ -19,13 +19,19 @@ import com.example.myfair.views.GenericCardView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.jjoe64.graphview.GraphView;
 
 
+import java.sql.Time;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserCardAnalyticsActivity extends AppCompatActivity {
 
@@ -39,6 +45,15 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
     DatePickerDialog toDialog;
     TextView fromText;
     TextView toText;
+    TextView fromTimeFiller;
+    TextView toTimeFiller;
+    TextView numberOfScansText;
+    TextView dateCreatedFiller;
+
+    ArrayList<Timestamp> scanDates;
+    Timestamp creationDate;
+    Long numberOfShares;
+
 
     final Calendar fromCalendar = Calendar.getInstance();
     final Calendar toCalendar = Calendar.getInstance();
@@ -65,13 +80,19 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         cardSpot = findViewById(R.id.cardPreviewLayout);
         graph = findViewById(R.id.scansGraph);
 
+        fromTimeFiller = findViewById(R.id.fromTimeFiller);
+        toTimeFiller = findViewById(R.id.toTimeFiller);
+
+
 
         fromDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
-                fromText.setText(newDate.getTime().toString());
+                String d = newDate.get(Calendar.MONTH)+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
+                fromTimeFiller.setText(d);
+                fromTimeFiller.setTextSize(24);
             }
         }, fromCalendar.get(Calendar.YEAR), fromCalendar.get(Calendar.MONTH), fromCalendar.get(Calendar.DAY_OF_MONTH));
         fromText = findViewById(R.id.fromText);
@@ -88,7 +109,9 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
-                toText.setText(newDate.getTime().toString());
+                String d = newDate.get(Calendar.MONTH)+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
+                toTimeFiller.setText(d);
+                toTimeFiller.setTextSize(24);
             }
         }, toCalendar.get(Calendar.YEAR), toCalendar.get(Calendar.MONTH), toCalendar.get(Calendar.DAY_OF_MONTH));
         toText = findViewById(R.id.toText);
@@ -102,9 +125,28 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
 
 
         makePreview(card, cardSpot);
+        numberOfScansText = findViewById(R.id.numberOfScansFiller);
+        dateCreatedFiller = findViewById(R.id.dateCreatedFiller);
 
+        DocumentReference metadata = card.collection("cdata").document("metadata");
+        metadata.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    Map<String,Object> metaData= task.getResult().getData();
+                    numberOfShares = (Long) metaData.get("shared");
+                    String placeHolder = "" + numberOfShares;
+                    numberOfScansText.setText(placeHolder);
 
-
+                    scanDates = (ArrayList<Timestamp>) metaData.get("scanRegistry");
+                    creationDate = (Timestamp) metaData.get("created");
+                    Calendar creationDatePH = Calendar.getInstance();
+                    creationDatePH.setTime(creationDate.toDate());
+                    String creationDateString = creationDatePH.get(Calendar.MONTH)+"/"+creationDatePH.get(Calendar.DAY_OF_MONTH)+"/"+creationDatePH.get(Calendar.YEAR);
+                    dateCreatedFiller.setText(creationDateString);
+                }
+            }
+        });
     }
 
     private void addCardView(GenericCardView v, LinearLayout listView) {

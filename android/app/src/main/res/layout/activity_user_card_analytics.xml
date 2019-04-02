@@ -6,10 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".activities.analytics.UserCardAnalyticsActivity">
 
+    <TextView
+        android:id="@+id/dateCreatedFiller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:textSize="30sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dateCreatedText"
+        app:layout_constraintStart_toEndOf="@+id/dateCreatedText" />
+
     <LinearLayout
         android:id="@+id/cardPreviewLayout"
         android:layout_width="395dp"
-        android:layout_height="114dp"
+        android:layout_height="142dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
@@ -38,9 +47,10 @@
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/scansGraph"
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="250dip"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="84dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/totalScansTitle" />
 
@@ -50,9 +60,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="32dp"
-        android:text="@string/fromText"
-        android:textSize="36sp"
         android:clickable="true"
+        android:text="@string/fromText"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scansGraph" />
 
@@ -61,10 +71,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
-        android:text="@string/toText"
-        android:textSize="36sp"
         android:clickable="true"
+        android:text="@string/toText"
+        android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/fromText"
         app:layout_constraintStart_toEndOf="@+id/fromText" />
+
+    <TextView
+        android:id="@+id/dateCreatedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="33dp"
+        android:text="@string/dateCreatedText"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalScansTitle" />
+
+    <TextView
+        android:id="@+id/fromTimeFiller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/fromText"
+        app:layout_constraintStart_toEndOf="@+id/fromText" />
+
+    <TextView
+        android:id="@+id/toTimeFiller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/toText"
+        app:layout_constraintStart_toEndOf="@+id/toText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
