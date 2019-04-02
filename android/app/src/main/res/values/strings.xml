@@ -67,5 +67,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="graphTitle">Card Scans</string>
     <string name="totalScansTitle">Total Scans</string>
+    <string name="totalNumberOfScans">Total Scans</string>
+    <string name="fromText">From</string>
+    <string name="toText">To</string>
 
 </resources>

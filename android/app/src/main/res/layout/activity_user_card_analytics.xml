@@ -6,4 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".activities.analytics.UserCardAnalyticsActivity">
 
+    <LinearLayout
+        android:id="@+id/cardPreviewLayout"
+        android:layout_width="395dp"
+        android:layout_height="114dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
+    <TextView
+        android:id="@+id/totalScansTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/totalNumberOfScans"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardPreviewLayout" />
+
+    <TextView
+        android:id="@+id/numberOfScansFiller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textSize="30sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/totalScansTitle"
+        app:layout_constraintStart_toEndOf="@+id/totalScansTitle" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/scansGraph"
+        android:layout_width="match_parent"
+        android:layout_height="250dip"
+        android:layout_marginTop="64dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalScansTitle" />
+
+    <TextView
+        android:id="@+id/fromText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/fromText"
+        android:textSize="36sp"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scansGraph" />
+
+    <TextView
+        android:id="@+id/toText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:text="@string/toText"
+        android:textSize="36sp"
+        android:clickable="true"
+        app:layout_constraintBaseline_toBaselineOf="@+id/fromText"
+        app:layout_constraintStart_toEndOf="@+id/fromText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
