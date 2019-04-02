@@ -247,15 +247,8 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     String cID = document.getId();
                     HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                    String type = (String) map.get(Card.FIELD_TYPE);
-                    if(type != null && type.equals(Card.VALUE_TYPE_BUSINESS)) {
-                        BusinessCardView v = new BusinessCardView(UserCardAnalyticsActivity.this, cID, map);
-                        addCardView(v, listView);
-                    }
-                    else if(type != null){
-                        UniversityCardView v = new UniversityCardView(UserCardAnalyticsActivity.this, cID, map);
-                        addCardView(v, listView);
-                    }
+                    UniversityCardView v = new UniversityCardView(UserCardAnalyticsActivity.this, cID, map);
+                    addCardView(v, listView);
                     Log.d(TAG, document.getId() + " => " + document.getData());
 
                 } else {
