@@ -53,11 +53,20 @@ public class UniversityCardView extends GenericCardView {
         setMap(map);
         setUserID(getValue(Card.FIELD_CARD_OWNER));
         setCardID(cID);
-        setBusinessCard();
+        String type = getValue(Card.FIELD_TYPE);
+        if(type.equals(Card.VALUE_TYPE_BUSINESS))
+            setBusinessCard();
+        else
+            setUniversityCard();
         setQrString();
     }
 
     private void setBusinessCard(){
+        setName();
+        setCompany();
+        setPosition();
+    }
+    private void setUniversityCard(){
         setName();
         setUniversity();
         setMajor();
@@ -72,6 +81,8 @@ public class UniversityCardView extends GenericCardView {
     public void setMajor() {
         this.major.setText(getValue(Card.FIELD_UNIVERSITY_MAJOR));
     }
+    public void setCompany() { this.university.setText(getValue(Card.FIELD_COMPANY_NAME)); }
+    public void setPosition() { this.major.setText(getValue(Card.FIELD_COMPANY_POSITION)); }
     public String getName() {
         return name.getText().toString();
     }
