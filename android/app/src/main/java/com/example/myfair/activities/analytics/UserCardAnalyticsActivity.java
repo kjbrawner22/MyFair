@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.jjoe64.graphview.GraphView;
 
 
+import java.sql.Array;
 import java.sql.Time;
 import java.time.Month;
 import java.util.ArrayList;
@@ -51,12 +53,16 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
     TextView dateCreatedFiller;
 
     ArrayList<Timestamp> scanDates;
+    ArrayList<Calendar> translatedScanDates;
     Timestamp creationDate;
     Long numberOfShares;
+
+    Button generateGraphBtn;
 
 
     final Calendar fromCalendar = Calendar.getInstance();
     final Calendar toCalendar = Calendar.getInstance();
+    Calendar creationDatePH;
 
 
 
@@ -80,6 +86,14 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         cardSpot = findViewById(R.id.cardPreviewLayout);
         graph = findViewById(R.id.scansGraph);
 
+        generateGraphBtn = findViewById(R.id.genGraphBtn);
+        generateGraphBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUpGraph();
+            }
+        });
+
         fromTimeFiller = findViewById(R.id.fromTimeFiller);
         toTimeFiller = findViewById(R.id.toTimeFiller);
 
@@ -89,8 +103,8 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
-                newDate.set(year, month, dayOfMonth);
-                String d = newDate.get(Calendar.MONTH)+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
+                int correctedMonth = newDate.get(Calendar.MONTH)+1;
+                String d = correctedMonth+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
                 fromTimeFiller.setText(d);
                 fromTimeFiller.setTextSize(24);
             }
@@ -109,7 +123,8 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
-                String d = newDate.get(Calendar.MONTH)+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
+                int correctedMonth = newDate.get(Calendar.MONTH)+1;
+                String d = correctedMonth+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
                 toTimeFiller.setText(d);
                 toTimeFiller.setTextSize(24);
             }
@@ -134,19 +149,42 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     Map<String,Object> metaData= task.getResult().getData();
+
+
                     numberOfShares = (Long) metaData.get("shared");
                     String placeHolder = "" + numberOfShares;
                     numberOfScansText.setText(placeHolder);
 
                     scanDates = (ArrayList<Timestamp>) metaData.get("scanRegistry");
+                    translatedScanDates = translateTimestamps(scanDates);
+
+
                     creationDate = (Timestamp) metaData.get("created");
-                    Calendar creationDatePH = Calendar.getInstance();
+                    creationDatePH = Calendar.getInstance();
                     creationDatePH.setTime(creationDate.toDate());
-                    String creationDateString = creationDatePH.get(Calendar.MONTH)+"/"+creationDatePH.get(Calendar.DAY_OF_MONTH)+"/"+creationDatePH.get(Calendar.YEAR);
+                    int correctedMonth = creationDatePH.get(Calendar.MONTH)+1;
+                    String creationDateString = correctedMonth+"/"+creationDatePH.get(Calendar.DAY_OF_MONTH)+"/"+creationDatePH.get(Calendar.YEAR);
                     dateCreatedFiller.setText(creationDateString);
                 }
             }
         });
+    }
+
+    private void setUpGraph(){
+        ArrayList<Calendar> filteredScanDates = translatedScanDates;
+        filteredScanDates.removeIf( c -> (c.getTime().before(fromCalendar.getTime())||c.getTime().after(toCalendar.getTime())));
+        int listSize = filteredScanDates.size();
+
+    }
+
+    private ArrayList<Calendar> translateTimestamps(ArrayList<Timestamp> list){
+        ArrayList<Calendar> temp = new ArrayList<>(list.size());
+        for( Timestamp elem : list){
+            Calendar x = Calendar.getInstance();
+            x.setTime(elem.toDate());
+            temp.add(x);
+        }
+        return temp;
     }
 
     private void addCardView(GenericCardView v, LinearLayout listView) {
