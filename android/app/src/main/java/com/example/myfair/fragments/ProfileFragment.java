@@ -357,17 +357,10 @@ public class ProfileFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String cID = document.getId();
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        String type = (String) map.get(Card.FIELD_TYPE);
-                        if(type != null && type.equals(Card.VALUE_TYPE_BUSINESS)) {
-                            BusinessCardView v = new BusinessCardView(getContext(), cID, map);
-                            v.setOnClickListener(businessCardClickListener);
-                            addCardView(v, listView);
-                        }
-                        else if(type != null){
-                            UniversityCardView v = new UniversityCardView(getContext(), cID, map);
-                            v.setOnClickListener(universityCardClickListener);
-                            addCardView(v, listView);
-                        }
+                        //String type = (String) map.get(Card.FIELD_TYPE);
+                        UniversityCardView v = new UniversityCardView(getContext(), cID, map);
+                        v.setOnClickListener(universityCardClickListener);
+                        addCardView(v, listView);
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {
