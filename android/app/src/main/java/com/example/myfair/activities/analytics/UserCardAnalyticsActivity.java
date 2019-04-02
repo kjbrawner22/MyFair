@@ -24,10 +24,13 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 import java.sql.Array;
 import java.sql.Time;
+import java.time.Duration;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,9 +62,8 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
 
     Button generateGraphBtn;
 
-
-    final Calendar fromCalendar = Calendar.getInstance();
-    final Calendar toCalendar = Calendar.getInstance();
+    Calendar fromCalendar = Calendar.getInstance();
+    Calendar toCalendar = Calendar.getInstance();
     Calendar creationDatePH;
 
 
@@ -86,6 +88,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         cardSpot = findViewById(R.id.cardPreviewLayout);
         graph = findViewById(R.id.scansGraph);
 
+
         generateGraphBtn = findViewById(R.id.genGraphBtn);
         generateGraphBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +106,15 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, dayOfMonth);
                 int correctedMonth = newDate.get(Calendar.MONTH)+1;
                 String d = correctedMonth+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
                 fromTimeFiller.setText(d);
                 fromTimeFiller.setTextSize(24);
+                fromCalendar.set(Calendar.YEAR,year);
+                fromCalendar.set(Calendar.MONTH,month);
+                fromCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
             }
         }, fromCalendar.get(Calendar.YEAR), fromCalendar.get(Calendar.MONTH), fromCalendar.get(Calendar.DAY_OF_MONTH));
         fromText = findViewById(R.id.fromText);
@@ -127,6 +135,9 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                 String d = correctedMonth+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
                 toTimeFiller.setText(d);
                 toTimeFiller.setTextSize(24);
+                toCalendar.set(Calendar.YEAR,year);
+                toCalendar.set(Calendar.MONTH,month);
+                toCalendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
             }
         }, toCalendar.get(Calendar.YEAR), toCalendar.get(Calendar.MONTH), toCalendar.get(Calendar.DAY_OF_MONTH));
         toText = findViewById(R.id.toText);
@@ -171,9 +182,45 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
     }
 
     private void setUpGraph(){
+        int[] subDivisions = new int[12];
+        for(int i = 0; i < 12; i++){
+            subDivisions[i]=0;
+        }
         ArrayList<Calendar> filteredScanDates = translatedScanDates;
-        filteredScanDates.removeIf( c -> (c.getTime().before(fromCalendar.getTime())||c.getTime().after(toCalendar.getTime())));
-        int listSize = filteredScanDates.size();
+        Log.e(TAG, "Checking from and To Times " + fromCalendar.getTime() + " " + fromCalendar.getTimeInMillis()+ " " + toCalendar.getTime()+ toCalendar.getTimeInMillis());
+        filteredScanDates.removeIf( c -> {
+            Log.e(TAG, "c times " + c.getTime() + c.getTimeInMillis());
+            return (c.getTime().before(fromCalendar.getTime())||c.getTime().after(toCalendar.getTime()));
+        });
+        Log.e(TAG,"How many are in the filtered scan dates " + filteredScanDates.size());
+        long timeBetween = (toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis());
+        Log.e(TAG,"time between" + timeBetween);
+        Log.e(TAG, "A moose has stolen the graph");
+        long timePerSlot = timeBetween/subDivisions.length;
+        Log.e(TAG,timePerSlot + " time Per slot");
+        filteredScanDates.forEach(c -> {
+            long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
+            Log.e(TAG, "Checking the diff "+ diff);
+            subDivisions[(int) (diff/timePerSlot)]++;
+        });
+
+        DataPoint[] set = new DataPoint[12];
+        for(int i = 0; i<set.length; i++){
+            set[i] = new DataPoint(i,subDivisions[i]);
+            Log.e(TAG,"subDivision "+i+" value "+subDivisions[i]);
+        }
+
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
+        graph.addSeries(series);
+
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(12);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(5);
+
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setXAxisBoundsManual(true);
 
     }
 
