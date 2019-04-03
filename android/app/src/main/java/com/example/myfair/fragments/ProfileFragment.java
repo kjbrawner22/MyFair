@@ -156,6 +156,10 @@ public class ProfileFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Standard onCreate override. Finds needed handles and initializes the view
+     * @param savedInstanceState - App's saved instance state
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -200,6 +204,10 @@ public class ProfileFragment extends Fragment {
         return v;
     }
 
+    /**
+     * onClick override to handle all click listeners.
+     * @param v - view that was clicked
+     */
     private View.OnClickListener menuCardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
