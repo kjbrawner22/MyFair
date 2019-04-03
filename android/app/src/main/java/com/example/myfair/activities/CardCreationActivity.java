@@ -3,6 +3,7 @@ package com.example.myfair.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,13 +34,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "CardCreationActivity";
-    private EditText etName, etCompany, etPosition, etUniversity, etMajor;
+    private EditText etName, etCompany, etPosition, etUniversity, etMajor, etName2;
     private String fullName, company, position, university, major;
     private Button btnBack;
     private Button btnDone;
     private ConstraintLayout lytSelect, lytUniversity, lytCompany;
     FirebaseDatabase database;
     FirebaseUser user;
+    int form;
 
     /**
      * Standard onCreate override. Finds needed handles and initializes view.
@@ -57,6 +60,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         lytCompany = findViewById(R.id.lytCompany);
 
         etName = findViewById(R.id.etName);
+        etName2 = findViewById(R.id.etName2);
         etCompany = findViewById(R.id.etCompany);
         etPosition = findViewById(R.id.etPosition);
         etUniversity = findViewById(R.id.etUniversity);
@@ -141,14 +145,36 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
              position = etPosition.getText().toString();
          }
          else{
-             fullName = etName.getText().toString();
+             fullName = etName2.getText().toString();
              university = etUniversity.getText().toString();
              major = etMajor.getText().toString();
          }
     }
 
     private boolean validFields(){
-        return etName.getText().toString().isEmpty();
+        if(form == 2){
+            validate(etName, etCompany, etPosition);
+        }
+        else if (form == 3){
+            validate(etName2, etUniversity, etMajor);
+        }
+        return true;
+    }
+
+    private boolean validate(EditText etOne, EditText etTwo, EditText etThree){
+        if (fullName.isEmpty()) {
+            etOne.setError("Email field is required.");
+            etOne.requestFocus();
+        } else if (company.isEmpty()) {
+            etTwo.setError("Password field is required.");
+            etTwo.requestFocus();
+        } else if (position.isEmpty()) {
+            etThree.setError("Must confirm your password.");
+            etThree.requestFocus();
+        } else {
+            return true;
+        }
+        return false;
     }
 
 
@@ -167,6 +193,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * @param formID - state of the desired view setting
      */
     private void changeForm(int formID){
+        form = formID;
         switch(formID){
             case 1:
                 btnBack.setVisibility(View.GONE);
@@ -191,7 +218,9 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
                 lytSelect.setVisibility(View.GONE);
                 lytCompany.setVisibility(View.GONE);
                 lytUniversity.setVisibility(View.VISIBLE);
-
+                break;
+            default:
+                Log.d("ChangeFormLog", "Form Not Yet Implemented");
         }
     }
 }

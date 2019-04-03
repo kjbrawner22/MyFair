@@ -62,7 +62,7 @@ public class CollectionsFragment extends Fragment {
     private String mParam2;
     private CardInfoView cardInfo;
     private CardView cvCards, cvBrochures, cvDocs;
-    private ScrollView svMenu;
+    private ScrollView svMenu, svCardScroller;
     private int lastForm;
 
     static final String TAG = "CollectionsFragmentLog";
@@ -163,6 +163,7 @@ public class CollectionsFragment extends Fragment {
         fm = mainActivity.getSupportFragmentManager();
         db = new FirebaseDatabase();
         lastForm = 1;
+        svCardScroller = v.findViewById(R.id.svCardScroller);
 
         FloatingActionButton shareFAB = v.findViewById(R.id.shareFAB);
         shareFAB.setOnClickListener(new View.OnClickListener() {
@@ -340,20 +341,20 @@ public class CollectionsFragment extends Fragment {
         switch (form){
             case 1:
                 // Contacts
-                lytListView.setVisibility(View.VISIBLE);
+                svCardScroller.setVisibility(View.VISIBLE);
                 cardInfo.setVisibility(View.GONE);
                 svMenu.setVisibility(View.GONE);
                 lastForm = form;
                 break;
             case 2:
                 //menu
-                lytListView.setVisibility(View.GONE);
+                svCardScroller.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.GONE);
                 svMenu.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 // card info
-                lytListView.setVisibility(View.GONE);
+                svCardScroller.setVisibility(View.GONE);
                 cardInfo.setVisibility(View.VISIBLE);
                 svMenu.setVisibility(View.GONE);
                 break;
@@ -383,17 +384,10 @@ public class CollectionsFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String cID = document.getId();
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        String type = (String) map.get(Card.FIELD_TYPE);
-                        if(type != null && type.equals(Card.VALUE_TYPE_BUSINESS)) {
-                            BusinessCardView v = new BusinessCardView(getContext(), cID, map);
-                            v.setOnClickListener(businessCardClickListener);
-                            addCardView(v, listView);
-                        }
-                        else if(type != null){
-                            UniversityCardView v = new UniversityCardView(getContext(), cID, map);
-                            v.setOnClickListener(universityCardClickListener);
-                            addCardView(v, listView);
-                        }
+                        //String type = (String) map.get(Card.FIELD_TYPE);
+                        UniversityCardView v = new UniversityCardView(getContext(), cID, map);
+                        v.setOnClickListener(universityCardClickListener);
+                        addCardView(v, listView);
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {

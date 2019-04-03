@@ -57,5 +57,19 @@
     <string name="collectionItemDefaultName">Null name</string>
     <string name="collectionItemIconDescription">Collection Icon</string>
     <string name="collectionItemMoreInfo">More Information</string>
+    <string name="analyticsYourCards">Your Cards</string>
+    <string name="analyticsScannedBtn">Scanned Cards</string>
+    <string name="historyBtn">History</string>
+    <string name="graphsBtn">Graphs</string>
+    <string name="analyticsGraphs">Graphs</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="graphTitle">Card Scans</string>
+    <string name="totalScansTitle">Total Scans</string>
+    <string name="totalNumberOfScans">Total Scans</string>
+    <string name="fromText">From</string>
+    <string name="toText">To</string>
+    <string name="dateCreatedText">Created:</string>
 
 </resources>
