@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 public class UserAnalytics extends AppCompatActivity {
 
+    //Init Variables
     FirebaseDatabase db;
     CollectionReference usersCards;
     String TAG = "usersCards";
@@ -37,6 +38,7 @@ public class UserAnalytics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_analytics);
 
+        //set up database and collect view locations
         db = new FirebaseDatabase();
         usersCards =  db.userCards();
 
@@ -47,7 +49,7 @@ public class UserAnalytics extends AppCompatActivity {
 
     private View.OnClickListener specificCardAnalyticsListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v) { //On a cards click open the user card analytics activity
             Intent intent = new Intent(UserAnalytics.this, UserCardAnalyticsActivity.class);
             GenericCardView placeHolder = (GenericCardView) v;
             String cId = placeHolder.getCardID();
@@ -57,7 +59,7 @@ public class UserAnalytics extends AppCompatActivity {
     };
 
     private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
+        listView.addView(v); //add view to layout
         v.setMargins();
     }
 
@@ -67,7 +69,7 @@ public class UserAnalytics extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        String cID = document.getId();
+                        String cID = document.getId(); //Creating the view to display the preview of the cards the user owns
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
                         UniversityCardView v = new UniversityCardView(UserAnalytics.this, cID, map);
                         v.setOnClickListener(specificCardAnalyticsListener);
