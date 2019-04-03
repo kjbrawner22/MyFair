@@ -30,14 +30,15 @@ public class SplashPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_page);
 
+        //Setting up the Animated Logo
         ImageView img = findViewById(R.id.spinnyLogo);
         img.setBackgroundResource(R.drawable.icon_spin_animation);
 
         AnimationDrawable frameAnim = (AnimationDrawable) img.getBackground();
-
+        //Commencing Animation
         frameAnim.start();
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance(); //Loading Firebase information
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
     }
@@ -59,6 +60,8 @@ public class SplashPageActivity extends AppCompatActivity {
         super.onResume();
         updateUI();
     }
+
+    //Check to see if a user is already logged in
 
     private void updateUI() {
         Log.e("updateUI","checking UI");
@@ -102,7 +105,7 @@ public class SplashPageActivity extends AppCompatActivity {
                 DocumentSnapshot snapshot = task.getResult();
                 if (snapshot != null && snapshot.exists()) {
                     User user = new User(snapshot.getData());
-                    Intent intent;
+                    Intent intent; //Navigate User depending on the update in the UI
                     if (user.profileCreated()) {
                         intent = new Intent(SplashPageActivity.this, com.example.myfair.activities.MainActivity.class);
                     } else {
