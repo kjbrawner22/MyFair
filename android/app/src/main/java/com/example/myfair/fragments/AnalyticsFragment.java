@@ -1,14 +1,21 @@
 package com.example.myfair.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myfair.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 /**
@@ -28,6 +35,11 @@ public class AnalyticsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private FirebaseUser user;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,13 +72,38 @@ public class AnalyticsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        //Construction for later Displaying in main fragment for a future iteration
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analytics, container, false);
+        View v = inflater.inflate(R.layout.fragment_analytics, container, false);
+
+        CardView usersCard = v.findViewById(R.id.ownedCard);
+        usersCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), com.example.myfair.activities.analytics.UserAnalytics.class);
+                startActivity(intent);
+            }
+        });
+
+        CardView historyCard = v.findViewById(R.id.historyCard);
+        historyCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), com.example.myfair.activities.analytics.HistoryAnalytics.class);
+                startActivity(intent);
+            }
+        });
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,4 +144,15 @@ public class AnalyticsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    //Statistics Suite
+
+    //Number of Cards Scanned
+    
+    //User Card with most scans
+
+    //Graphing. Most likely using GraphView OpenSource Graph Plotting
+
+    //Show most recent card scanned and a timestamp
 }
