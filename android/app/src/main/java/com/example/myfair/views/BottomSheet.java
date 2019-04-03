@@ -17,10 +17,18 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import androidx.annotation.Nullable;
 
+/**
+ * Bottom sheet class for initializing Bottom Sheets (QR codes/sharing cards)
+ */
 public class BottomSheet extends BottomSheetDialogFragment {
     private ImageView qrCode;
     //private TextView qrEncrypted;
     private String qrString;
+
+    /**
+     * Sets variables and setup for inflate layout
+     * @return returns the inflated view
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,6 +50,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return v;
     }
 
+    /**
+     * Method for setting the QR code displayed on the bottom sheet
+     * uses QR string (set in onCreateView)
+     */
     private void setQrCode(){
         Bitmap bitmap = QRCodeHelper.newInstance(getContext()).setContent(qrString).setErrorCorrectionLevel(ErrorCorrectionLevel.Q).setMargin(2).getQRCOde();
         qrCode.setImageBitmap(bitmap);
