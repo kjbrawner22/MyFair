@@ -12,15 +12,25 @@ import java.util.HashMap;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
+/**
+ * Base Class for BusinessCardView and UniversityCardView
+ */
 public class GenericCardView extends CardView {
     private String cID, uID;
     private String encryptedString;
     private HashMap<String,Object> map;
 
+    /**
+     * Standard Constructor
+     * @param context - Context of the view
+     */
     public GenericCardView(@NonNull Context context) {
         super(context);
     }
 
+    /**
+     * Helper method that sets the margins for the view
+     */
     public void setMargins() {
         MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
         int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
@@ -29,6 +39,9 @@ public class GenericCardView extends CardView {
         Log.d("MARGINS", "" + margin);
     }
 
+    /**
+     * Helper method that initializes the encrypted string variable used for the QR bitmap
+     */
     public void setQrString(){
         qrObject user = new qrObject(uID, cID);
         String serializeString = new Gson().toJson(user);
@@ -36,6 +49,10 @@ public class GenericCardView extends CardView {
         Log.d("SetQrCode", "CardInfoView: " + encryptedString);
     }
 
+    /**
+     * Setter for the map variable that holds the underlying card data
+     * @param map - HashMap that holds card data
+     */
     public void setMap(HashMap<String,Object> map){
         this.map = map;
     }
@@ -46,10 +63,25 @@ public class GenericCardView extends CardView {
         return str;
     }
 
+
+    /**
+     * Getters for cID and uID
+     * @return String
+     */
     public String getCardID(){return cID;}
-    public void setCardID(String id){cID = id;}
     public String getUserID(){return uID;}
+
+
+    /**
+     * Setters for cID and uID
+     * @param id - String representing ID value
+     */
+    public void setCardID(String id){cID = id;}
     public void setUserID(String id){uID = id;}
 
+    /**
+     * Getter for QR string
+     * @return String
+     */
     public String getEncryptedString() { return encryptedString; }
 }

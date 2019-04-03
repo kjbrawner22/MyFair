@@ -100,6 +100,10 @@ public class ProfileFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Standard onCreate override. Finds needed handles and initializes view.
+     * @param savedInstanceState App's saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +160,12 @@ public class ProfileFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Standard onCreateView override. Finds needed handles and initializes the view
+     * @param inflater - Inflater responsible for inflating the layout fragment.
+     * @param container - ViewGroup associated with the inflater.
+     * @param savedInstanceState - App's saved instance state
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -200,6 +210,10 @@ public class ProfileFragment extends Fragment {
         return v;
     }
 
+    /**
+     * onClick override to handle menuCard clicks.
+     * @param view - view that was clicked
+     */
     private View.OnClickListener menuCardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -241,7 +255,10 @@ public class ProfileFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
+    /**
+     * Override of the onAttach method,
+     * used to attach the listeners to the fragment.
+     * */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -253,6 +270,10 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Override of the onDetach method,
+     * used to detach the listeners to the fragment.
+     * */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -273,7 +294,10 @@ public class ProfileFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
+    /**
+     * change form view
+     * @param form - current view setting
+     */
     private void changeForm(int form){
         switch(form){
             case 1:
@@ -296,6 +320,10 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * onClick override to handle button clicks.
+     * @param view - view that was clicked
+     */
     private View.OnClickListener buttonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -323,6 +351,11 @@ public class ProfileFragment extends Fragment {
         }
     };
 
+
+    /**
+     * onClick override to handle businessCard clicks.
+     * @param view - view that was clicked
+     */
     private View.OnClickListener businessCardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -332,6 +365,10 @@ public class ProfileFragment extends Fragment {
         }
     };
 
+    /**
+     * onClick override to handle universityCard clicks.
+     * @param view - view that was clicked
+     */
     private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -341,11 +378,17 @@ public class ProfileFragment extends Fragment {
         }
     };
 
+    /**
+     * Adds a card (@param v) to the linear layout (@param listView)
+     * */
     private void addCardView(GenericCardView v, LinearLayout listView) {
         listView.addView(v);
         v.setMargins();
     }
 
+    /**
+     * Gets the list of IDs of cards and populates a linear layout with cardViews.
+     * */
     private void getIdList(CollectionReference ref, final LinearLayout listView){
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

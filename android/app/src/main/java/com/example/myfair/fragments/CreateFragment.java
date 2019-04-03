@@ -56,6 +56,10 @@ public class CreateFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Standard onCreate override. Finds needed handles and initializes view.
+     * @param savedInstanceState App's saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,12 @@ public class CreateFragment extends Fragment {
         }
     }
 
+    /**
+     * Standard onCreateView override. Finds needed handles and initializes the view
+     * @param inflater - Inflater responsible for inflating the layout fragment.
+     * @param container - ViewGroup associated with the inflater.
+     * @param savedInstanceState - App's saved instance state
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,6 +93,9 @@ public class CreateFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Opens Card Creation Activity
+     */
     private void openCardCreation() {
         Intent intent = new Intent(getActivity(), CardCreationActivity.class);
         startActivity(intent);
@@ -97,6 +110,10 @@ public class CreateFragment extends Fragment {
 
     }
 
+    /**
+     * Override of the onAttach method,
+     * used to attach the listeners to the fragment.
+     * */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -108,6 +125,10 @@ public class CreateFragment extends Fragment {
         }
     }
 
+    /**
+     * Override of the onDetach method,
+     * used to detach the listeners to the fragment.
+     * */
     @Override
     public void onDetach() {
         super.onDetach();

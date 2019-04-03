@@ -5,6 +5,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * NOT CURRENTLY IN USE ANYWHERE IN CODE
+ * DELETE IN FUTURE
+ */
 public class CardList {
     private static final String TAG = "CardListLog";
     private ArrayList<Card> list;

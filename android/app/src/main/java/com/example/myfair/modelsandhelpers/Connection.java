@@ -14,6 +14,7 @@ public class Connection {
     private int icon;
     private String dbKey;
     private String name;
+    private boolean enabled;
 
     /**
      * Standard Constructor for the Connection object
@@ -21,10 +22,40 @@ public class Connection {
      * @param dbKey - String that represents the connection type in the database
      * @param name - String that represents the displayed value for the connection
      */
-    public Connection(@NonNull int icon, @NonNull String dbKey, @NonNull String name) {
+    public Connection(int icon, @NonNull String dbKey, @NonNull String name) {
         this.icon = icon;
         this.dbKey = dbKey;
         this.name = name;
+        this.enabled = true;
+    }
+
+    /**
+     * @param icon - icon's drawable id
+     * @param dbKey - String that represents the connection type in the database
+     * @param name - String that represents the displayed value for the connection
+     * @param enabled - boolean that represents the enabled value for the spinner.
+     */
+    public Connection(int icon, String dbKey, String name, boolean enabled) {
+        this.icon = icon;
+        this.dbKey = dbKey;
+        this.name = name;
+        this.enabled = enabled;
+    }
+
+    /**
+     * Enable the connection to be selected in the spinner
+     * @param enabled - boolean to assign to enable/disable the connection in the spinner
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * Getter to determine if the Connection is enabled or not.
+     * @return boolean
+     */
+    public boolean isEnabled() {
+        return enabled;
     }
 
     /**
