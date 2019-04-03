@@ -54,6 +54,21 @@ public class ConnectionArrayAdapter extends ArrayAdapter<Connection> {
     }
 
     /**
+     * Utilize the Connection's 'isEnabled' method to determine if the item is enabled or not
+     * @param position - item's position in the spinner
+     * @return boolean result
+     */
+    @Override
+    public boolean isEnabled(int position) {
+        Connection connection = getItem(position);
+        if (connection != null) {
+            return connection.isEnabled();
+        }
+
+        return false;
+    }
+
+    /**
      * @param position - position of the view/object in the array
      * @param convertView - view to pass into the super method to modify
      * @param parent - parent view holding the dropdown views
