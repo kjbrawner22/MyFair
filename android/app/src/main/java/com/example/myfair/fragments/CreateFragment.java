@@ -69,6 +69,12 @@ public class CreateFragment extends Fragment {
         }
     }
 
+    /**
+     * Standard onCreateView override. Finds needed handles and initializes the view
+     * @param inflater - Inflater responsible for inflating the layout fragment.
+     * @param container - ViewGroup associated with the inflater.
+     * @param savedInstanceState - App's saved instance state
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

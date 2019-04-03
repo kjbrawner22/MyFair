@@ -40,6 +40,10 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     FirebaseDatabase database;
     FirebaseUser user;
 
+    /**
+     * Standard onCreate override. Finds needed handles and initializes view.
+     * @param savedInstanceState App's saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +76,10 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         //initialize contents of text boxes to values inside database
     }
 
+    /**
+     * onClick override to handle all click listeners.
+     * @param v - view that was clicked
+     */
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -93,6 +101,9 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    /**
+     * Helper function responsible for updating the information on a card
+     * */
     private void updateData(){
         Card localCard = new Card(fullName);
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
@@ -110,12 +121,19 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         localCard.sendToDb(Card.VALUE_NEW_CARD);
         updateUI();
     }
+
+    /**
+     * Helper function responsible for updating the UI on a card
+     * */
     private void updateUI() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
+    /**
+     * Helper function responsible for setting the text strings on a card
+     * */
     private void setStrings(){
         if(getForm() == 2){
              fullName = etName.getText().toString();
@@ -133,12 +151,21 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         return etName.getText().toString().isEmpty();
     }
 
+
+    /**
+     * get the form's state.
+     * @return int state value
+     */
     private int getForm(){
         if(lytSelect.getVisibility() == View.VISIBLE) return 1;
         else if (lytCompany.getVisibility() == View.VISIBLE) return 2;
         else return 3;
     }
 
+    /**
+     * change form view
+     * @param formID - state of the desired view setting
+     */
     private void changeForm(int formID){
         switch(formID){
             case 1:
