@@ -20,6 +20,10 @@ import com.example.myfair.modelsandhelpers.Connection;
 
 import androidx.annotation.Nullable;
 
+/**
+ * Compound view to display a spinner and an edit field that correspond to data
+ * being entered for the social connections
+ */
 public class AddConnectionsView extends LinearLayout {
     private Spinner spinner;
     private EditText field;
@@ -27,6 +31,10 @@ public class AddConnectionsView extends LinearLayout {
 
     private final String TAG = "AddConnectionsView";
 
+    /**
+     * The below are standard constructors that redirect to the initialize method
+     * @param context - app's current context
+     */
     public AddConnectionsView(Context context) {
         super(context);
         initialize(context);
@@ -47,6 +55,10 @@ public class AddConnectionsView extends LinearLayout {
         initialize(context);
     }
 
+    /**
+     * initialize and inflate the view, then get handles to the view components needed
+     * @param context - app's current context
+     */
     private void initialize(Context context) {
         setOrientation(HORIZONTAL);
 
@@ -58,6 +70,11 @@ public class AddConnectionsView extends LinearLayout {
         btnAdd = findViewById(R.id.btnAdd);
     }
 
+    /**
+     * Set the click listener for when the 'add' button is clicked
+     * @param context - current context of the app
+     * @param connectionsView - view group to add the new ConnectionView(s) to
+     */
     public void setAddConnectionClickListener(final Context context, final ViewGroup connectionsView) {
         btnAdd.setOnClickListener(new OnClickListener() {
             @Override
@@ -72,11 +89,15 @@ public class AddConnectionsView extends LinearLayout {
         });
     }
 
-    // must be called after the instance is added to a layout
-    // will use default CONNECTIONS_LIST array in the User object if
-    // no options are provided
+    /**
+     * set the spinner adapter to a new instance of ConnectionArrayAdapter
+     * NOTE: should be called after the instance is added to a layout,
+     *       otherwise the spinner won't get the adapter
+     */
     public void setSpinnerAdapter() {
-        ConnectionArrayAdapter adapter = new ConnectionArrayAdapter(getContext());
-        spinner.setAdapter(adapter);
+        if (getParent() != null) {
+            ConnectionArrayAdapter adapter = new ConnectionArrayAdapter(getContext());
+            spinner.setAdapter(adapter);
+        }
     }
 }

@@ -15,6 +15,9 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Class model for user information that is stored in the database
+ */
 public class User extends DatabaseObject {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
@@ -33,18 +36,34 @@ public class User extends DatabaseObject {
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
 
+    /**
+     * Default Constructor
+     */
     public User() {
         super();
     }
 
+    /**
+     * Standard constructor that sets the user's name
+     * @param name - String representing the name of the user
+     */
     public User(String name){
         super.setValue(User.FIELD_NAME, name);
     }
 
+    /**
+     * Constructor that initializes the user using a predefined map
+     * NOTE: data from DB comes in the form of a map, User user = new User(data);
+     * @param newMap - Map variable that represents the underlying data in the user class
+     */
     public User(Map<String, Object> newMap) {
         super(newMap);
     }
 
+    /**
+     * Method that checks if profile information has been initialized in the database
+     * @return - boolean variable that specifies profile completion
+     */
     public boolean profileCreated() {
         if (containsKey(FIELD_PROFILE_CREATED)) {
             return getValue(FIELD_PROFILE_CREATED).equals(VALUE_TRUE);
@@ -53,6 +72,10 @@ public class User extends DatabaseObject {
         return false;
     }
 
+    /**
+     * Custom method that generates a DocRef for a specific user
+     * @return returns document reference for the specified user
+     */
     public DocumentReference setFromDb(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -61,10 +84,12 @@ public class User extends DatabaseObject {
             return null;
         }
 
-        DocumentReference docRef = db.collection("users").document(user.getUid());
-        return docRef;
+        return db.collection("users").document(user.getUid());
     }
 
+    /**
+     * Custom method that updates user information in the database
+     */
     public void sendToDb() {
         final String TAG = "sendUserInfo";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -87,6 +112,12 @@ public class User extends DatabaseObject {
         });
     }
 
+    /**
+     * Static method that determines whether a field is private
+     * @param key - String that representsa specified field
+     * @return - boolean variable that specifies if the given field is private
+     * NOTE: true = private, false = public
+     */
     public static boolean isPrivateField(String key) {
         if (key.equals(FIELD_PROFILE_CREATED)) {
             return true;

@@ -27,6 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import static com.google.android.gms.tasks.Tasks.await;
 
+/**
+ * LoginActivity that handles the authentication and logic dealing with user sign in/up/etc.
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "LoginActivity";
@@ -37,6 +40,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseFirestore db;
     private FirebaseUser user;
 
+    /**
+     * Standard overriden onCreate method, grab handles and initialize view
+     * @param savedInstanceState application instance's state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +80,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnResetPassword.setOnClickListener(this);
     }
 
+    /**
+     * onClick override to handle all the click listeners
+     * NOTE: Must implement View.OnClickListener to work
+     * @param v - view that was clicked
+     */
     // Handle all the click listeners
     @Override
     public void onClick(final View v) {
@@ -118,13 +130,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Override the back button to change to the Sign in form.
+     */
     @Override
     public void onBackPressed() {
-
         changeForm(R.id.btnSignInForm);
     }
 
-    // validate the sign-in fields, and return a boolean of the result
+    /**
+     * validate the sign-in fields
+     * @return boolean success or failure
+     */
     private boolean validSignInFields() {
         final EditText etEmail = findViewById(R.id.etSignInEmail);
         final EditText etPassword = findViewById(R.id.etSignInPassword);
@@ -148,6 +165,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return false;
     }
 
+    /**
+     * Attempt to sign the user in with firebase
+     */
     private void signIn() {
         final String email = ((EditText)findViewById(R.id.etSignInEmail)).getText().toString();
         final String password = ((EditText)findViewById(R.id.etSignInPassword)).getText().toString();
@@ -166,7 +186,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    // validate the sign-up fields, and return a boolean of the result
+    /**
+     * validate the sign-up fields
+     * @return boolean success or failure
+     */
     private boolean validSignUpFields() {
         final EditText etEmail = findViewById(R.id.etSignUpEmail);
         final EditText etPassword = findViewById(R.id.etSignUpPassword);
@@ -198,7 +221,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return false;
     }
 
-    // sign-up a user in the Firebase authentication system.
+    /**
+     * sign-up a user in the Firebase authentication system.
+     */
     private void signUp() {
         final String email = ((EditText) findViewById(R.id.etSignUpEmail))
                 .getText().toString();
@@ -223,7 +248,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    // send a verification email to the current user
+    /**
+     * send a verification email to the current user
+     * @param user - FirebaseUser object
+     */
     private void sendVerificationEmail(FirebaseUser user) {
         if (user == null) {
             Toast.makeText(LoginActivity.this,
@@ -248,7 +276,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    // change to either the sign-in or sign-up form view
+    /**
+     * change to either the sign-in, sign-up, or ResetPassword form view.
+     * Set the other 2 views to GONE so no click listeners from the invisible views are triggered.
+     * @param id - id of form to change to.
+     */
     private void changeForm(int id) {
         ConstraintLayout lytSignIn = findViewById(R.id.lytSignIn);
         ConstraintLayout lytSignUp = findViewById(R.id.lytSignUp);
@@ -272,6 +304,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Show the PasswordReset form view
+     * @param email String
+     */
     private void showPasswordResetView(String email) {
         if (!email.isEmpty()) {
             EditText etEmail = findViewById(R.id.etResetEmail);
@@ -281,6 +317,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         changeForm(R.id.btnResetPasswordForm);
     }
 
+
+    /**
+     * Attempt to send password reset email through Firebase auth system.
+     */
     private void resetPassword() {
         EditText etEmail = findViewById(R.id.etResetEmail);
         final String email = etEmail.getText().toString();
@@ -302,13 +342,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         + ". Please check your inbox.", Toast.LENGTH_LONG).show();
                         changeForm(R.id.btnSignInForm);
                     } else {
-
+                        //TODO: add some error notification for user here.
+                        Log.d("PASSWORD_RESET", "Failure.");
                     }
                 }
             });
         }
     }
 
+    /**
+     * Show the email verification view.
+     * @param email String
+     */
     private void showEmailVerificationView(String email) {
         ConstraintLayout lytSignIn = findViewById(R.id.lytSignIn);
         ConstraintLayout lytSignUp = findViewById(R.id.lytSignUp);
@@ -338,8 +383,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         updateUI();
     }
 
-    // after user's information is reloaded from firebase, attempt to sign them in
-    // and check if the email is verified and their profile is created
+    /**
+     * after user's information is reloaded from firebase, attempt to sign them in
+     * and check if the email is verified and their profile is created
+     */
     private final OnCompleteListener<Void> userReloadListener = new OnCompleteListener<Void>() {
         @Override
         public void onComplete(@NonNull Task<Void> task) {
@@ -356,7 +403,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     };
 
-    // logic to navigate user to either profile creation or the main activity
+    /**
+     * logic to navigate user to either profile creation or the main activity
+     */
     private final OnCompleteListener<DocumentSnapshot> navigateUserListener = new OnCompleteListener<DocumentSnapshot>() {
         @Override
         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -385,8 +434,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     };
 
-    // check auth state, and if the user is authenticated,
-    // proceed to the main activity
+
+    /**
+     * Trigger the user's data to reload and then begin the authentication process with
+     * the above listeners.
+     */
     private void updateUI() {
         user = mAuth.getCurrentUser();
         if (user != null) {

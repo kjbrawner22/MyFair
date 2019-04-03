@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imgIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:contentDescription="icon"
         android:paddingEnd="5dp"
         android:paddingStart="5dp"/>
@@ -17,6 +17,6 @@
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="22dp" />
 
 </LinearLayout>
