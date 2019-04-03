@@ -19,6 +19,8 @@ public class FirebaseDatabase {
         return db;
     }
 
+    public String getUserId(){ return currentUser.getUid(); }
+
     /*
             Get database reference for card library
             must pass in desired uID

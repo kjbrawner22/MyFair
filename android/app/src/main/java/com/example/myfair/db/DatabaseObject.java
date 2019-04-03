@@ -26,11 +26,15 @@ public class DatabaseObject {
         }
 
         public boolean setValue(String key, Object value) {
+            if(!containsKey(key))
+                return false;
             map.put(key, value);
             return true;
         }
 
         public String getValue(String key){
+            if(!containsKey(key))
+                return "";
             return (String) map.get(key);
         }
 
