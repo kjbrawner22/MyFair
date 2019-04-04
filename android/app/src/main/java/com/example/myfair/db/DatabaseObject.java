@@ -51,8 +51,8 @@ public class DatabaseObject {
      * @return boolean variable that represents the success of setValue
      */
     public boolean setValue(String key, Object value) {
-        if(!containsKey(key))
-            return false;
+        /*if(!containsKey(key))
+            return false;*/
         map.put(key, value);
         return true;
     }
