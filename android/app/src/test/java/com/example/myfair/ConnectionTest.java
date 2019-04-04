@@ -32,4 +32,5 @@ public class ConnectionTest {
     public void getName() {
         assertEquals(connection.getName(), "Twitter");
     }
+
 }
