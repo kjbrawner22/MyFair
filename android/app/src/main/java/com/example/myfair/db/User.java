@@ -66,9 +66,10 @@ public class User extends DatabaseObject {
      */
     public boolean profileCreated() {
         if (containsKey(FIELD_PROFILE_CREATED)) {
-            return getValue(FIELD_PROFILE_CREATED).equals(VALUE_TRUE);
+            boolean val = getValue(FIELD_PROFILE_CREATED).equals(VALUE_TRUE);
+            return val;
         }
-        Log.d("getCardInfo", "Doesn't contain key");
+        //Log.d("getCardInfo", "Doesn't contain key");
         return false;
     }
 
