@@ -48,7 +48,6 @@ public class DatabaseObjectTest {
         assertEquals(Card.VALUE_TYPE_UNIVERSITY, object.getValue(Card.FIELD_TYPE));
 
         assertTrue(object.setValue(Card.FIELD_COMPANY_POSITION, str2));
-        assertFalse(object.setValue("apple", str2));
     }
 
     @Test
