@@ -69,4 +69,24 @@ public class DatabaseObjectTest {
         assertTrue(object.containsKey(Card.FIELD_CARD_OWNER));
         assertFalse(object.containsKey("apple"));
     }
+
+    @Test
+    public void getId(){
+        assertEquals("1234", object.getId());
+    }
+
+    @Test
+    public void setId(){
+        object.setId("12345");
+        assertEquals("12345", object.getId());
+    }
+
+    @Test
+    public void display(){
+        String expected = "{name=Josh G. Helms, company_position=Engineer, card_type=business_card, card_owner=4j6fK7UvU7MLDXwqHoFCtWw97Qy2, company_name=Northrop Grumman}";
+        String displayStr = object.display();
+        assertEquals(expected,displayStr);
+    }
+
+
 }

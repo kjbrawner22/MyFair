@@ -10,15 +10,15 @@ import static org.junit.Assert.*;
 public class UserTest {
 
     private User user;
-    private HashMap<String,Object> map;
 
     @Before
     public void setUser(){
         user = new User();
-        map = new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
 
         map.put(User.FIELD_NAME, "Joshua Helms");
         map.put(User.FIELD_PROFILE_CREATED, User.VALUE_TRUE);
+        user.setMap(map);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class UserTest {
 
     @Test
     public void isPrivateField() {
-        assertTrue(User.isPrivateField(User.FIELD_NAME));
-        assertFalse(User.isPrivateField(User.FIELD_PROFILE_CREATED));
+        assertFalse(User.isPrivateField(User.FIELD_NAME));
+        assertTrue(User.isPrivateField(User.FIELD_PROFILE_CREATED));
     }
 }
