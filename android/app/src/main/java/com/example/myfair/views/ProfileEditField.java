@@ -9,11 +9,19 @@ import android.widget.TextView;
 
 import com.example.myfair.R;
 
+/**
+ * ProfileEditField - Compound view that encapsulates a label with an EditText to edit the value
+ *                    associated with that label
+ */
 public class ProfileEditField extends LinearLayout {
 
     private TextView label;
     private EditText field;
 
+    /**
+     * Default generated constructors with the initialize method appended
+     * @param context
+     */
     public  ProfileEditField(Context context) {
         super(context);
         initialize(context);
@@ -34,6 +42,10 @@ public class ProfileEditField extends LinearLayout {
         initialize(context);
     }
 
+    /**
+     * Initialize and inflate the view, then grab the handles for the views needed
+     * @param context - app's current context
+     */
     private void initialize(Context context) {
         this.setOrientation(VERTICAL);
 
@@ -44,18 +56,34 @@ public class ProfileEditField extends LinearLayout {
         field = findViewById(R.id.etField);
     }
 
+    /**
+     * Set the label's string value
+     * @param label - String to update the label's value
+     */
     public void setLabel(String label) {
         this.label.setText(label);
     }
 
+    /**
+     * Getter for the label's String value
+     * @return String
+     */
     public String getLabel() {
         return label.getText().toString();
     }
 
+    /**
+     * Setter for the field's string value
+     * @param field - String value to update the field
+     */
     public void setField(String field) {
         this.field.setText(field);
     }
 
+    /**
+     * Getter for the field's string value
+     * @return String
+     */
     public String getField() {
         return field.getText().toString();
     }

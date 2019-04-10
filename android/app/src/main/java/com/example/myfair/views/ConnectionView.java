@@ -14,25 +14,22 @@ import android.widget.LinearLayout;
 import com.example.myfair.R;
 import com.example.myfair.modelsandhelpers.Connection;
 
+/**
+ * ConnectionView composed of a TextField to display the value of the connection
+ * and a hidden String that stores the connection type
+ */
 public class ConnectionView extends LinearLayout {
     private ImageButton btnDelete;
     private String connectionType;
     private EditText etField;
 
+    /**
+     * below are the constructors that have been appended with the initialize method
+     * @param context - app's current context
+     */
     public ConnectionView(Context context) {
         super(context);
         initialize(context);
-    }
-
-    public ConnectionView(Context context, ViewGroup parent, Connection connection, String connectionText) {
-        super(context);
-        initialize(context);
-        parent.addView(this);
-
-        connectionType = connection.getDbKey();
-
-        etField.setText(connectionText);
-        etField.setCompoundDrawablesWithIntrinsicBounds(connection.getIconId(), 0, 0, 0);
     }
 
     public ConnectionView(Context context, AttributeSet attrs) {
@@ -45,6 +42,30 @@ public class ConnectionView extends LinearLayout {
         initialize(context);
     }
 
+    /**
+     * Custom constructor that builds and adds the view from the given parameters
+     * explained below.
+     *
+     * @param context - app's current context
+     * @param parent - view group to add the new ConnectionView to
+     * @param connection - takes in a Connection object of the correct connection type
+     * @param connectionText - the value for the connection to be added to the EditText field
+     */
+    public ConnectionView(Context context, ViewGroup parent, Connection connection, String connectionText) {
+        super(context);
+        initialize(context);
+        parent.addView(this);
+
+        connectionType = connection.getDbKey();
+
+        etField.setText(connectionText);
+        etField.setCompoundDrawablesWithIntrinsicBounds(connection.getIconId(), 0, 0, 0);
+    }
+
+    /**
+     * Initialize and inflate the layout, then grab the handles to necessary views
+     * @param context - app's current context
+     */
     private void initialize(Context context) {
         setOrientation(HORIZONTAL);
 
@@ -55,15 +76,26 @@ public class ConnectionView extends LinearLayout {
         etField = findViewById(R.id.etField);
     }
 
+    /**
+     * get the text from the EditText field
+     * @return String
+     */
     public String getText() {
         return etField.getText().toString();
     }
 
+    /**
+     * get the connection type
+     * @return String
+     */
     public String getConnectionType() {
         return connectionType;
     }
 
-    // set delete listener to remove view from the supplied parent
+    /**
+     * Set the on click listener of the 'delete' button to remove the view from the parent view
+     * @param parent - the parent view to delete the item from
+     */
     public void setOnDeleteListener(final ViewGroup parent) {
         final ConnectionView temp = this;
         btnDelete.setOnClickListener(new OnClickListener() {

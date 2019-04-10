@@ -6,18 +6,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.myfair.db.FirebaseDatabase;
+
 import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.qrObject;
+
+import com.example.myfair.db.FirebaseDatabase;
+
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -112,6 +120,32 @@ public class ScannedActivity extends AppCompatActivity {
                                 Log.d(TAG, "DocumentSnapshot card added to collection!");
                             } else {
                                 Log.d(TAG, "Error adding card info document to collection");
+                            }
+                        }
+                    });
+
+                    DocumentReference metaRef = database.getCardRef(uID,cID).collection("cdata").document("metadata");
+                    metaRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                Map<String,Object> metadata = task.getResult().getData();
+                                ArrayList<Timestamp> timeStamp = (ArrayList<Timestamp>) metadata.get("scanRegistry");
+                                long scans = (long) metadata.get("shared");
+                                scans++;
+                                timeStamp.add(new Timestamp(Calendar.getInstance().getTime()));
+
+                                metaRef.update("scanRegistry", timeStamp, "shared", scans).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Log.e("pushing a moose", "We Updated");
+                                        }
+                                        else{
+                                            Log.e("pushing a moose", "oops something went wrong");
+                                        }
+                                    }
+                                });
                             }
                         }
                     });

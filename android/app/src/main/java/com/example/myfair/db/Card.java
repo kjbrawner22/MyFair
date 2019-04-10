@@ -6,12 +6,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +21,9 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Class model for Card object map that is stored in the Firebase DB
+ */
 public class Card extends DatabaseObject {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_UNIVERSITY_NAME = "university_name";
@@ -31,24 +36,44 @@ public class Card extends DatabaseObject {
     public static final String VALUE_TYPE_UNIVERSITY = "university_card";
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
+    public static final String FIELD_SCAN_REGISTRY = "scanRegistry";
 
     private FirebaseDatabase db;
     private String cID;
 
+
+    /**
+     * Default Constructor
+     */
     public Card() {
         super();
     }
 
+    /**
+     * Standard constructor that also initializes database and fullName
+     * @param fullName - String that represents the full name of the card owner
+     */
     public Card(String fullName){
         super();
         db = new FirebaseDatabase();
         this.setValue(Card.FIELD_NAME, fullName);
     }
 
+    /**
+     * Constructor that initializes card using an existing map
+     * NOTE: data pulled from DB is of type map, can use Card card = new Card(data);
+     * @param newMap - Map variable that represents the underlying data in the card class
+     */
     public Card(Map<String, Object> newMap) {
         super(newMap);
     }
 
+    /**
+     * Custom method that generates a DocRef for a specific uID & cID
+     * @param uID - String that represents the user ID for the card owner
+     * @param cID - String that represents the card ID
+     * @return returns document reference for the specified card
+     */
     public DocumentReference setFromDb(String uID, String cID){
         final String TAG = "getCardInfo";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -63,6 +88,10 @@ public class Card extends DatabaseObject {
         return docRef;
     }
 
+    /**
+     * Custom method that sends an updated card to the database
+     * @param cID - String that represents the card ID
+     */
     public void sendToDb(String cID){
         final String TAG = "sendCardInfo";
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -103,6 +132,10 @@ public class Card extends DatabaseObject {
         }
     }
 
+    /**
+     * Helper method that allows sedToDb to initialize the card metadata
+     * @param docRef - DocumentReference for the location of the card metadata
+     */
     private void createMetadata(DocumentReference docRef){
         final String TAG = "sendCardInfo";
         DocumentReference metaDoc = docRef.collection("cdata").document("metadata");
@@ -111,6 +144,7 @@ public class Card extends DatabaseObject {
         Date currentTime = Calendar.getInstance().getTime();
         data.put("created", currentTime);
         data.put("shared", 0);
+        data.put(FIELD_SCAN_REGISTRY, new ArrayList<Timestamp>());
 
         Log.d("CardCreationLog", "Current Time: " + currentTime);
         metaDoc.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -125,10 +159,19 @@ public class Card extends DatabaseObject {
         });
     }
 
+    /**
+     * Getter for the cardID (cID)
+     * @return returns Strign for the cID
+     */
     public String getCardID(){
         return cID;
     }
 
+
+    /**
+     * Setter for cID
+     * @param ID - String that represents the card ID
+     */
     public void setCardID(String ID){
         cID = ID;
     }

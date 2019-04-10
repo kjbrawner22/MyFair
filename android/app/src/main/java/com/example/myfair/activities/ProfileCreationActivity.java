@@ -36,6 +36,10 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
     private LinearLayout connectionsView;
 
 
+    /**
+     * standard onCreate override. get needed handles and initialize view.
+     * @param savedInstanceState - app's saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +68,10 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         btnForward.setOnClickListener(this);
     }
 
+    /**
+     * onClick override to handle all click listeners.
+     * @param v - view that was clicked
+     */
     @Override
     public void onClick(final View v) {
         int id = v.getId();
@@ -90,6 +98,9 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         }
     }
 
+    /**
+     * Add the user's connections to the User model
+     */
     private void addConnectionsToUser() {
         for (int i = 0; i < connectionsView.getChildCount(); i++) {
             ConnectionView view = (ConnectionView) connectionsView.getChildAt(i);
@@ -97,12 +108,19 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         }
     }
 
+    /**
+     * Send the user's information to the database, then update the UI
+     */
     private void updateUser() {
         dbUser.setValue(User.FIELD_PROFILE_CREATED, User.VALUE_TRUE);
         dbUser.sendToDb();
         updateUI();
     }
 
+    /**
+     * validate the name fields.
+     * @return boolean success or failure
+     */
     private boolean validProfileFields() {
         final String fname = etFname.getText().toString();
         final String lname = etLname.getText().toString();
@@ -120,6 +138,10 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         return false;
     }
 
+    /**
+     * get the form's state.
+     * @return int state value
+     */
     private int getFormState(){
         if(lytName.getVisibility() == View.VISIBLE) {
             return 1;
@@ -128,7 +150,10 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
         }
     }
 
-    // change form view
+    /**
+     * change form view
+     * @param state - state of the current view setting
+     */
     private void changeForm(int state) {
         switch (state){
             case 1:
@@ -147,6 +172,9 @@ public class ProfileCreationActivity extends AppCompatActivity implements View.O
 
     }
 
+    /**
+     * Update the UI and go to the Main Activity
+     */
     private void updateUI() {
         boolean returnToMain = getIntent().getBooleanExtra(User.FIELD_PROFILE_CREATED, false);
 

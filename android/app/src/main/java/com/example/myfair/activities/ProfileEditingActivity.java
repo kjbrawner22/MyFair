@@ -30,12 +30,19 @@ import java.util.zip.Inflater;
 
 import javax.annotation.Nullable;
 
+/**
+ * Edit User's profile information
+ */
 public class ProfileEditingActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileEditingActivity";
     private LinearLayout lytEditFields;
     private ArrayList<ProfileEditField> editFields;
 
+    /**
+     * standard onCreate override. initalize view and the toolbar
+     * @param savedInstanceState - app's saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +76,11 @@ public class ProfileEditingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handle clicks on the action bar's items
+     * @param item - Menu item clicked
+     * @return boolean on handler success result
+     */
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -83,11 +95,20 @@ public class ProfileEditingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Inflate the action menu
+     * @param menu - Menu object to inflate the layout on
+     * @return boolean success value
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_menu_profile_edit, menu);
         return true;
     }
 
+    /**
+     * Set the current Edit fields to correspond to the user's info
+     * @param map - Map representing the User's information
+     */
     private void setEditFields(HashMap<String, Object> map) {
         for (Map.Entry pair : map.entrySet()) {
             if (User.isPrivateField((String) pair.getKey())) {
@@ -105,6 +126,9 @@ public class ProfileEditingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Save the changes made to the database
+     */
     private void saveChanges() {
         User u = new User();
         HashMap<String, Object> map = new HashMap<>();
