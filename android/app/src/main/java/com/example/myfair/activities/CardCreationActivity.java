@@ -100,7 +100,9 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             case R.id.btnDone:
                 //send info to database
                 setStrings();
-                updateData();
+                if (validFields()) {
+                    updateData();
+                }
                 //update back to home fragment
         }
     }
@@ -144,37 +146,41 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
              company = etCompany.getText().toString();
              position = etPosition.getText().toString();
          }
-         else{
+         else {
              fullName = etName2.getText().toString();
              university = etUniversity.getText().toString();
              major = etMajor.getText().toString();
          }
     }
 
-    private boolean validFields(){
+    private boolean validFields() {
         if(form == 2){
-            validate(etName, etCompany, etPosition);
+            return validate(etName, etCompany, etPosition);
         }
         else if (form == 3){
-            validate(etName2, etUniversity, etMajor);
+            return validate(etName2, etUniversity, etMajor);
         }
-        return true;
+        else
+        {
+            return false;
+        }
     }
 
     private boolean validate(EditText etOne, EditText etTwo, EditText etThree){
         if (fullName.isEmpty()) {
-            etOne.setError("Email field is required.");
+            etOne.setError("Name is required.");
             etOne.requestFocus();
+            return false;
         } else if (company.isEmpty()) {
-            etTwo.setError("Password field is required.");
+            etTwo.setError("Company Name is required.");
             etTwo.requestFocus();
+            return false;
         } else if (position.isEmpty()) {
-            etThree.setError("Must confirm your password.");
+            etThree.setError("Position is required.");
             etThree.requestFocus();
-        } else {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
 
