@@ -6,12 +6,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ public class Card extends DatabaseObject {
     public static final String VALUE_TYPE_UNIVERSITY = "university_card";
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
+    public static final String FIELD_SCAN_REGISTRY = "scanRegistry";
 
     private FirebaseDatabase db;
     private String cID;
@@ -141,6 +144,7 @@ public class Card extends DatabaseObject {
         Date currentTime = Calendar.getInstance().getTime();
         data.put("created", currentTime);
         data.put("shared", 0);
+        data.put(FIELD_SCAN_REGISTRY, new ArrayList<Timestamp>());
 
         Log.d("CardCreationLog", "Current Time: " + currentTime);
         metaDoc.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
