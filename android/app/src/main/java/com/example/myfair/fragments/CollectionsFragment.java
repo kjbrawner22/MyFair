@@ -166,14 +166,6 @@ public class CollectionsFragment extends Fragment {
         lastForm = 1;
         svCardScroller = v.findViewById(R.id.svCardScroller);
 
-        FloatingActionButton shareFAB = v.findViewById(R.id.shareFAB);
-        shareFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), GenerateActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
         // Return the fragment manager
