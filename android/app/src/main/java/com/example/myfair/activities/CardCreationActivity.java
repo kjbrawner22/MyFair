@@ -36,9 +36,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     private static final String TAG = "CardCreationActivity";
     private EditText etName, etCompany, etPosition, etUniversity, etMajor, etName2;
     private String fullName, company, position, university, major;
-    private Button btnBack;
     private Button btnDone;
-    private ConstraintLayout lytSelect, lytUniversity, lytCompany;
+    private ConstraintLayout lytSelect, lytUniversity, lytCompany, lytCardPreview;
     FirebaseDatabase database;
     FirebaseUser user;
     int form;
@@ -55,6 +54,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         database = new FirebaseDatabase();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        lytCardPreview = findViewById(R.id.previewLayout);
         lytSelect = findViewById(R.id.lytSelect);
         lytUniversity = findViewById(R.id.lytUniversity);
         lytCompany = findViewById(R.id.lytCompany);
@@ -66,17 +66,19 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         etUniversity = findViewById(R.id.etUniversity);
         etMajor = findViewById(R.id.etMajor);
 
-        Button btnUniversity = findViewById(R.id.btnUniversity);
         Button btnCompany = findViewById(R.id.btnCompany);
-        btnBack = findViewById(R.id.btnBack1);
+        Button btnCancel = findViewById(R.id.btnCancel);
         btnDone = findViewById(R.id.btnDone);
 
-        btnUniversity.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
         btnCompany.setOnClickListener(this);
-        btnBack.setOnClickListener(this);
         btnDone.setOnClickListener(this);
 
-        changeForm(1);
+        UniversityCardView v = new UniversityCardView(getBaseContext(), null, null);
+        lytCardPreview.addView(v);
+        v.setMargins();
+
+        changeForm(2);
         //initialize contents of text boxes to values inside database
     }
 
@@ -88,14 +90,14 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.btnBack1:
-                changeForm(1);
-                break;
             case R.id.btnCompany:
                 changeForm(2);
                 break;
             case R.id.btnUniversity:
                 changeForm(3);
+                break;
+            case R.id.btnCancel:
+                updateUI();
                 break;
             case R.id.btnDone:
                 //send info to database
@@ -202,7 +204,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         form = formID;
         switch(formID){
             case 1:
-                btnBack.setVisibility(View.GONE);
                 btnDone.setVisibility(View.GONE);
                 etName.setVisibility(View.GONE);
                 lytSelect.setVisibility(View.VISIBLE);
@@ -210,7 +211,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
                 lytUniversity.setVisibility(View.GONE);
                 break;
             case 2:
-                btnBack.setVisibility(View.VISIBLE);
                 btnDone.setVisibility(View.VISIBLE);
                 etName.setVisibility(View.VISIBLE);
                 lytSelect.setVisibility(View.GONE);
@@ -218,7 +218,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
                 lytUniversity.setVisibility(View.GONE);
                 break;
             case 3:
-                btnBack.setVisibility(View.VISIBLE);
                 btnDone.setVisibility(View.VISIBLE);
                 etName.setVisibility(View.VISIBLE);
                 lytSelect.setVisibility(View.GONE);
