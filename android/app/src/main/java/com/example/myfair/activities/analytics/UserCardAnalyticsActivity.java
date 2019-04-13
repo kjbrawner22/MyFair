@@ -108,10 +108,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                 String d = correctedMonth+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
                 fromTimeFiller.setText(d); // The filler text view is set with the text and then the fromCalendar is set to hold the new values
                 fromTimeFiller.setTextSize(24);
+                Log.e(TAG, "Inputed stuff year "+year+ " month " + month + " dayofMonth " + dayOfMonth);
                 fromCalendar.set(Calendar.YEAR,year);
                 fromCalendar.set(Calendar.MONTH,month);
                 fromCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                fromCalendar.set(Calendar.HOUR, 0);
+                fromCalendar.set(Calendar.HOUR_OF_DAY, 0 );
                 fromCalendar.set(Calendar.MINUTE, 0);
                 fromCalendar.set(Calendar.SECOND,0);
 
@@ -138,7 +139,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                 toCalendar.set(Calendar.YEAR,year);
                 toCalendar.set(Calendar.MONTH,month);
                 toCalendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-                toCalendar.set(Calendar.HOUR, 23);
+                toCalendar.set(Calendar.HOUR_OF_DAY, 23);
                 toCalendar.set(Calendar.MINUTE, 59);
                 toCalendar.set(Calendar.SECOND, 59);
             }
@@ -193,15 +194,17 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
      */
     private void setUpGraph(){
         graph.removeAllSeries();
-        int[] subDivisions = new int[12];
-        for(int i = 0; i < 12; i++){
+        int[] subDivisions = new int[24];
+        for(int i = 0; i < 24; i++){
             subDivisions[i]=0;
         }
+        Log.e(TAG,"Testing from calendar " + fromCalendar.getTime());
+        Log.e(TAG, "Testing to calendar " + toCalendar.getTime());
         ArrayList<Calendar> filteredScanDates = translatedScanDates;
         filteredScanDates.removeIf( c -> (c.getTime().before(fromCalendar.getTime())||c.getTime().after(toCalendar.getTime()))); // This statement purges the Scan Times that are outside of the bounds of the to and from
 
         long timeBetween = (toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()); //timeBetween is the time in milliseconds that is between the to and from calendars
-
+        Log.e(TAG, "Checking time between " + timeBetween);
         long timePerSlot = timeBetween/subDivisions.length; //Time per slot gives a round idea of how many hours will be accumulated to each slot in the graph, this will be changed in a future iteration
         Log.e(TAG,timePerSlot + " time Per slot");
         filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
@@ -210,7 +213,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             subDivisions[(int) (diff/timePerSlot)]++;
         });
 
-        DataPoint[] set = new DataPoint[12];
+        DataPoint[] set = new DataPoint[24];
         for(int i = 0; i<set.length; i++){ //This for set up the Series for the graph
             set[i] = new DataPoint(i,subDivisions[i]);
             Log.e(TAG,"subDivision "+i+" value "+subDivisions[i]);
@@ -221,7 +224,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         graph.addSeries(series); //Setting up the Series
 
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(12);
+        graph.getViewport().setMaxX(24);
         graph.getViewport().setMinY(0);
 
         graph.getViewport().setYAxisBoundsManual(true);
