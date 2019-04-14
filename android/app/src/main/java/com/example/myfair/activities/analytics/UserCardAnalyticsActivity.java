@@ -24,6 +24,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -182,9 +183,18 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     int correctedMonth = creationDatePH.get(Calendar.MONTH)+1;
                     String creationDateString = correctedMonth+"/"+creationDatePH.get(Calendar.DAY_OF_MONTH)+"/"+creationDatePH.get(Calendar.YEAR);
                     dateCreatedFiller.setText(creationDateString);
+                    fromCalendar = creationDatePH;
+                    fromCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                    fromCalendar.set(Calendar.MINUTE, 0);
+                    fromCalendar.set(Calendar.SECOND, 0);
+                    toCalendar = Calendar.getInstance();
+                    setUpGraph();
                 }
             }
         });
+
+
+
     }
 
     /**
@@ -215,7 +225,9 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
 
         DataPoint[] set = new DataPoint[24];
         for(int i = 0; i<set.length; i++){ //This for set up the Series for the graph
-            set[i] = new DataPoint(i,subDivisions[i]);
+            Calendar temp = fromCalendar;
+            temp.set(Calendar.HOUR_OF_DAY,temp.get(Calendar.HOUR_OF_DAY)+1);
+            set[i] = new DataPoint(temp.getTime().getTime(),subDivisions[i]);
             Log.e(TAG,"subDivision "+i+" value "+subDivisions[i]);
         }
 
@@ -223,13 +235,14 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
         graph.addSeries(series); //Setting up the Series
 
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(24);
-        graph.getViewport().setMinY(0);
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
 
-        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinX(fromCalendar.getTime().getTime());
+        graph.getViewport().setMaxX(toCalendar.getTime().getTime());
+
         graph.getViewport().setXAxisBoundsManual(true);
 
+        graph.getGridLabelRenderer().setHumanRounding(false);
     }
 
     private ArrayList<Calendar> translateTimestamps(ArrayList<Timestamp> list){
