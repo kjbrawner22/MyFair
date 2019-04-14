@@ -63,6 +63,7 @@ public class CollectionsFragment extends Fragment {
     private String mParam2;
     private CardView cvCards, cvBrochures, cvDocs;
     private ScrollView svMenu;
+    CollectionReference contactsLibrary;
 
 
     static final String TAG = "CollectionsFragmentLog";
@@ -168,6 +169,7 @@ public class CollectionsFragment extends Fragment {
         cvCards.setOnClickListener(cvListener);
         cvBrochures.setOnClickListener(cvListener);
         cvDocs.setOnClickListener(cvListener);
+        contactsLibrary = db.userContacts();
 
         return v;
     }
