@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -38,6 +39,8 @@ public class HistoryAnalytics extends AppCompatActivity {
     TextView fromText;
     TextView toText;
 
+    Button refreshBtn;
+
     Calendar fromCalendar = Calendar.getInstance();
     Calendar toCalendar = Calendar.getInstance();
 
@@ -58,6 +61,13 @@ public class HistoryAnalytics extends AppCompatActivity {
         cardScroller = findViewById(R.id.scannedCardScroll);
         cardList = findViewById(R.id.scannedCardList);
 
+        refreshBtn = findViewById(R.id.refreshButton);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         fromText = findViewById(R.id.textFrom);
         toText = findViewById(R.id.textTo);

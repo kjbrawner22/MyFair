@@ -10,34 +10,33 @@
         android:id="@+id/textFrom"
         android:layout_width="wrap_content"
         android:layout_height="43dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
         android:text="From:"
         android:textAlignment="center"
         android:textSize="24sp"
-        android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/scannedCardScroll" />
 
     <TextView
         android:id="@+id/textTo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="43dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
         android:text="To:"
         android:textAlignment="center"
         android:textSize="24sp"
-        android:clickable="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFrom" />
+        app:layout_constraintStart_toEndOf="@+id/textFrom"
+        app:layout_constraintTop_toBottomOf="@+id/scannedCardScroll" />
 
     <ScrollView
         android:id="@+id/scannedCardScroll"
         android:layout_width="match_parent"
         android:layout_height="605dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:visibility="visible"
@@ -46,7 +45,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.025">
 
         <LinearLayout
             android:id="@+id/scannedCardList"
@@ -76,8 +75,18 @@
         android:id="@+id/toDateText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="32dp"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textTo"
         app:layout_constraintStart_toEndOf="@+id/textTo" />
+
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="10dp"
+        android:text="Refresh"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
