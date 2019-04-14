@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.LoginActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
 import com.example.myfair.R;
@@ -223,15 +224,14 @@ public class ProfileFragment extends Fragment {
             Log.d("ButtonIDClicked", "ID: " + id);
             switch(id){
                 case R.id.cvProfileCards:
-                    changeForm(1);
+                    Intent intent = new Intent(getContext(), CardViewingActivity.class);
+                    startActivity(intent);
 
                     break;
                 case R.id.cvProfileBrochures:
-                    changeForm(1);
 
                     break;
                 case R.id.cvProfileDocs:
-                    changeForm(1);
 
                     break;
                 default:
