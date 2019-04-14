@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
 import com.example.myfair.activities.MainActivity;
@@ -280,7 +281,9 @@ public class CollectionsFragment extends Fragment {
             int id = view.getId();
             switch(id){
                 case R.id.cvProfileCards:
-                    changeForm(1);
+                    // start new intent
+                    Intent intent = new Intent(getContext(), CardViewingActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.cvProfileBrochures:
                     changeForm(1);
