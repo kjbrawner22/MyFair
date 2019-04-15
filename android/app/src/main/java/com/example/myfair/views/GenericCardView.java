@@ -33,8 +33,8 @@ public class GenericCardView extends CardView {
      */
     public void setMargins() {
         MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
-        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
-        params.setMargins(margin, 0,margin, margin);
+        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
+        params.setMargins(margin, 8,margin, margin);
         setLayoutParams(params);
         Log.d("MARGINS", "" + margin);
     }

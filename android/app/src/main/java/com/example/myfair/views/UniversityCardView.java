@@ -14,9 +14,9 @@ import androidx.annotation.NonNull;
  * Custom card view that sets the university card view layout
  */
 public class UniversityCardView extends GenericCardView {
-    private TextView name;
-    private TextView university;
-    private TextView major;
+    public TextView name;
+    public TextView university;
+    public TextView major;
 
     /**
      * Default constructor
@@ -87,31 +87,24 @@ public class UniversityCardView extends GenericCardView {
      * Helper function for setting the Edit Text Values
      */
     private void setBusinessCard(){
-        setName();
-        setCompany();
-        setPosition();
+        this.name.setText(getValue(Card.FIELD_NAME));
+        this.university.setText(getValue(Card.FIELD_COMPANY_NAME));
+        this.major.setText(getValue(Card.FIELD_COMPANY_POSITION));
     }
     private void setUniversityCard(){
-        setName();
-        setUniversity();
-        setMajor();
+        this.name.setText(getValue(Card.FIELD_NAME));
+        this.university.setText(getValue(Card.FIELD_UNIVERSITY_NAME));
+        this.major.setText(getValue(Card.FIELD_UNIVERSITY_MAJOR));
     }
 
     /**
      * Helper functions for setting the Edit Text values
      */
-    public void setName() {
-        this.name.setText(getValue(Card.FIELD_NAME));
-    }
-    public void setUniversity() {
-        this.university.setText(getValue(Card.FIELD_UNIVERSITY_NAME));
-    }
-    public void setMajor() {
-        this.major.setText(getValue(Card.FIELD_UNIVERSITY_MAJOR));
-    }
-
-    public void setCompany() { this.university.setText(getValue(Card.FIELD_COMPANY_NAME)); }
-    public void setPosition() { this.major.setText(getValue(Card.FIELD_COMPANY_POSITION)); }
+    public void setName(String name) { this.name.setText(name); }
+    public void setUniversity(String university) { this.university.setText(university); }
+    public void setMajor(String major) { this.major.setText(major); }
+    public void setCompany(String company) { this.university.setText(company); }
+    public void setPosition(String position) { this.major.setText(position); }
 
     /**
      * Helper functions for getting the Edit Text Values
@@ -126,4 +119,15 @@ public class UniversityCardView extends GenericCardView {
     public String getMajor() {
         return major.getText().toString();
     }
+
+    public TextView getNameView() {
+        return name;
+    }
+    public TextView getUniversityView() {
+        return university;
+    }
+    public TextView getMajorView() {
+        return major;
+    }
+
 }

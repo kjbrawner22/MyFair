@@ -2,11 +2,15 @@ package com.example.myfair.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myfair.R;
@@ -23,6 +27,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,10 +39,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "CardCreationActivity";
-    private EditText etName, etCompany, etPosition, etUniversity, etMajor, etName2;
-    private String fullName, company, position, university, major;
+    private EditText etName, etCompany, etPosition;
+    private String fullName, company, position;
     private Button btnDone;
-    private ConstraintLayout lytSelect, lytUniversity, lytCompany, lytCardPreview;
+    private ConstraintLayout lytCompany;
+    LinearLayout lytPreview;
     FirebaseDatabase database;
     FirebaseUser user;
     int form;
@@ -54,29 +60,26 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         database = new FirebaseDatabase();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        lytCardPreview = findViewById(R.id.previewLayout);
-        lytSelect = findViewById(R.id.lytSelect);
-        lytUniversity = findViewById(R.id.lytUniversity);
         lytCompany = findViewById(R.id.lytCompany);
 
         etName = findViewById(R.id.etName);
-        etName2 = findViewById(R.id.etName2);
         etCompany = findViewById(R.id.etCompany);
         etPosition = findViewById(R.id.etPosition);
-        etUniversity = findViewById(R.id.etUniversity);
-        etMajor = findViewById(R.id.etMajor);
+        lytPreview = findViewById(R.id.lytPreview);
 
-        Button btnCompany = findViewById(R.id.btnCompany);
         Button btnCancel = findViewById(R.id.btnCancel);
         btnDone = findViewById(R.id.btnDone);
 
         btnCancel.setOnClickListener(this);
-        btnCompany.setOnClickListener(this);
         btnDone.setOnClickListener(this);
 
-        UniversityCardView v = new UniversityCardView(getBaseContext(), null, null);
-        lytCardPreview.addView(v);
+        UniversityCardView v = new UniversityCardView(this, "empty", null);
+        lytPreview.addView(v);
         v.setMargins();
+
+        etName.addTextChangedListener(createTextWatcher(v.getNameView()));
+        etCompany.addTextChangedListener(createTextWatcher(v.getUniversityView()));
+        etPosition.addTextChangedListener(createTextWatcher(v.getMajorView()));
 
         changeForm(2);
         //initialize contents of text boxes to values inside database
@@ -90,12 +93,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.btnCompany:
-                changeForm(2);
-                break;
-            case R.id.btnUniversity:
-                changeForm(3);
-                break;
             case R.id.btnCancel:
                 updateUI();
                 break;
@@ -109,6 +106,25 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    private TextWatcher createTextWatcher(TextView textView) {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                textView.setText(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
+    }
+
     /**
      * Helper function responsible for updating the information on a card
      * */
@@ -119,11 +135,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             localCard.setValue(Card.FIELD_TYPE, Card.VALUE_TYPE_BUSINESS);
             localCard.setValue(Card.FIELD_COMPANY_NAME, company);
             localCard.setValue(Card.FIELD_COMPANY_POSITION, position);
-        }
-        else if(getForm() == 3){
-            localCard.setValue(Card.FIELD_TYPE, Card.VALUE_TYPE_UNIVERSITY);
-            localCard.setValue(Card.FIELD_UNIVERSITY_NAME, university);
-            localCard.setValue(Card.FIELD_UNIVERSITY_MAJOR, major);
         }
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
         localCard.sendToDb(Card.VALUE_NEW_CARD);
@@ -143,24 +154,14 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * Helper function responsible for setting the text strings on a card
      * */
     private void setStrings(){
-        if(getForm() == 2){
-             fullName = etName.getText().toString();
-             company = etCompany.getText().toString();
-             position = etPosition.getText().toString();
-         }
-         else {
-             fullName = etName2.getText().toString();
-             university = etUniversity.getText().toString();
-             major = etMajor.getText().toString();
-         }
+        fullName = etName.getText().toString();
+        company = etCompany.getText().toString();
+        position = etPosition.getText().toString();
     }
 
     private boolean validFields() {
         if(form == 2){
             return validate(etName, etCompany, etPosition);
-        }
-        else if (form == 3){
-            return validate(etName2, etUniversity, etMajor);
         }
         else
         {
@@ -191,8 +192,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * @return int state value
      */
     private int getForm(){
-        if(lytSelect.getVisibility() == View.VISIBLE) return 1;
-        else if (lytCompany.getVisibility() == View.VISIBLE) return 2;
+        if (lytCompany.getVisibility() == View.VISIBLE) return 2;
         else return 3;
     }
 
@@ -203,26 +203,10 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     private void changeForm(int formID){
         form = formID;
         switch(formID){
-            case 1:
-                btnDone.setVisibility(View.GONE);
-                etName.setVisibility(View.GONE);
-                lytSelect.setVisibility(View.VISIBLE);
-                lytCompany.setVisibility(View.GONE);
-                lytUniversity.setVisibility(View.GONE);
-                break;
             case 2:
                 btnDone.setVisibility(View.VISIBLE);
                 etName.setVisibility(View.VISIBLE);
-                lytSelect.setVisibility(View.GONE);
                 lytCompany.setVisibility(View.VISIBLE);
-                lytUniversity.setVisibility(View.GONE);
-                break;
-            case 3:
-                btnDone.setVisibility(View.VISIBLE);
-                etName.setVisibility(View.VISIBLE);
-                lytSelect.setVisibility(View.GONE);
-                lytCompany.setVisibility(View.GONE);
-                lytUniversity.setVisibility(View.VISIBLE);
                 break;
             default:
                 Log.d("ChangeFormLog", "Form Not Yet Implemented");
