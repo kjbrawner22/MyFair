@@ -45,8 +45,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import static com.example.myfair.activities.CardViewingActivity.INTENT_TOOLBAR_TITLE;
 
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -75,6 +79,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_creation);
 
+        setupToolbar();
+
         database = new FirebaseDatabase();
         user = FirebaseAuth.getInstance().getCurrentUser();
         localCard = new Card();
@@ -87,10 +93,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         etPosition = findViewById(R.id.etPosition);
         lytPreview = findViewById(R.id.lytPreview);
 
-        Button btnCancel = findViewById(R.id.btnCancel);
         btnDone = findViewById(R.id.btnDone);
 
-        btnCancel.setOnClickListener(this);
         btnDone.setOnClickListener(this);
 
         UniversityCardView v = new UniversityCardView(this, "empty", null);
@@ -133,6 +137,21 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             mImageUri = data.getData();
 
             Picasso.with(this).load(mImageUri).fit().centerInside().into(ivCurrentImage);
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        Log.d("ACTION_BAR_CARD_VIEWING", "Actionbar: " + actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
     }
 
@@ -144,9 +163,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.btnCancel:
-                updateUI();
-                break;
             case R.id.btnDone:
                 //send info to database
                 setStrings();
@@ -155,10 +171,13 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
                     updateUI();
                 }
                 //update back to home fragment
+                break;
+            default:
+                break;
         }
     }
 
-    private TextWatcher createTextWatcher(TextView textView) {
+    private TextWatcher createTextWatcher(final TextView textView) {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
