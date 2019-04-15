@@ -33,8 +33,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import static com.example.myfair.activities.CardViewingActivity.INTENT_TOOLBAR_TITLE;
 
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,6 +61,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_creation);
 
+        setupToolbar();
+
         database = new FirebaseDatabase();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -67,10 +73,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         etPosition = findViewById(R.id.etPosition);
         lytPreview = findViewById(R.id.lytPreview);
 
-        Button btnCancel = findViewById(R.id.btnCancel);
         btnDone = findViewById(R.id.btnDone);
 
-        btnCancel.setOnClickListener(this);
         btnDone.setOnClickListener(this);
 
         UniversityCardView v = new UniversityCardView(this, "empty", null);
@@ -85,6 +89,24 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         //initialize contents of text boxes to values inside database
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        Log.d("ACTION_BAR_CARD_VIEWING", "Actionbar: " + actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+    }
+
     /**
      * onClick override to handle all click listeners.
      * @param v - view that was clicked
@@ -93,9 +115,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.btnCancel:
-                updateUI();
-                break;
             case R.id.btnDone:
                 //send info to database
                 setStrings();
@@ -103,10 +122,13 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
                     updateData();
                 }
                 //update back to home fragment
+                break;
+            default:
+                break;
         }
     }
 
-    private TextWatcher createTextWatcher(TextView textView) {
+    private TextWatcher createTextWatcher(final TextView textView) {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
