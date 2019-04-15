@@ -1,14 +1,19 @@
 package com.example.myfair.activities;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +21,9 @@ import android.widget.Toast;
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.modelsandhelpers.Upload;
 import com.example.myfair.views.UniversityCardView;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +33,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Method;
 import java.util.Calendar;
@@ -39,13 +51,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "CardCreationActivity";
+    private StorageReference mStorageRef;
+    private StorageTask mUploadTask;
+    private ImageView ivBanner, ivProfile, ivCurrentImage;
+    private Uri mImageUri;
     private EditText etName, etCompany, etPosition;
     private String fullName, company, position;
     private Button btnDone;
     private ConstraintLayout lytCompany;
-    LinearLayout lytPreview;
-    FirebaseDatabase database;
-    FirebaseUser user;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private LinearLayout lytPreview;
+    private FirebaseDatabase database;
+    private FirebaseUser user;
+    private Card localCard;
     int form;
 
     /**
@@ -59,9 +77,11 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
 
         database = new FirebaseDatabase();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        localCard = new Card();
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
         lytCompany = findViewById(R.id.lytCompany);
-
         etName = findViewById(R.id.etName);
         etCompany = findViewById(R.id.etCompany);
         etPosition = findViewById(R.id.etPosition);
@@ -77,12 +97,43 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         lytPreview.addView(v);
         v.setMargins();
 
+        ivBanner = v.findViewById(R.id.ivBanner);
+        ivProfile = v.findViewById(R.id.ivProfile);
         etName.addTextChangedListener(createTextWatcher(v.getNameView()));
         etCompany.addTextChangedListener(createTextWatcher(v.getUniversityView()));
         etPosition.addTextChangedListener(createTextWatcher(v.getMajorView()));
+        ivBanner.setOnClickListener(imageUploadListener);
+        ivProfile.setOnClickListener(imageUploadListener);
 
         changeForm(2);
         //initialize contents of text boxes to values inside database
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    private View.OnClickListener imageUploadListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ivCurrentImage = (ImageView) view;
+            openFileChooser();
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+
+            Picasso.with(this).load(mImageUri).fit().centerInside().into(ivCurrentImage);
+        }
     }
 
     /**
@@ -101,6 +152,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
                 setStrings();
                 if (validFields()) {
                     updateData();
+                    updateUI();
                 }
                 //update back to home fragment
         }
@@ -129,7 +181,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * Helper function responsible for updating the information on a card
      * */
     private void updateData(){
-        Card localCard = new Card(fullName);
+        uploadFile();
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
         if(getForm() == 2){
             localCard.setValue(Card.FIELD_TYPE, Card.VALUE_TYPE_BUSINESS);
@@ -138,7 +190,44 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         }
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
         localCard.sendToDb(Card.VALUE_NEW_CARD);
-        updateUI();
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile() {
+        if (mImageUri != null) {
+            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                    + "." + getFileExtension(mImageUri));
+
+            mUploadTask = fileReference.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(CardCreationActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Log.d("CardCreationLog", "uri, choose image view " + localCard.getMap());
+                                    if(ivCurrentImage.getId() == R.id.ivBanner)
+                                        localCard.setValue(Card.FIELD_BANNER_URI, uri);
+                                    else
+                                        localCard.setValue(Card.FIELD_PROFILE_URI, uri);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CardCreationActivity.this, "Upload Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
