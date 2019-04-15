@@ -90,7 +90,9 @@ public class ScannedActivity extends AppCompatActivity {
 
                 if (snapshot != null && snapshot.exists()) {
                     Log.d("Scanned", "User snapshot updated");
-                    sharedCard.setMap(snapshot.getData());
+                    Map<String,Object> temp = snapshot.getData();
+                    temp.put("Scan Date", new Timestamp(Calendar.getInstance().getTime()));
+                    sharedCard.setMap(temp);
                     Log.d("Scanned","Object info" + sharedCard.getMap());
                     scannedNameTextView.setText(sharedCard.getValue(Card.FIELD_NAME));
 
