@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.LoginActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
 import com.example.myfair.R;
@@ -64,15 +65,9 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private ImageButton btnBack;
-    private ImageButton btnShare;
-    private ImageButton btnCardLytBack;
-    private ScrollView profileMenu, lookAtCards;
-    private CardInfoView cardInfo;
-    private LinearLayout lytCardList;
+    private ScrollView profileMenu;
     private FirebaseDatabase db;
     private CardView profileCards, profileBrochures, profileDocuments;
-    private androidx.fragment.app.FragmentManager fm;
 
     private FirebaseAuth mAuth;
 
@@ -175,28 +170,15 @@ public class ProfileFragment extends Fragment {
         FloatingActionButton scanButton = v.findViewById(R.id.scanFAB);
 
         FragmentActivity mainActivity = getActivity();
-        fm = mainActivity.getSupportFragmentManager();
 
-        lookAtCards = v.findViewById(R.id.svCardScroll);
-
-        lytCardList = v.findViewById(R.id.lytCardList);
-        cardInfo = v.findViewById(R.id.profileCardInfo);
-        btnBack = cardInfo.findViewById(R.id.btnInfoBack);
-        btnShare = cardInfo.findViewById(R.id.btnShare);
         profileCards = v.findViewById(R.id.cvProfileCards);
         profileBrochures = v.findViewById(R.id.cvProfileBrochures);
         profileDocuments = v.findViewById(R.id.cvProfileDocs);
         profileMenu = v.findViewById(R.id.svProfileMenu);
-        btnCardLytBack = v.findViewById(R.id.btnCardLytBack);
+
 
         db = new FirebaseDatabase();
-        getIdList(db.userCards(), lytCardList);
 
-        changeForm(3);
-
-        btnBack.setOnClickListener(buttonListener);
-        btnShare.setOnClickListener(buttonListener);
-        btnCardLytBack.setOnClickListener(buttonListener);
         profileCards.setOnClickListener(menuCardListener);
         profileBrochures.setOnClickListener(menuCardListener);
         profileDocuments.setOnClickListener(menuCardListener);
@@ -223,15 +205,13 @@ public class ProfileFragment extends Fragment {
             Log.d("ButtonIDClicked", "ID: " + id);
             switch(id){
                 case R.id.cvProfileCards:
-                    changeForm(1);
-
+                    Intent intent = new Intent(getContext(), CardViewingActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.cvProfileBrochures:
-                    changeForm(1);
 
                     break;
                 case R.id.cvProfileDocs:
-                    changeForm(1);
 
                     break;
                 default:
@@ -295,121 +275,5 @@ public class ProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-    /**
-     * change form view
-     * @param form - current view setting
-     */
-    private void changeForm(int form){
-        switch(form){
-            case 1:
-                lookAtCards.setVisibility(View.VISIBLE);
-                cardInfo.setVisibility(View.GONE);
-                profileMenu.setVisibility(View.GONE);
-                break;
-            case 2:
-                lookAtCards.setVisibility(View.GONE);
-                cardInfo.setVisibility(View.VISIBLE);
-                profileMenu.setVisibility(View.GONE);
-                break;
-            case 3:
-                lookAtCards.setVisibility(View.GONE);
-                cardInfo.setVisibility(View.GONE);
-                profileMenu.setVisibility(View.VISIBLE);
-                break;
-            default:
-                Log.d("ChangeForm", "Form not implmented");
-        }
-    }
-
-    /**
-     * onClick override to handle button clicks.
-     * @param view - view that was clicked
-     */
-    private View.OnClickListener buttonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-            Log.d("ButtonIDClicked", "ID: " + id);
-            switch(id){
-                case R.id.btnCardLytBack:
-                    changeForm(3);
-                    break;
-                case R.id.btnInfoBack:
-                    changeForm(1);
-                    break;
-                case R.id.btnShare:
-                    Bundle bundle = new Bundle();
-                    String str = cardInfo.getQrStr();
-                    bundle.putString("encryptedString", str);
-                    //Log.d("EncryptedString", str);
-                    BottomSheet bottomSheet = new BottomSheet();
-                    bottomSheet.setArguments(bundle);
-                    bottomSheet.show(fm, "exampleBottomSheet");
-                    break;
-                default:
-                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
-            }
-        }
-    };
-
-
-    /**
-     * onClick override to handle businessCard clicks.
-     * @param view - view that was clicked
-     */
-    private View.OnClickListener businessCardClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            changeForm(2);
-            cardInfo.setFromBusinessCardView((BusinessCardView) view, getContext());
-            Log.d("CardInfoCreated", "card Info Visible");
-        }
-    };
-
-    /**
-     * onClick override to handle universityCard clicks.
-     * @param view - view that was clicked
-     */
-    private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            changeForm(2);
-            cardInfo.setFromUniversityCardView((UniversityCardView) view, getContext());
-            Log.d("CardInfoCreated", "card Info Visible");
-        }
-    };
-
-    /**
-     * Adds a card (@param v) to the linear layout (@param listView)
-     * */
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
-        v.setMargins();
-    }
-
-    /**
-     * Gets the list of IDs of cards and populates a linear layout with cardViews.
-     * */
-    private void getIdList(CollectionReference ref, final LinearLayout listView){
-        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                final String TAG = "profileGetIdList";
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String cID = document.getId();
-                        HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        //String type = (String) map.get(Card.FIELD_TYPE);
-                        UniversityCardView v = new UniversityCardView(getContext(), cID, map);
-                        v.setOnClickListener(universityCardClickListener);
-                        addCardView(v, listView);
-                        Log.d(TAG, document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
     }
 }
