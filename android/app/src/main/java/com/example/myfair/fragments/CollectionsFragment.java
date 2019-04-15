@@ -61,18 +61,14 @@ public class CollectionsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private CardInfoView cardInfo;
     private CardView cvCards, cvBrochures, cvDocs;
-    private ScrollView svMenu, svCardScroller;
-    private int lastForm;
+    private ScrollView svMenu;
+    CollectionReference contactsLibrary;
+
 
     static final String TAG = "CollectionsFragmentLog";
     private FirebaseDatabase db;
-    private ImageButton  btnShare, btnBack, btnMenuBack;
-
-    private LinearLayout lytListView;
     private OnFragmentInteractionListener mListener;
-    private androidx.fragment.app.FragmentManager fm;
 
     public CollectionsFragment() {
         setHasOptionsMenu(true);
@@ -161,38 +157,19 @@ public class CollectionsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_collections, container, false);
 
         FragmentActivity mainActivity = getActivity();
-        fm = mainActivity.getSupportFragmentManager();
+
         db = new FirebaseDatabase();
-        lastForm = 1;
-        svCardScroller = v.findViewById(R.id.svCardScroller);
-
-
-
-        // Return the fragment manager
-
 
         // find views
-        lytListView = v.findViewById(R.id.lytListView);
-        cardInfo = v.findViewById(R.id.cardInfo);
-        btnBack = cardInfo.findViewById(R.id.btnInfoBack);
-        btnShare = cardInfo.findViewById(R.id.btnShare);
         cvCards = v.findViewById(R.id.cvProfileCards);
         cvBrochures = v.findViewById(R.id.cvProfileBrochures);
         cvDocs = v.findViewById(R.id.cvProfileDocs);
         svMenu = v.findViewById(R.id.svProfileMenu);
-        btnMenuBack = v.findViewById(R.id.btnMenuBack);
-
-        btnBack.setOnClickListener(buttonListener);
-        btnShare.setOnClickListener(buttonListener);
-        btnMenuBack.setOnClickListener(buttonListener);
+        svMenu.setVisibility(View.VISIBLE);
         cvCards.setOnClickListener(cvListener);
         cvBrochures.setOnClickListener(cvListener);
         cvDocs.setOnClickListener(cvListener);
-
-        changeForm(2);
-
-        // pull cards from database
-        getIdList(db.userContacts(), lytListView);
+        contactsLibrary = db.userContacts();
 
         return v;
     }
@@ -245,33 +222,6 @@ public class CollectionsFragment extends Fragment {
     }
 
     /**
-     * onClick override to handle businessCard clicks.
-     * @param view - view that was clicked
-     */
-    private View.OnClickListener businessCardClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            changeForm(3);
-            cardInfo.setFromBusinessCardView((BusinessCardView) view, getContext());
-            Log.d("CardInfoCreated", "card Info Visible");
-        }
-    };
-
-    /**
-     * onClick override to handle universityCard clicks.
-     * @param view - view that was clicked
-     */
-    private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            changeForm(3);
-            cardInfo.setFromUniversityCardView((UniversityCardView) view, getContext());
-            Log.d("CardInfoCreated", "card Info Visible");
-        }
-    };
-
-
-    /**
      * onClick override to handle cv clicks.
      * @param view - view that is populated with card categories
      */
@@ -286,10 +236,8 @@ public class CollectionsFragment extends Fragment {
                     startActivity(intent);
                     break;
                 case R.id.cvProfileBrochures:
-                    changeForm(1);
                     break;
                 case R.id.cvProfileDocs:
-                    changeForm(1);
                     break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");
@@ -297,98 +245,4 @@ public class CollectionsFragment extends Fragment {
         }
     };
 
-    /**
-     * onClick override to handle button clicks.
-     * @param view - view that was clicked
-     */
-    private View.OnClickListener buttonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-            Log.d("ButtonIDClicked", "ID: " + id);
-            switch(id){
-                case R.id.btnMenuBack:
-                    changeForm(2);
-                    break;
-                case R.id.btnInfoBack:
-                    changeForm(lastForm);
-                    break;
-                case R.id.btnShare:
-                    Bundle bundle = new Bundle();
-                    String str = cardInfo.getQrStr();
-                    bundle.putString("encryptedString", str);
-                    //Log.d("EncryptedString", str);
-                    BottomSheet bottomSheet = new BottomSheet();
-                    bottomSheet.setArguments(bundle);
-                    bottomSheet.show(fm, "exampleBottomSheet");
-                    break;
-                default:
-                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
-            }
-        }
-    };
-
-    /**
-     * change form view
-     * @param form - current view setting
-     */
-    private void changeForm(int form){
-        switch (form){
-            case 1:
-                // Contacts
-                svCardScroller.setVisibility(View.VISIBLE);
-                cardInfo.setVisibility(View.GONE);
-                svMenu.setVisibility(View.GONE);
-                lastForm = form;
-                break;
-            case 2:
-                //menu
-                svCardScroller.setVisibility(View.GONE);
-                cardInfo.setVisibility(View.GONE);
-                svMenu.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                // card info
-                svCardScroller.setVisibility(View.GONE);
-                cardInfo.setVisibility(View.VISIBLE);
-                svMenu.setVisibility(View.GONE);
-                break;
-            default:
-                Log.d("CollectionsFragmentLog", "form not implemented..");
-        }
-    }
-
-    /**
-     * Adds a card to the linear layout
-     * @param listView - linear layout holding card views
-     * @param v - card view being added to list
-     * */
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
-        v.setMargins();
-    }
-
-    /**
-     * Gets the list of IDs of cards and populates a linear layout with cardViews.
-     * */
-    private void getIdList(CollectionReference ref, final LinearLayout listView){
-        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String cID = document.getId();
-                        HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        //String type = (String) map.get(Card.FIELD_TYPE);
-                        UniversityCardView v = new UniversityCardView(getContext(), cID, map);
-                        v.setOnClickListener(universityCardClickListener);
-                        addCardView(v, listView);
-                        Log.d(TAG, document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
-    }
 }
