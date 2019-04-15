@@ -58,6 +58,8 @@ public class CollectionsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static final String CARD_VIEWING_TOOLBAR_TITLE = "Contacts";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -233,6 +235,7 @@ public class CollectionsFragment extends Fragment {
                 case R.id.cvProfileCards:
                     // start new intent
                     Intent intent = new Intent(getContext(), CardViewingActivity.class);
+                    intent.putExtra(CardViewingActivity.INTENT_TOOLBAR_TITLE, CARD_VIEWING_TOOLBAR_TITLE);
                     startActivity(intent);
                     break;
                 case R.id.cvProfileBrochures:

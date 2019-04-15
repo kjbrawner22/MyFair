@@ -1,10 +1,13 @@
 package com.example.myfair.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.drm.DrmStore;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.ScrollView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.fragments.CollectionsFragment;
 import com.example.myfair.views.BottomSheet;
 import com.example.myfair.views.CardInfoView;
 import com.example.myfair.views.GenericCardView;
@@ -34,10 +38,14 @@ public class CardViewingActivity extends AppCompatActivity {
     ImageButton cardInfoBack, cardInfoShare;
     FirebaseDatabase db;
 
+    public static final String INTENT_TOOLBAR_TITLE = "toolbar_title";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_viewing);
+
+        setupToolbar();
 
         db = new FirebaseDatabase();
         context = this;
@@ -50,7 +58,32 @@ public class CardViewingActivity extends AppCompatActivity {
         cardInfoShare.setOnClickListener(buttonListener);
 
         changeForm(1);
-        getIdList(db.userCards(), cardList);
+
+        String title = getIntent().getStringExtra(INTENT_TOOLBAR_TITLE);
+        if (title.equals(CollectionsFragment.CARD_VIEWING_TOOLBAR_TITLE)) {
+            getIdList(db.userContacts(), cardList);
+        } else {
+            getIdList(db.userCards(), cardList);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getIntent().getStringExtra(INTENT_TOOLBAR_TITLE));
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        Log.d("ACTION_BAR_CARD_VIEWING", "Actionbar: " + actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
     }
 
     private void addCardView(GenericCardView v, LinearLayout listView) {
@@ -109,8 +142,12 @@ public class CardViewingActivity extends AppCompatActivity {
                     bottomSheet.setArguments(bundle);
                     bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
                     break;
+                case R.id.homeAsUp:
+                    onBackPressed();
+                    break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+                    break;
             }
         }
     };
