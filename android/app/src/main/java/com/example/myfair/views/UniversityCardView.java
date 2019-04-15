@@ -2,6 +2,7 @@ package com.example.myfair.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myfair.R;
@@ -130,4 +131,11 @@ public class UniversityCardView extends GenericCardView {
         return major;
     }
 
+    public ImageView getBannerView() {
+        return findViewById(R.id.ivBanner);
+    }
+
+    public ImageView getProfileView() {
+        return findViewById(R.id.ivProfile);
+    }
 }
