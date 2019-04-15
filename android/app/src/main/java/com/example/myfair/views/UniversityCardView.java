@@ -36,7 +36,7 @@ public class UniversityCardView extends GenericCardView {
     public UniversityCardView(@NonNull Context context, String cID, HashMap<String,Object> map){
         super(context);
         initialize(context);
-        setFromMap(cID, map);
+        if (cID != null && map != null) setFromMap(cID, map);
     }
 
     public UniversityCardView(@NonNull Context context, Card card){
@@ -51,7 +51,7 @@ public class UniversityCardView extends GenericCardView {
      */
     private void initialize(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.view_university_card, this);
+        inflater.inflate(R.layout.view_card, this);
 
         name = findViewById(R.id.tvNameU);
         university = findViewById(R.id.tvUniversity);
