@@ -32,6 +32,8 @@ public class Card extends DatabaseObject {
     public static final String FIELD_COMPANY_POSITION = "company_position";
     public static final String FIELD_CARD_OWNER = "card_owner";
     public static final String FIELD_TYPE = "card_type";
+    public static final String FIELD_BANNER_URI = "banner_uri";
+    public static final String FIELD_PROFILE_URI = "profile_uri";
 
     public static final String VALUE_TYPE_UNIVERSITY = "university_card";
     public static final String VALUE_TYPE_BUSINESS = "business_card";
