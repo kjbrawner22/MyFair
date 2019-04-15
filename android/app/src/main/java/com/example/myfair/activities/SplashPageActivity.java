@@ -38,6 +38,8 @@ public class SplashPageActivity extends AppCompatActivity {
         //Commencing Animation
         frameAnim.start();
 
+
+
         mAuth = FirebaseAuth.getInstance(); //Loading Firebase information
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
