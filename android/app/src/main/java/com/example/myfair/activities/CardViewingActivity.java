@@ -27,7 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 
 public class CardViewingActivity extends AppCompatActivity {
-
+    //implement card directory here
     private Context context;
     private CardInfoView cardInfo;
     private ScrollView svCardScroller;
