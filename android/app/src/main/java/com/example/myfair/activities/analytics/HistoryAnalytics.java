@@ -66,7 +66,7 @@ public class HistoryAnalytics extends AppCompatActivity {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                getIdList(db.userContacts(), cardList);
             }
         });
 
@@ -128,7 +128,7 @@ public class HistoryAnalytics extends AppCompatActivity {
             }
         });
 
-
+        fromCalendar.set(1990,0,1,0,0,0);
 
         //Pulling Card History history
         getIdList(db.userContacts(), cardList);
