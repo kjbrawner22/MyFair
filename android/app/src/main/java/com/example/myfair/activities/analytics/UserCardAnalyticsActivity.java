@@ -183,11 +183,14 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     int correctedMonth = creationDatePH.get(Calendar.MONTH)+1;
                     String creationDateString = correctedMonth+"/"+creationDatePH.get(Calendar.DAY_OF_MONTH)+"/"+creationDatePH.get(Calendar.YEAR);
                     dateCreatedFiller.setText(creationDateString);
+                    fromText.setText(creationDateString);
                     fromCalendar = creationDatePH;
                     fromCalendar.set(Calendar.HOUR_OF_DAY, 0);
                     fromCalendar.set(Calendar.MINUTE, 0);
                     fromCalendar.set(Calendar.SECOND, 0);
                     toCalendar = Calendar.getInstance();
+                    String temp = (toCalendar.get(Calendar.MONTH)+1)+"/"+toCalendar.get(Calendar.DAY_OF_MONTH)+"/"+toCalendar.get(Calendar.YEAR);
+                    toText.setText(temp);
                     setUpGraph();
                 }
             }

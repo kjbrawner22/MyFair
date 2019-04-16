@@ -82,11 +82,11 @@
 
     <Button
         android:id="@+id/refreshButton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="8dp"
         android:text="Refresh"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTo" />
+        app:layout_constraintTop_toBottomOf="@+id/scannedCardScroll" />
 </androidx.constraintlayout.widget.ConstraintLayout>
