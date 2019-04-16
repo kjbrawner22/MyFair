@@ -66,6 +66,7 @@ public class HistoryAnalytics extends AppCompatActivity {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cardList.removeAllViews();
                 getIdList(db.userContacts(), cardList);
             }
         });

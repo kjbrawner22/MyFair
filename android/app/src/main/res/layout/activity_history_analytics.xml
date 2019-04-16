@@ -88,5 +88,5 @@
         android:layout_marginTop="8dp"
         android:text="Refresh"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scannedCardScroll" />
+        app:layout_constraintTop_toBottomOf="@+id/toDateText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

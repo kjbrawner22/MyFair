@@ -64,7 +64,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
     Calendar toCalendar = Calendar.getInstance();
     Calendar creationDatePH;
 
-
+    long msInDay = 86400000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,14 +183,14 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     int correctedMonth = creationDatePH.get(Calendar.MONTH)+1;
                     String creationDateString = correctedMonth+"/"+creationDatePH.get(Calendar.DAY_OF_MONTH)+"/"+creationDatePH.get(Calendar.YEAR);
                     dateCreatedFiller.setText(creationDateString);
-                    fromText.setText(creationDateString);
+                    fromTimeFiller.setText(creationDateString);
                     fromCalendar = creationDatePH;
                     fromCalendar.set(Calendar.HOUR_OF_DAY, 0);
                     fromCalendar.set(Calendar.MINUTE, 0);
                     fromCalendar.set(Calendar.SECOND, 0);
                     toCalendar = Calendar.getInstance();
                     String temp = (toCalendar.get(Calendar.MONTH)+1)+"/"+toCalendar.get(Calendar.DAY_OF_MONTH)+"/"+toCalendar.get(Calendar.YEAR);
-                    toText.setText(temp);
+                    toTimeFiller.setText(temp);
                     setUpGraph();
                 }
             }
@@ -207,45 +207,75 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
      */
     private void setUpGraph(){
         graph.removeAllSeries();
-        int[] subDivisions = new int[24];
-        for(int i = 0; i < 24; i++){
-            subDivisions[i]=0;
-        }
-        Log.e(TAG,"Testing from calendar " + fromCalendar.getTime());
-        Log.e(TAG, "Testing to calendar " + toCalendar.getTime());
+
+
         ArrayList<Calendar> filteredScanDates = translatedScanDates;
         filteredScanDates.removeIf( c -> (c.getTime().before(fromCalendar.getTime())||c.getTime().after(toCalendar.getTime()))); // This statement purges the Scan Times that are outside of the bounds of the to and from
 
         long timeBetween = (toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()); //timeBetween is the time in milliseconds that is between the to and from calendars
         Log.e(TAG, "Checking time between " + timeBetween);
-        long timePerSlot = timeBetween/subDivisions.length; //Time per slot gives a round idea of how many hours will be accumulated to each slot in the graph, this will be changed in a future iteration
-        Log.e(TAG,timePerSlot + " time Per slot");
-        filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
-            long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
-            Log.e(TAG, "Checking the diff "+ diff);
-            subDivisions[(int) (diff/timePerSlot)]++;
-        });
 
-        DataPoint[] set = new DataPoint[24];
-        for(int i = 0; i<set.length; i++){ //This for set up the Series for the graph
-            Calendar temp = fromCalendar;
-            temp.set(Calendar.HOUR_OF_DAY,temp.get(Calendar.HOUR_OF_DAY)+1);
-            set[i] = new DataPoint(temp.getTime().getTime(),subDivisions[i]);
-            Log.e(TAG,"subDivision "+i+" value "+subDivisions[i]);
+        DataPoint[] set = new DataPoint[0];
+
+        if(toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()<= msInDay){ // If the time frame is only one day
+            ArrayList<DataPoint> temp = new ArrayList<>();
+            int []subDivisions = new int[24];
+            for (int i = 0; i < 24; i++){
+                subDivisions[i]=0;
+            }
+
+            filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
+                long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
+                Log.e(TAG, "Checking the diff "+ diff);
+                subDivisions[(int) (diff/360000)]++;
+            });
+
+            for (int i = 0; i < 24 ; i++) {
+                temp.add(new DataPoint(i,subDivisions[i]));
+            }
+
+            set = (DataPoint []) temp.toArray();
+
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(24);
+
+            graph.getViewport().setXAxisBoundsManual(true);
+        }
+        else{
+
+            ArrayList<DataPoint> temp = new ArrayList<>();
+            int numberOfDays = toCalendar.get(Calendar.DAY_OF_YEAR)-fromCalendar.get(Calendar.DAY_OF_YEAR);
+            int subDivisions[] = new int[numberOfDays];
+
+            filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
+                long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
+                Log.e(TAG, "Checking the diff "+ diff);
+                subDivisions[(int) (diff/timePerSlot)]++;
+            });
+
+            DataPoint[] set = new DataPoint[24];
+            for(int i = 0; i<set.length; i++){ //This for set up the Series for the graph
+                Calendar temp = fromCalendar;
+                temp.add(Calendar.DAY_OF_YEAR,i);
+                set[i] = new DataPoint(temp.getTime().getTime(),subDivisions[i]);
+                Log.e(TAG,"subDivision "+i+" value "+subDivisions[i]);
+            }
+
+
+            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+
+            graph.getViewport().setMinX(fromCalendar.getTime().getTime());
+            graph.getViewport().setMaxX(toCalendar.getTime().getTime());
+
+            graph.getViewport().setXAxisBoundsManual(true);
+
+            graph.getGridLabelRenderer().setHumanRounding(false);
         }
 
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
         graph.addSeries(series); //Setting up the Series
 
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-
-        graph.getViewport().setMinX(fromCalendar.getTime().getTime());
-        graph.getViewport().setMaxX(toCalendar.getTime().getTime());
-
-        graph.getViewport().setXAxisBoundsManual(true);
-
-        graph.getGridLabelRenderer().setHumanRounding(false);
     }
 
     private ArrayList<Calendar> translateTimestamps(ArrayList<Timestamp> list){
