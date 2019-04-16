@@ -34,11 +34,12 @@ public class Card extends DatabaseObject {
     public static final String FIELD_TYPE = "card_type";
     public static final String FIELD_BANNER_URI = "banner_uri";
     public static final String FIELD_PROFILE_URI = "profile_uri";
+    public static final String FIELD_SCAN_REGISTRY = "scanRegistry";
 
     public static final String VALUE_TYPE_UNIVERSITY = "university_card";
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
-    public static final String FIELD_SCAN_REGISTRY = "scanRegistry";
+    public static final String VALUE_DEFAULT_IMAGE = "default_image";
 
     private FirebaseDatabase db;
     private String cID;
@@ -131,6 +132,10 @@ public class Card extends DatabaseObject {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "DocumentSnapshot card info successfully updated!");
+
+                        if (listener != null) {
+                            listener.cardCreated();
+                        }
                     } else {
                         Log.d(TAG, "Error updating card info document");
                     }

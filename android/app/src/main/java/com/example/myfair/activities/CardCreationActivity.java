@@ -59,12 +59,12 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     private StorageReference mStorageRef;
     private StorageTask mUploadTask;
     private ImageView ivBanner, ivProfile, ivCurrentImage;
-    private Uri mImageUri;
+    private Uri bannerUri, profileUri;
     private EditText etName, etCompany, etPosition;
     private String fullName, company, position;
     private Button btnDone;
     private ConstraintLayout lytCompany;
-    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int PICK_BANNER_REQUEST = 1, PICK_PROFILE_REQUEST = 2;
     private LinearLayout lytPreview;
     private FirebaseDatabase database;
     private FirebaseUser user;
@@ -120,18 +120,21 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         //initialize contents of text boxes to values inside database
     }
 
-    private void openFileChooser() {
+    private void openFileChooser(int requestCode) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, requestCode);
     }
 
     private View.OnClickListener imageUploadListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ivCurrentImage = (ImageView) view;
-            openFileChooser();
+            if (view.getId() == R.id.ivBanner) {
+                openFileChooser(PICK_BANNER_REQUEST);
+            } else {
+                openFileChooser(PICK_PROFILE_REQUEST);
+            }
         }
     };
 
@@ -139,11 +142,16 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+        if (requestCode == PICK_BANNER_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
-            mImageUri = data.getData();
+            bannerUri = data.getData();
 
-            Picasso.with(this).load(mImageUri).fit().centerInside().into(ivCurrentImage);
+            Picasso.with(this).load(bannerUri).fit().centerInside().into(ivBanner);
+        } else if (requestCode == PICK_PROFILE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            profileUri = data.getData();
+
+            Picasso.with(this).load(profileUri).fit().centerInside().into(ivProfile);
         }
     }
     
@@ -206,13 +214,61 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     }
 
     /**
-     * Helper function responsible for updating the information on a card
+     * Helper function responsible for uploading photos and updating the information on a card
      * */
     private void updateData(){
         //TODO: include uploadFile method here somehow
-        localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
-        localCard.sendToDb(Card.VALUE_NEW_CARD);
+        if (bannerUri != null) {
+            uploadImage(bannerUri, Card.FIELD_BANNER_URI);
+        } else {
+            localCard.setValue(Card.FIELD_BANNER_URI, Card.VALUE_DEFAULT_IMAGE);
+        }
+        if (profileUri != null) {
+            uploadImage(profileUri, Card.FIELD_PROFILE_URI);
+        } else {
+            localCard.setValue(Card.FIELD_PROFILE_URI, Card.VALUE_DEFAULT_IMAGE);
+        }
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!localCard.containsKey(Card.FIELD_PROFILE_URI) || !localCard.containsKey(Card.FIELD_BANNER_URI)) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        Log.e("CARD_CREATION_LOG", "Error in sleep: ", e.getCause());
+                    }
+                }
+                localCard.sendToDb(Card.VALUE_NEW_CARD);
+            }
+        });
+
+        t.start();
+    }
+
+    private void uploadImage(Uri uri, String cardField) {
+        StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                + "." + getFileExtension(uri));
+
+        mUploadTask = fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(CardCreationActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
+                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.d("CardCreationLog", "uri, choose image view " + localCard.getMap());
+                        localCard.setValue(cardField, uri.toString());
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CardCreationActivity.this, "Upload Error", Toast.LENGTH_SHORT).show();
+                localCard.setValue(cardField, Card.VALUE_DEFAULT_IMAGE);
+            }
+        });
     }
 
     private String getFileExtension(Uri uri) {
@@ -221,48 +277,12 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
-    private void uploadFile() {
-        if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(mImageUri));
-
-            mUploadTask = fileReference.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(CardCreationActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
-                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Log.d("CardCreationLog", "uri, choose image view " + localCard.getMap());
-                                    if(ivCurrentImage.getId() == R.id.ivBanner)
-                                        localCard.setValue(Card.FIELD_BANNER_URI, uri);
-                                    else
-                                        localCard.setValue(Card.FIELD_PROFILE_URI, uri);
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(CardCreationActivity.this, "Upload Error", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-
     private boolean validFields() {
         if(form == 2){
             return validate(etName, etCompany, etPosition);
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     private boolean validate(EditText etOne, EditText etTwo, EditText etThree){
