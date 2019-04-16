@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
+import com.example.myfair.db.CardCreationListener;
 import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.modelsandhelpers.Upload;
 import com.example.myfair.views.UniversityCardView;
@@ -78,6 +79,12 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         database = new FirebaseDatabase();
         user = FirebaseAuth.getInstance().getCurrentUser();
         localCard = new Card();
+        localCard.addCardCreationListener(new CardCreationListener() {
+            @Override
+            public void cardCreated() {
+                finish();
+            }
+        });
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
@@ -99,9 +106,9 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
 
         ivBanner = v.findViewById(R.id.ivBanner);
         ivProfile = v.findViewById(R.id.ivProfile);
-        etName.addTextChangedListener(createTextWatcher(v.getNameView()));
-        etCompany.addTextChangedListener(createTextWatcher(v.getUniversityView()));
-        etPosition.addTextChangedListener(createTextWatcher(v.getMajorView()));
+        etName.addTextChangedListener(createTextWatcher(v.getNameView(), Card.FIELD_NAME));
+        etCompany.addTextChangedListener(createTextWatcher(v.getUniversityView(), Card.FIELD_UNIVERSITY_NAME));
+        etPosition.addTextChangedListener(createTextWatcher(v.getMajorView(), Card.FIELD_UNIVERSITY_MAJOR));
         ivBanner.setOnClickListener(imageUploadListener);
         ivProfile.setOnClickListener(imageUploadListener);
 
@@ -145,20 +152,18 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         int id = v.getId();
         switch (id) {
             case R.id.btnCancel:
-                updateUI();
+                finish();
                 break;
             case R.id.btnDone:
                 //send info to database
-                setStrings();
                 if (validFields()) {
                     updateData();
-                    updateUI();
                 }
                 //update back to home fragment
         }
     }
 
-    private TextWatcher createTextWatcher(TextView textView) {
+    private TextWatcher createTextWatcher(TextView textView, String cardField) {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -168,6 +173,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 textView.setText(charSequence.toString());
+                localCard.setValue(cardField, charSequence.toString());
             }
 
             @Override
@@ -181,13 +187,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * Helper function responsible for updating the information on a card
      * */
     private void updateData(){
-        uploadFile();
+        //TODO: include uploadFile method here somehow
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
-        if(getForm() == 2){
-            localCard.setValue(Card.FIELD_TYPE, Card.VALUE_TYPE_BUSINESS);
-            localCard.setValue(Card.FIELD_COMPANY_NAME, company);
-            localCard.setValue(Card.FIELD_COMPANY_POSITION, position);
-        }
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
         localCard.sendToDb(Card.VALUE_NEW_CARD);
     }
@@ -230,23 +231,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    /**
-     * Helper function responsible for updating the UI on a card
-     * */
-    private void updateUI() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
-    /**
-     * Helper function responsible for setting the text strings on a card
-     * */
-    private void setStrings(){
-        fullName = etName.getText().toString();
-        company = etCompany.getText().toString();
-        position = etPosition.getText().toString();
-    }
 
     private boolean validFields() {
         if(form == 2){
@@ -259,15 +244,15 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private boolean validate(EditText etOne, EditText etTwo, EditText etThree){
-        if (fullName.isEmpty()) {
+        if (etOne.getText().toString().isEmpty()) {
             etOne.setError("Name is required.");
             etOne.requestFocus();
             return false;
-        } else if (company.isEmpty()) {
+        } else if (etTwo.getText().toString().isEmpty()) {
             etTwo.setError("Company Name is required.");
             etTwo.requestFocus();
             return false;
-        } else if (position.isEmpty()) {
+        } else if (etThree.getText().toString().isEmpty()) {
             etThree.setError("Position is required.");
             etThree.requestFocus();
             return false;
