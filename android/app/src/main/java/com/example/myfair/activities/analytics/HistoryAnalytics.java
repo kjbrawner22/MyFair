@@ -22,6 +22,7 @@ import com.example.myfair.views.GenericCardView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -147,7 +148,9 @@ public class HistoryAnalytics extends AppCompatActivity {
      * Gets the list of IDs of cards and populates a linear layout with cardViews.
      * */
     private void getIdList(CollectionReference ref, final LinearLayout listView){
-        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ref.whereLessThanOrEqualTo("scan_date",new Timestamp(toCalendar.getTime()))
+            .whereGreaterThanOrEqualTo("scan_date",new Timestamp(fromCalendar.getTime()))
+            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
