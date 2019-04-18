@@ -56,13 +56,16 @@ public class UniversityCardView extends GenericCardView {
         parent.addView(this);
         setMargins();
         if (cID != null && map != null) setFromMap(cID, map);
-        renderImages(context);
+        renderImages();
     }
 
-    public UniversityCardView(@NonNull Context context, Card card){
+    public UniversityCardView(Context context, String cID, HashMap<String, Object> map, ViewGroup parent, int viewIndex) {
         super(context);
         initialize(context);
-        setFromCardModel(card);
+        parent.addView(this, viewIndex);
+        setMargins();
+        if (cID != null && map != null) setFromMap(cID, map);
+        renderImages();
     }
 
     /**
@@ -135,9 +138,8 @@ public class UniversityCardView extends GenericCardView {
         };
     }
 
-    private void renderImages(Context context) {
+    private void renderImages() {
         ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
         String bannerUri = getValue(Card.FIELD_BANNER_URI);
         if (!bannerUri.equals(Card.VALUE_DEFAULT_IMAGE)) {
