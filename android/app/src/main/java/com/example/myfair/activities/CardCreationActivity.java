@@ -217,7 +217,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * Helper function responsible for uploading photos and updating the information on a card
      * */
     private void updateData(){
-        //TODO: include uploadFile method here somehow
+        localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
         if (bannerUri != null) {
             uploadImage(bannerUri, Card.FIELD_BANNER_URI);

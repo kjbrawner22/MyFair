@@ -56,6 +56,7 @@ public class GenericCardView extends CardView {
     public void setMap(HashMap<String,Object> map){
         this.map = map;
     }
+    public HashMap<String, Object> getMap() { return map; };
 
     public String getValue(String key){
         String str = (String) map.get(key);
