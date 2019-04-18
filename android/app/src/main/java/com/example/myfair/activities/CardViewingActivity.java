@@ -1,10 +1,14 @@
 package com.example.myfair.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.Intent;
+import android.drm.DrmStore;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +18,7 @@ import android.widget.ScrollView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.fragments.CollectionsFragment;
 import com.example.myfair.views.BottomSheet;
 import com.example.myfair.views.CardInfoView;
 import com.example.myfair.views.GenericCardView;
@@ -27,17 +32,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 
 public class CardViewingActivity extends AppCompatActivity {
-
+    //implement card directory here
     private Context context;
     private CardInfoView cardInfo;
     private ScrollView svCardScroller;
     ImageButton cardInfoBack, cardInfoShare;
     FirebaseDatabase db;
 
+    public static final String INTENT_TOOLBAR_TITLE = "toolbar_title";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_viewing);
+
+        setupToolbar();
 
         db = new FirebaseDatabase();
         context = this;
@@ -50,12 +59,32 @@ public class CardViewingActivity extends AppCompatActivity {
         cardInfoShare.setOnClickListener(buttonListener);
 
         changeForm(1);
-        getIdList(db.userCards(), cardList);
+
+        String title = getIntent().getStringExtra(INTENT_TOOLBAR_TITLE);
+        if (title.equals(CollectionsFragment.CARD_VIEWING_TOOLBAR_TITLE)) {
+            getIdList(db.userContacts(), cardList);
+        } else {
+            getIdList(db.userCards(), cardList);
+        }
     }
 
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
-        v.setMargins();
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getIntent().getStringExtra(INTENT_TOOLBAR_TITLE));
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        Log.d("ACTION_BAR_CARD_VIEWING", "Actionbar: " + actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
     }
 
     /**
@@ -70,9 +99,8 @@ public class CardViewingActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String cID = document.getId();
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        UniversityCardView v = new UniversityCardView(context, cID, map);
+                        UniversityCardView v = new UniversityCardView(context, cID, map, listView);
                         v.setOnClickListener(universityCardClickListener);
-                        addCardView(v, listView);
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {
@@ -85,9 +113,18 @@ public class CardViewingActivity extends AppCompatActivity {
     private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            /*
             changeForm(2);
             cardInfo.setFromUniversityCardView((UniversityCardView) view, context);
             Log.d("CardInfoCreated", "card Info Visible");
+            */
+            Bundle extras = new Bundle();
+            extras.putSerializable("card_map", ((UniversityCardView) view).getMap());
+            extras.putString("card_id", ((UniversityCardView) view).getCardID());
+
+            Intent intent = new Intent(CardViewingActivity.this, CardInfoActivity.class);
+            intent.putExtras(extras);
+            startActivity(intent);
         }
     };
 
@@ -109,8 +146,12 @@ public class CardViewingActivity extends AppCompatActivity {
                     bottomSheet.setArguments(bundle);
                     bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
                     break;
+                case R.id.homeAsUp:
+                    onBackPressed();
+                    break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");
+                    break;
             }
         }
     };

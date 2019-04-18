@@ -1,11 +1,23 @@
 package com.example.myfair.views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.myfair.R;
+import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.HashMap;
 
@@ -17,6 +29,7 @@ public class UniversityCardView extends GenericCardView {
     private TextView name;
     private TextView university;
     private TextView major;
+    private ImageView ivBanner, ivProfile;
 
     /**
      * Default constructor
@@ -36,13 +49,25 @@ public class UniversityCardView extends GenericCardView {
     public UniversityCardView(@NonNull Context context, String cID, HashMap<String,Object> map){
         super(context);
         initialize(context);
-        setFromMap(cID, map);
+        if (cID != null && map != null) setFromMap(cID, map);
     }
 
-    public UniversityCardView(@NonNull Context context, Card card){
+    public UniversityCardView(Context context, String cID, HashMap<String, Object> map, ViewGroup parent) {
         super(context);
         initialize(context);
-        setFromCardModel(card);
+        parent.addView(this);
+        setMargins();
+        if (cID != null && map != null) setFromMap(cID, map);
+        renderImages();
+    }
+
+    public UniversityCardView(Context context, String cID, HashMap<String, Object> map, ViewGroup parent, int viewIndex) {
+        super(context);
+        initialize(context);
+        parent.addView(this, viewIndex);
+        setMargins();
+        if (cID != null && map != null) setFromMap(cID, map);
+        renderImages();
     }
 
     /**
@@ -51,11 +76,13 @@ public class UniversityCardView extends GenericCardView {
      */
     private void initialize(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.view_university_card, this);
+        inflater.inflate(R.layout.view_card, this);
 
         name = findViewById(R.id.tvNameU);
         university = findViewById(R.id.tvUniversity);
         major = findViewById(R.id.tvMajor);
+        ivBanner = findViewById(R.id.ivBanner);
+        ivProfile = findViewById(R.id.ivProfile);
     }
 
     /**
@@ -76,42 +103,79 @@ public class UniversityCardView extends GenericCardView {
         setUserID(getValue(Card.FIELD_CARD_OWNER));
         setCardID(cID);
         String type = getValue(Card.FIELD_TYPE);
-        if(type.equals(Card.VALUE_TYPE_BUSINESS))
+        if(type.equals(Card.VALUE_TYPE_BUSINESS)) {
             setBusinessCard();
-        else
+        } else {
             setUniversityCard();
+        }
+
         setQrString();
+    }
+
+    private ImageLoadingListener getImageLoadingListener(String cardField) {
+        return new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if (cardField.equals(Card.FIELD_BANNER_URI)) {
+                    ivBanner.setImageBitmap(loadedImage);
+                } else {
+                    ivProfile.setImageBitmap(loadedImage);
+                }
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        };
+    }
+
+    private void renderImages() {
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        String bannerUri = getValue(Card.FIELD_BANNER_URI);
+        if (!bannerUri.equals(Card.VALUE_DEFAULT_IMAGE)) {
+            imageLoader.displayImage(bannerUri, (ImageView) findViewById(R.id.ivBanner), MainActivity.displayOptions);
+        }
+
+        String profileUri = getValue(Card.FIELD_PROFILE_URI);
+        if (!profileUri.equals(Card.VALUE_DEFAULT_IMAGE)) {
+            imageLoader.displayImage(profileUri,(ImageView) findViewById(R.id.ivProfile), MainActivity.displayOptions);
+        }
     }
 
     /**
      * Helper function for setting the Edit Text Values
      */
     private void setBusinessCard(){
-        setName();
-        setCompany();
-        setPosition();
+        this.name.setText(getValue(Card.FIELD_NAME));
+        this.university.setText(getValue(Card.FIELD_COMPANY_NAME));
+        this.major.setText(getValue(Card.FIELD_COMPANY_POSITION));
     }
     private void setUniversityCard(){
-        setName();
-        setUniversity();
-        setMajor();
+        this.name.setText(getValue(Card.FIELD_NAME));
+        this.university.setText(getValue(Card.FIELD_UNIVERSITY_NAME));
+        this.major.setText(getValue(Card.FIELD_UNIVERSITY_MAJOR));
     }
 
     /**
      * Helper functions for setting the Edit Text values
      */
-    public void setName() {
-        this.name.setText(getValue(Card.FIELD_NAME));
-    }
-    public void setUniversity() {
-        this.university.setText(getValue(Card.FIELD_UNIVERSITY_NAME));
-    }
-    public void setMajor() {
-        this.major.setText(getValue(Card.FIELD_UNIVERSITY_MAJOR));
-    }
-
-    public void setCompany() { this.university.setText(getValue(Card.FIELD_COMPANY_NAME)); }
-    public void setPosition() { this.major.setText(getValue(Card.FIELD_COMPANY_POSITION)); }
+    public void setName(String name) { this.name.setText(name); }
+    public void setUniversity(String university) { this.university.setText(university); }
+    public void setMajor(String major) { this.major.setText(major); }
+    public void setCompany(String company) { this.university.setText(company); }
+    public void setPosition(String position) { this.major.setText(position); }
 
     /**
      * Helper functions for getting the Edit Text Values
@@ -125,5 +189,23 @@ public class UniversityCardView extends GenericCardView {
     }
     public String getMajor() {
         return major.getText().toString();
+    }
+
+    public TextView getNameView() {
+        return name;
+    }
+    public TextView getUniversityView() {
+        return university;
+    }
+    public TextView getMajorView() {
+        return major;
+    }
+
+    public ImageView getBannerView() {
+        return ivBanner;
+    }
+
+    public ImageView getProfileView() {
+        return ivProfile;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.myfair.db;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,14 +33,19 @@ public class Card extends DatabaseObject {
     public static final String FIELD_COMPANY_POSITION = "company_position";
     public static final String FIELD_CARD_OWNER = "card_owner";
     public static final String FIELD_TYPE = "card_type";
+    public static final String FIELD_BANNER_URI = "banner_uri";
+    public static final String FIELD_PROFILE_URI = "profile_uri";
+    public static final String FIELD_SCAN_REGISTRY = "scanRegistry";
+    public static final String FIELD_ABOUT = "card_bio";
 
     public static final String VALUE_TYPE_UNIVERSITY = "university_card";
     public static final String VALUE_TYPE_BUSINESS = "business_card";
     public static final String VALUE_NEW_CARD = "new_card";
-    public static final String FIELD_SCAN_REGISTRY = "scanRegistry";
+    public static final String VALUE_DEFAULT_IMAGE = "default_image";
 
     private FirebaseDatabase db;
     private String cID;
+    private CardCreationListener listener;
 
 
     /**
@@ -47,6 +53,7 @@ public class Card extends DatabaseObject {
      */
     public Card() {
         super();
+        db = new FirebaseDatabase();
     }
 
     /**
@@ -66,6 +73,10 @@ public class Card extends DatabaseObject {
      */
     public Card(Map<String, Object> newMap) {
         super(newMap);
+    }
+
+    public void addCardCreationListener(CardCreationListener listener) {
+        this.listener = listener;
     }
 
     /**
@@ -101,8 +112,7 @@ public class Card extends DatabaseObject {
         }
 
         if (cID.equals(com.example.myfair.db.Card.VALUE_NEW_CARD)) {
-             final CollectionReference colRef;
-             colRef = db.userCards();
+             final CollectionReference colRef = db.userCards();
              colRef.add(getMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                  @Override
                  public void onSuccess(DocumentReference documentReference) {
@@ -124,12 +134,28 @@ public class Card extends DatabaseObject {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "DocumentSnapshot card info successfully updated!");
+
+                        if (listener != null) {
+                            listener.cardCreated();
+                        }
                     } else {
                         Log.d(TAG, "Error updating card info document");
                     }
                 }
             });
         }
+    }
+
+    public ArrayList<Pair<String, String>> getConnectionEntries() {
+        ArrayList<Pair<String, String>> list = new ArrayList<>();
+
+        for (String connectionField : User.getAllConnectionFields()) {
+            if (containsKey(connectionField)) {
+                list.add(new Pair<>(connectionField, getValue(connectionField)));
+            }
+        }
+
+        return list;
     }
 
     /**
@@ -151,6 +177,9 @@ public class Card extends DatabaseObject {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    if (listener != null) {
+                        listener.cardCreated();
+                    }
                     Log.d(TAG, "DocumentSnapshot metadata successfully updated!");
                 } else {
                     Log.d(TAG, "Error updating metadata document");

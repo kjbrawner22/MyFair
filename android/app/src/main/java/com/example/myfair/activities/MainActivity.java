@@ -12,6 +12,9 @@ import com.example.myfair.fragments.CollectionsFragment;
 import com.example.myfair.fragments.CreateFragment;
 import com.example.myfair.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements
     private Fragment fragmentAnalytics;
     private Fragment fragmentProfile;
     private FragmentManager fm;
+
+    public static final DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
+            .cacheInMemory(true)
+            .cacheOnDisk(true)
+            .build();
 
     private Resources res;
 
@@ -85,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initialize Image Loader singleton
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 
         res = getResources();
 
