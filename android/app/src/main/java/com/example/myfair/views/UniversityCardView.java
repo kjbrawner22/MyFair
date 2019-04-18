@@ -10,7 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.myfair.R;
+import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -143,12 +145,12 @@ public class UniversityCardView extends GenericCardView {
 
         String bannerUri = getValue(Card.FIELD_BANNER_URI);
         if (!bannerUri.equals(Card.VALUE_DEFAULT_IMAGE)) {
-            imageLoader.displayImage(bannerUri, (ImageView) findViewById(R.id.ivBanner));
+            imageLoader.displayImage(bannerUri, (ImageView) findViewById(R.id.ivBanner), MainActivity.displayOptions);
         }
 
         String profileUri = getValue(Card.FIELD_PROFILE_URI);
         if (!profileUri.equals(Card.VALUE_DEFAULT_IMAGE)) {
-            imageLoader.displayImage(profileUri,(ImageView) findViewById(R.id.ivProfile));
+            imageLoader.displayImage(profileUri,(ImageView) findViewById(R.id.ivProfile), MainActivity.displayOptions);
         }
     }
 
