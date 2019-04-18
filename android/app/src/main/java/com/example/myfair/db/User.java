@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.example.myfair.R;
+import com.example.myfair.modelsandhelpers.Connection;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -28,10 +30,14 @@ public class User extends DatabaseObject {
     public static final String FIELD_USERNAME ="username";
 
     // social media username fields
+    public static final String FIELD_CELL_NUMBER = "cell_number";
+    public static final String FIELD_WORK_NUMBER = "work_number";
+    public static final String FIELD_HOME_NUMBER = "work_number";
     public static final String FIELD_TWITTER_USERNAME ="twitter_username";
     public static final String FIELD_GITHUB_USERNAME ="github_username";
     public static final String FIELD_LINKED_IN_USERNAME ="linked_in_username";
     public static final String FIELD_INSTAGRAM_USERNAME ="instagram_username";
+
 
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
@@ -111,6 +117,18 @@ public class User extends DatabaseObject {
                 }
             }
         });
+    }
+
+    public static String[] getAllConnectionFields() {
+        return new String[]{
+                User.FIELD_CELL_NUMBER,
+                User.FIELD_WORK_NUMBER,
+                User.FIELD_HOME_NUMBER,
+                User.FIELD_TWITTER_USERNAME,
+                User.FIELD_GITHUB_USERNAME,
+                User.FIELD_INSTAGRAM_USERNAME,
+                User.FIELD_LINKED_IN_USERNAME
+        };
     }
 
     /**
