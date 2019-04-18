@@ -57,4 +57,14 @@
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
     </FrameLayout>
 
+    <Button
+        android:id="@+id/btnPrint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Print"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

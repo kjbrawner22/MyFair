@@ -3,11 +3,13 @@ package com.example.myfair.views;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.myfair.R;
@@ -45,6 +47,16 @@ public class BottomSheet extends BottomSheetDialogFragment {
         Log.d("EncryptedString", "Value's value:)  ::: " + bundle);
         Log.d("EncryptedString", "Bottom Sheet: " + qrString);
         Log.d("BottomSheetLog", "qrCode id: " + qrCode);
+
+        Button btnPrint = v.findViewById(R.id.btnPrint);
+        btnPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap = ((BitmapDrawable)qrCode.getDrawable()).getBitmap();
+                Log.d("BOTTOM_SHEET", "onClick: " + ((BitmapDrawable)qrCode.getDrawable()).getBitmap());
+                QRCodeHelper.printQRCode(getContext(), ((BitmapDrawable)qrCode.getDrawable()).getBitmap());
+            }
+        });
 
         setQrCode();
         return v;

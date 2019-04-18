@@ -16,6 +16,8 @@ import java.util.Map;
 
 import androidx.annotation.IntRange;
 
+import androidx.print.PrintHelper;
+
 /**
  * Built with reference to a tutorial by Ahsen Saeed
  * Any further development is built upon this platform
@@ -55,6 +57,12 @@ public class QRCodeHelper {
             qrCodeHelper = new QRCodeHelper(context);
         }
         return qrCodeHelper;
+    }
+
+    public static void printQRCode(Context context, Bitmap bitmap) {
+         PrintHelper printHelper = new PrintHelper(context);
+         printHelper.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+         printHelper.printBitmap("Print QR Code", bitmap);
     }
 
     /**
