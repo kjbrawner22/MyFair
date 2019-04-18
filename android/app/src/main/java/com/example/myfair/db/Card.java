@@ -1,6 +1,7 @@
 package com.example.myfair.db;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -144,9 +145,16 @@ public class Card extends DatabaseObject {
         }
     }
 
-    public Task<DocumentReference> createNewDbCard(){
-        CollectionReference ref = db.userCards();
-        return ref.add(getMap());
+    public ArrayList<Pair<String, String>> getConnectionEntries() {
+        ArrayList<Pair<String, String>> list = new ArrayList<>();
+
+        for (String connectionField : User.getAllConnectionFields()) {
+            if (containsKey(connectionField)) {
+                list.add(new Pair<>(connectionField, getValue(connectionField)));
+            }
+        }
+
+        return list;
     }
 
     /**
