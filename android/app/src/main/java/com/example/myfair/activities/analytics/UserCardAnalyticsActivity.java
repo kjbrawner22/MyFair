@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,15 +24,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 
-
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -215,7 +218,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         long timeBetween = (toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()); //timeBetween is the time in milliseconds that is between the to and from calendars
         Log.e(TAG, "Checking time between " + timeBetween);
 
-        DataPoint[] set = new DataPoint[0];
+        DataPoint[] set;
 
         if(toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()<= msInDay){ // If the time frame is only one day
             ArrayList<DataPoint> temp = new ArrayList<>();
@@ -235,32 +238,42 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             }
 
             set = (DataPoint []) temp.toArray();
+            NumberFormat nf = NumberFormat.getInstance();
+
+            graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf,nf));
 
             graph.getViewport().setMinX(0);
             graph.getViewport().setMaxX(24);
 
             graph.getViewport().setXAxisBoundsManual(true);
+
+            graph.getGridLabelRenderer().setHumanRounding(true);
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
+            graph.addSeries(series); //Setting up the Series
         }
         else{
-
+            //Time frame takes place over multiple days
             ArrayList<DataPoint> temp = new ArrayList<>();
             int numberOfDays = toCalendar.get(Calendar.DAY_OF_YEAR)-fromCalendar.get(Calendar.DAY_OF_YEAR);
             int subDivisions[] = new int[numberOfDays];
-
+            for(int i = 0; i< subDivisions.length; i++){
+                subDivisions[i] = 0;
+            }
             filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
                 long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
                 Log.e(TAG, "Checking the diff "+ diff);
-                subDivisions[(int) (diff/timePerSlot)]++;
+                subDivisions[(int) (diff/numberOfDays)]++;
             });
 
-            DataPoint[] set = new DataPoint[24];
-            for(int i = 0; i<set.length; i++){ //This for set up the Series for the graph
-                Calendar temp = fromCalendar;
-                temp.add(Calendar.DAY_OF_YEAR,i);
-                set[i] = new DataPoint(temp.getTime().getTime(),subDivisions[i]);
-                Log.e(TAG,"subDivision "+i+" value "+subDivisions[i]);
+            for(int i = 0; i<subDivisions.length; i++){ //This for set up the Series for the graph
+                Calendar base = fromCalendar;
+                base.add(Calendar.DAY_OF_YEAR,i);
+                Date t = base.getTime();
+                temp.add(new DataPoint(t.getTime(), subDivisions[i]));
             }
 
+            set = (DataPoint[]) temp.toArray();
 
             graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
 
@@ -270,11 +283,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             graph.getViewport().setXAxisBoundsManual(true);
 
             graph.getGridLabelRenderer().setHumanRounding(false);
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
+            graph.addSeries(series); //Setting up the Series
+
         }
-
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
-        graph.addSeries(series); //Setting up the Series
 
     }
 
