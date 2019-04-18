@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.drm.DrmStore;
 import android.os.Bundle;
 import android.util.Log;
@@ -112,9 +113,18 @@ public class CardViewingActivity extends AppCompatActivity {
     private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            /*
             changeForm(2);
             cardInfo.setFromUniversityCardView((UniversityCardView) view, context);
             Log.d("CardInfoCreated", "card Info Visible");
+            */
+            Bundle extras = new Bundle();
+            extras.putSerializable("card_map", ((UniversityCardView) view).getMap());
+            extras.putString("card_id", ((UniversityCardView) view).getCardID());
+
+            Intent intent = new Intent(CardViewingActivity.this, CardInfoActivity.class);
+            intent.putExtras(extras);
+            startActivity(intent);
         }
     };
 
