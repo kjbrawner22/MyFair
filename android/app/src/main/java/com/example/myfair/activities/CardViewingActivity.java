@@ -87,11 +87,6 @@ public class CardViewingActivity extends AppCompatActivity {
         }
     }
 
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
-        v.setMargins();
-    }
-
     /**
      * Gets the list of IDs of cards and populates a linear layout with cardViews.
      * */
@@ -104,9 +99,8 @@ public class CardViewingActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String cID = document.getId();
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        UniversityCardView v = new UniversityCardView(context, cID, map);
+                        UniversityCardView v = new UniversityCardView(context, cID, map, listView);
                         v.setOnClickListener(universityCardClickListener);
-                        addCardView(v, listView);
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {

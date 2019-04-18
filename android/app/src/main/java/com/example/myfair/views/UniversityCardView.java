@@ -1,12 +1,21 @@
 package com.example.myfair.views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.HashMap;
 
@@ -15,9 +24,10 @@ import androidx.annotation.NonNull;
  * Custom card view that sets the university card view layout
  */
 public class UniversityCardView extends GenericCardView {
-    public TextView name;
-    public TextView university;
-    public TextView major;
+    private TextView name;
+    private TextView university;
+    private TextView major;
+    private ImageView ivBanner, ivProfile;
 
     /**
      * Default constructor
@@ -40,6 +50,15 @@ public class UniversityCardView extends GenericCardView {
         if (cID != null && map != null) setFromMap(cID, map);
     }
 
+    public UniversityCardView(Context context, String cID, HashMap<String, Object> map, ViewGroup parent) {
+        super(context);
+        initialize(context);
+        parent.addView(this);
+        setMargins();
+        if (cID != null && map != null) setFromMap(cID, map);
+        renderImages(context);
+    }
+
     public UniversityCardView(@NonNull Context context, Card card){
         super(context);
         initialize(context);
@@ -57,6 +76,8 @@ public class UniversityCardView extends GenericCardView {
         name = findViewById(R.id.tvNameU);
         university = findViewById(R.id.tvUniversity);
         major = findViewById(R.id.tvMajor);
+        ivBanner = findViewById(R.id.ivBanner);
+        ivProfile = findViewById(R.id.ivProfile);
     }
 
     /**
@@ -77,11 +98,56 @@ public class UniversityCardView extends GenericCardView {
         setUserID(getValue(Card.FIELD_CARD_OWNER));
         setCardID(cID);
         String type = getValue(Card.FIELD_TYPE);
-        if(type.equals(Card.VALUE_TYPE_BUSINESS))
+        if(type.equals(Card.VALUE_TYPE_BUSINESS)) {
             setBusinessCard();
-        else
+        } else {
             setUniversityCard();
+        }
+
         setQrString();
+    }
+
+    private ImageLoadingListener getImageLoadingListener(String cardField) {
+        return new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if (cardField.equals(Card.FIELD_BANNER_URI)) {
+                    ivBanner.setImageBitmap(loadedImage);
+                } else {
+                    ivProfile.setImageBitmap(loadedImage);
+                }
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        };
+    }
+
+    private void renderImages(Context context) {
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
+
+        String bannerUri = getValue(Card.FIELD_BANNER_URI);
+        if (!bannerUri.equals(Card.VALUE_DEFAULT_IMAGE)) {
+            imageLoader.displayImage(bannerUri, (ImageView) findViewById(R.id.ivBanner));
+        }
+
+        String profileUri = getValue(Card.FIELD_PROFILE_URI);
+        if (!profileUri.equals(Card.VALUE_DEFAULT_IMAGE)) {
+            imageLoader.displayImage(profileUri,(ImageView) findViewById(R.id.ivProfile));
+        }
     }
 
     /**
@@ -132,10 +198,10 @@ public class UniversityCardView extends GenericCardView {
     }
 
     public ImageView getBannerView() {
-        return findViewById(R.id.ivBanner);
+        return ivBanner;
     }
 
     public ImageView getProfileView() {
-        return findViewById(R.id.ivProfile);
+        return ivProfile;
     }
 }
