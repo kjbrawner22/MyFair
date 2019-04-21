@@ -2,6 +2,7 @@ package com.example.myfair.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.LoginActivity;
@@ -70,6 +72,7 @@ public class ProfileFragment extends Fragment {
     private ScrollView profileMenu;
     private FirebaseDatabase db;
     private CardView profileCards, profileBrochures, profileDocuments;
+    private TextView cardText, brochureText, documentText;
 
     private FirebaseAuth mAuth;
 
@@ -177,6 +180,12 @@ public class ProfileFragment extends Fragment {
         profileBrochures = v.findViewById(R.id.cvProfileBrochures);
         profileDocuments = v.findViewById(R.id.cvProfileDocs);
         profileMenu = v.findViewById(R.id.svProfileMenu);
+        brochureText = v.findViewById(R.id.textView6);
+        brochureText.setShadowLayer(15, 0, 0, Color.BLACK);
+        cardText = v.findViewById(R.id.textView2);
+        cardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        documentText = v.findViewById(R.id.textView7);
+        documentText.setShadowLayer(15, 0, 0, Color.BLACK);
 
 
         db = new FirebaseDatabase();
