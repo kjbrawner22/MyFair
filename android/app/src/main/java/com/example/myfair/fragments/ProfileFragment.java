@@ -180,12 +180,17 @@ public class ProfileFragment extends Fragment {
         profileBrochures = v.findViewById(R.id.cvProfileBrochures);
         profileDocuments = v.findViewById(R.id.cvProfileDocs);
         profileMenu = v.findViewById(R.id.svProfileMenu);
-        brochureText = v.findViewById(R.id.textView6);
-        brochureText.setShadowLayer(15, 0, 0, Color.BLACK);
-        cardText = v.findViewById(R.id.textView2);
-        cardText.setShadowLayer(15, 0, 0, Color.BLACK);
-        documentText = v.findViewById(R.id.textView7);
-        documentText.setShadowLayer(15, 0, 0, Color.BLACK);
+
+        /*
+            Programmatically adds shadows: ending up scrapping this
+            brochureText = v.findViewById(R.id.textView6);
+            brochureText.setShadowLayer(30, 0, 0, Color.BLACK);
+            cardText = v.findViewById(R.id.textView2);
+            cardText.setShadowLayer(30, 0, 0, Color.BLACK);
+            documentText = v.findViewById(R.id.textView7);
+            documentText.setShadowLayer(30, 0, 0, Color.BLACK);
+         */
+
 
 
         db = new FirebaseDatabase();

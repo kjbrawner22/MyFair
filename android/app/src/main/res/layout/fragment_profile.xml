@@ -44,15 +44,19 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
                     android:elevation="10dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
                     android:text="Your Cards"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imageView7"
@@ -73,8 +77,9 @@
 
                 <TextView
                     android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
                     android:elevation="1dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
@@ -87,7 +92,7 @@
                     android:text="Brochures"
                     android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="@color/default_indicator_on"
+                    android:textColor="@color/colorWhite"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -118,15 +123,19 @@
 
                 <TextView
                     android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
                     android:elevation="10dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
                     android:text="Documents"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
 
             <View
