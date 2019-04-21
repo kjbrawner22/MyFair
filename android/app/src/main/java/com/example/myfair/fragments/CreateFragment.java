@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.myfair.activities.CardCreationActivity;
 import com.example.myfair.R;
@@ -27,7 +28,8 @@ public class CreateFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private Button btnLibrary, btnNewCard;
+    private Button btnLibrary;
+    private ImageView createNewCard;
 
     private String mParam1;
     private String mParam2;
@@ -81,9 +83,9 @@ public class CreateFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create, container, false);
 
-        btnNewCard = (Button) view.findViewById(R.id.btnNewCard);
+        createNewCard = (ImageView) view.findViewById(R.id.createFAB);
 
-        btnNewCard.setOnClickListener(new View.OnClickListener() {
+        createNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openCardCreation();
