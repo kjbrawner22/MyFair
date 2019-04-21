@@ -6,36 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".activities.analytics.HistoryAnalytics">
 
-    <TextView
+    <Button
         android:id="@+id/textFrom"
         android:layout_width="wrap_content"
-        android:layout_height="43dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:clickable="true"
         android:text="From:"
         android:textAlignment="center"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scannedCardScroll" />
 
-    <TextView
+    <Button
         android:id="@+id/textTo"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
         android:clickable="true"
         android:text="To:"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/textFrom"
-        app:layout_constraintTop_toBottomOf="@+id/scannedCardScroll" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFrom" />
 
     <ScrollView
         android:id="@+id/scannedCardScroll"
-        android:layout_width="match_parent"
-        android:layout_height="605dp"
+        android:layout_width="0dp"
+        android:layout_height="522dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -74,11 +76,12 @@
     <TextView
         android:id="@+id/toDateText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="46dp"
         android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textTo"
-        app:layout_constraintStart_toEndOf="@+id/textTo" />
+        app:layout_constraintStart_toEndOf="@+id/textTo"
+        app:layout_constraintTop_toBottomOf="@+id/fromDateText" />
 
     <Button
         android:id="@+id/refreshButton"
