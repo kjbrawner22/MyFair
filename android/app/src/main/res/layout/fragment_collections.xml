@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:src="@drawable/carddimension"
+                    android:src="@drawable/your_cards_splash"
                     android:visibility="visible" />
 
             </androidx.cardview.widget.CardView>
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:src="@drawable/brochure" />
+                    android:src="@drawable/brochures_splash" />
 
                 <TextView
                     android:id="@+id/textView6"
@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:src="@drawable/paper" />
+                    android:src="@drawable/documents_closeup" />
 
                 <TextView
                     android:id="@+id/textView7"
