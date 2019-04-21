@@ -44,7 +44,7 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="200dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:elevation="10dp"
@@ -77,7 +77,7 @@
 
                 <TextView
                     android:id="@+id/textView6"
-                    android:layout_width="200dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:elevation="1dp"
@@ -85,10 +85,6 @@
                     android:paddingTop="10dp"
                     android:paddingEnd="10dp"
                     android:paddingBottom="10dp"
-                    android:shadowColor="#000000"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="1"
                     android:text="Brochures"
                     android:textAlignment="center"
                     android:textAllCaps="false"
@@ -123,7 +119,7 @@
 
                 <TextView
                     android:id="@+id/textView7"
-                    android:layout_width="200dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:elevation="10dp"
