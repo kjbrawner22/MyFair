@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,14 +24,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 
-
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +67,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
     Calendar toCalendar = Calendar.getInstance();
     Calendar creationDatePH;
 
-
+    long msInDay = 86400000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,10 +112,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                 String d = correctedMonth+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
                 fromTimeFiller.setText(d); // The filler text view is set with the text and then the fromCalendar is set to hold the new values
                 fromTimeFiller.setTextSize(24);
+                Log.e(TAG, "Inputed stuff year "+year+ " month " + month + " dayofMonth " + dayOfMonth);
                 fromCalendar.set(Calendar.YEAR,year);
                 fromCalendar.set(Calendar.MONTH,month);
                 fromCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                fromCalendar.set(Calendar.HOUR, 0);
+                fromCalendar.set(Calendar.HOUR_OF_DAY, 0 );
                 fromCalendar.set(Calendar.MINUTE, 0);
                 fromCalendar.set(Calendar.SECOND,0);
 
@@ -133,12 +138,14 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                 newDate.set(year, month, dayOfMonth);
                 int correctedMonth = newDate.get(Calendar.MONTH)+1;
                 String d = correctedMonth+"/"+newDate.get(Calendar.DAY_OF_MONTH)+"/"+newDate.get(Calendar.YEAR);
+
+                Log.e(TAG, "Inputed stuff year "+year+ " month " + month + " dayofMonth " + dayOfMonth);
                 toTimeFiller.setText(d);
                 toTimeFiller.setTextSize(24);
                 toCalendar.set(Calendar.YEAR,year);
                 toCalendar.set(Calendar.MONTH,month);
                 toCalendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-                toCalendar.set(Calendar.HOUR, 23);
+                toCalendar.set(Calendar.HOUR_OF_DAY, 23);
                 toCalendar.set(Calendar.MINUTE, 59);
                 toCalendar.set(Calendar.SECOND, 59);
             }
@@ -181,9 +188,22 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     int correctedMonth = creationDatePH.get(Calendar.MONTH)+1;
                     String creationDateString = correctedMonth+"/"+creationDatePH.get(Calendar.DAY_OF_MONTH)+"/"+creationDatePH.get(Calendar.YEAR);
                     dateCreatedFiller.setText(creationDateString);
+                    fromTimeFiller.setText(creationDateString);
+                    fromCalendar = creationDatePH;
+                    fromCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                    fromCalendar.set(Calendar.MINUTE, 0);
+                    fromCalendar.set(Calendar.SECOND, 0);
+                    fromDialog.updateDate(creationDatePH.get(Calendar.YEAR),creationDatePH.get(Calendar.MONTH),creationDatePH.get(Calendar.DATE));
+                    toCalendar = Calendar.getInstance();
+                    String temp = (toCalendar.get(Calendar.MONTH)+1)+"/"+toCalendar.get(Calendar.DAY_OF_MONTH)+"/"+toCalendar.get(Calendar.YEAR);
+                    toTimeFiller.setText(temp);
+                    setUpGraph();
                 }
             }
         });
+
+
+
     }
 
     /**
@@ -193,39 +213,84 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
      */
     private void setUpGraph(){
         graph.removeAllSeries();
-        int[] subDivisions = new int[12];
-        for(int i = 0; i < 12; i++){
-            subDivisions[i]=0;
-        }
+
+
         ArrayList<Calendar> filteredScanDates = translatedScanDates;
         filteredScanDates.removeIf( c -> (c.getTime().before(fromCalendar.getTime())||c.getTime().after(toCalendar.getTime()))); // This statement purges the Scan Times that are outside of the bounds of the to and from
 
         long timeBetween = (toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()); //timeBetween is the time in milliseconds that is between the to and from calendars
+        Log.e(TAG, "Checking time between " + timeBetween);
 
-        long timePerSlot = timeBetween/subDivisions.length; //Time per slot gives a round idea of how many hours will be accumulated to each slot in the graph, this will be changed in a future iteration
-        Log.e(TAG,timePerSlot + " time Per slot");
-        filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
-            long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
-            Log.e(TAG, "Checking the diff "+ diff);
-            subDivisions[(int) (diff/timePerSlot)]++;
-        });
+        if(toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()<= msInDay){ // If the time frame is only one day
+            Log.e(TAG,"24 hours");
+            DataPoint[] set = new DataPoint[24];
+            int []subDivisions = new int[24];
+            for (int i = 0; i < 24; i++){
+                subDivisions[i]=0;
+            }
 
-        DataPoint[] set = new DataPoint[12];
-        for(int i = 0; i<set.length; i++){ //This for set up the Series for the graph
-            set[i] = new DataPoint(i,subDivisions[i]);
-            Log.e(TAG,"subDivision "+i+" value "+subDivisions[i]);
+            filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
+                long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
+                Log.e(TAG, "Checking the diff "+ diff);
+                subDivisions[(int) (diff/3600000)]++;
+
+                if(subDivisions[(int) (diff/3600000)] > 0) Log.e(TAG, "We got 1");
+            });
+
+            for (int i = 0; i < 24 ; i++) {
+                set[i] = new DataPoint(i,subDivisions[i]);
+            }
+
+            NumberFormat nf = NumberFormat.getInstance();
+
+            graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf,nf));
+            graph.getGridLabelRenderer().setNumHorizontalLabels(5);
+
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(24);
+
+            graph.getViewport().setXAxisBoundsManual(true);
+
+            graph.getGridLabelRenderer().setHumanRounding(true);
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
+            graph.addSeries(series); //Setting up the Series
         }
+        else{
+            //Time frame takes place over multiple days
+            Log.e(TAG,"Multi Day");
+            int numberOfDays = toCalendar.get(Calendar.DAY_OF_YEAR)-fromCalendar.get(Calendar.DAY_OF_YEAR);
+            int subDivisions[] = new int[numberOfDays];
+            DataPoint[] set = new DataPoint[numberOfDays];
+            for(int i = 0; i< subDivisions.length; i++){
+                subDivisions[i] = 0;
+            }
+            filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
+                long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
+                Log.e(TAG, "Checking the diff "+ diff);
+                subDivisions[(int) (diff/msInDay)]++;
+                if(subDivisions[(int) (diff/msInDay)] > 0) Log.e(TAG, "We got 1");
+            });
+
+            for(int i = 0; i<subDivisions.length; i++){ //This for set up the Series for the graph
+                set[i]= new DataPoint(i, subDivisions[i]);
+            }
 
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
-        graph.addSeries(series); //Setting up the Series
+            NumberFormat nf = NumberFormat.getInstance();
+            graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf,nf));
+            graph.getGridLabelRenderer().setNumHorizontalLabels(6);
 
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(12);
-        graph.getViewport().setMinY(0);
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(numberOfDays);
 
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setXAxisBoundsManual(true);
+
+            graph.getViewport().setXAxisBoundsManual(true);
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(set);
+            graph.addSeries(series); //Setting up the Series
+
+        }
 
     }
 
