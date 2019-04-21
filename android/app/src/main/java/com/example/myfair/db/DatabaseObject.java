@@ -11,11 +11,11 @@ public class DatabaseObject {
     private HashMap<String, Object> map;
 
     /**
-    * Default constructor, initializes the underlying map variable
-    */
+     * Default constructor, initializes the underlying map variable
+     */
     public DatabaseObject() {
-            map = new HashMap<>();
-        }
+        map = new HashMap<>();
+    }
 
     /**
      * Standard constructor that sets the db object from a predefined map
@@ -30,8 +30,8 @@ public class DatabaseObject {
      * @return - returns type HashMap<String, Object>
      */
     public HashMap<String, Object> getMap() {
-            return map;
-        }
+        return map;
+    }
 
     /**
      * Setter for map variable
@@ -74,31 +74,30 @@ public class DatabaseObject {
      * @return boolean variable that specifies whether the key was found
      */
     public boolean containsKey(String key){
-            return map.containsKey(key);
-        }
+        return map.containsKey(key);
+    }
 
     /**
      * Getter for the ID variable
      * @return String that represents the object's id
      */
     public String getId(){
-            return id;
-        }
+        return id;
+    }
 
     /**
      * Setter for the ID variable
      * @param newId - String that represents the ID
      */
     public void setId(String newId){
-            id = newId;
-        }
+        id = newId;
+    }
 
     /**
      * Helper method to display map contents in logging
      * @return String that represents the map contents
      */
     public String display(){
-            return getMap().toString();
-        }
+        return getMap().toString();
+    }
 }
-
