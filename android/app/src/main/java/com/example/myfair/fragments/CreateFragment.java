@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.example.myfair.activities.CardCreationActivity;
 import com.example.myfair.R;
+import com.example.myfair.activities.PacketCreationActivity;
 
 
 /**
@@ -27,7 +28,7 @@ public class CreateFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private Button btnLibrary, btnNewCard;
+    private Button btnNewPacket, btnNewCard;
 
     private String mParam1;
     private String mParam2;
@@ -82,6 +83,14 @@ public class CreateFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create, container, false);
 
         btnNewCard = (Button) view.findViewById(R.id.btnNewCard);
+        btnNewPacket = (Button) view.findViewById(R.id.btnNewPacket);
+
+        btnNewPacket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPacketCreation();
+            }
+        });
 
         btnNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +100,14 @@ public class CreateFragment extends Fragment {
         });
 
         return view;
+    }
+
+    /**
+     * Opens Packet Creation Activity
+     */
+    private void openPacketCreation(){
+        Intent intent = new Intent(getActivity(), PacketCreationActivity.class);
+        startActivity(intent);
     }
 
     /**
