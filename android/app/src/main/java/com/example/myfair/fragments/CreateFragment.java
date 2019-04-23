@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.example.myfair.activities.CardCreationActivity;
 import com.example.myfair.R;
+import com.example.myfair.activities.PacketCreationActivity;
 
 
 /**
@@ -28,6 +29,7 @@ public class CreateFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+  
     private Button btnLibrary;
     private ImageView createNewCard;
 
@@ -84,7 +86,7 @@ public class CreateFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create, container, false);
 
         createNewCard = (ImageView) view.findViewById(R.id.createFAB);
-
+      
         createNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +95,14 @@ public class CreateFragment extends Fragment {
         });
 
         return view;
+    }
+
+    /**
+     * Opens Packet Creation Activity
+     */
+    private void openPacketCreation(){
+        Intent intent = new Intent(getActivity(), PacketCreationActivity.class);
+        startActivity(intent);
     }
 
     /**

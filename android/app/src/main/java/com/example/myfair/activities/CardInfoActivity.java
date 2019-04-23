@@ -132,6 +132,9 @@ public class CardInfoActivity extends AppCompatActivity {
                             }
                         });
                 break;
+            case R.id.action_share:
+                shareCard();
+                break;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -144,15 +147,19 @@ public class CardInfoActivity extends AppCompatActivity {
     private View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Bundle bundle = new Bundle();
-            bundle.putString("encryptedString", encryptedString);
-            BottomSheet bottomSheet = new BottomSheet();
-            bottomSheet.setArguments(bundle);
-            bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
+            shareCard();
         }
     };
 
-    public void setQrString(String uID, String cID){
+    private void shareCard(){
+        Bundle bundle = new Bundle();
+        bundle.putString("encryptedString", encryptedString);
+        BottomSheet bottomSheet = new BottomSheet();
+        bottomSheet.setArguments(bundle);
+        bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
+    }
+
+    private void setQrString(String uID, String cID){
         qrObject user = new qrObject(uID, cID);
         String serializeString = new Gson().toJson(user);
         encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
