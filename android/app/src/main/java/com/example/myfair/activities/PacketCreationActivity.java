@@ -6,22 +6,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.myfair.R;
+import com.example.myfair.views.UniversityCardView;
 
 import java.net.URL;
+import java.util.HashMap;
 
 public class PacketCreationActivity extends AppCompatActivity {
     public static final String INTENT_TOOLBAR_TITLE = "New Packet";
+    public static final String TAG = "PacketCreationLog";
     private String docName, docLink;
+    private LinearLayout lytCardList, lytDocList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +36,45 @@ public class PacketCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_packet_creation);
         setupToolbar();
 
+        lytCardList = findViewById(R.id.lytCardList);
+        lytDocList = findViewById(R.id.lytDocList);
 
         CardView cvAddDoc = findViewById(R.id.cvAddDoc);
-        cvAddDoc.setOnClickListener(cardListener);
+        cvAddDoc.setOnClickListener(docListener);
+        CardView cvAddCard = findViewById(R.id.cvAddCard);
+        cvAddCard.setOnClickListener(cardListener);
+
     }
 
     private View.OnClickListener cardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Intent i = new Intent(PacketCreationActivity.this, CardPickerActivity.class);
+            startActivityForResult(i, 1);
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                HashMap<String, Object> map = (HashMap<String, Object>) data.getSerializableExtra("card_map");
+                String cID = data.getStringExtra("card_id");
+                UniversityCardView card = new UniversityCardView(this, cID, map, lytCardList);
+                Log.d(TAG, "result: " + cID);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
+
+    private View.OnClickListener docListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
             createDialog();
-            Log.d("PacketCreationLog", "Strings: " + docName + ", " + docLink);
+            Log.d(TAG, "Strings: " + docName + ", " + docLink);
         }
     };
 
