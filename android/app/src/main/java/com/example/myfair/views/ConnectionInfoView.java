@@ -1,20 +1,26 @@
 package com.example.myfair.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import com.example.myfair.R;
+import com.example.myfair.db.Card;
+import com.example.myfair.modelsandhelpers.Connection;
 
 public class ConnectionInfoView extends LinearLayout {
     private ImageView ivLogo;
     private TextView tvText;
+    private boolean checked;
 
     public ConnectionInfoView(Context context) {
         super(context);
@@ -44,6 +50,15 @@ public class ConnectionInfoView extends LinearLayout {
         tvText.setText(text);
     }
 
+    public ConnectionInfoView(Context context, ViewGroup parent, Connection connection) {
+        super(context);
+        initialize(context);
+        parent.addView(this);
+        ivLogo.setImageResource(connection.getIconId());
+        tvText.setText(connection.getValue());
+        checked = false;
+    }
+
     /**
      * initialize and inflate the view, then get handles to the view components needed
      * @param context - app's current context
@@ -56,6 +71,19 @@ public class ConnectionInfoView extends LinearLayout {
 
         ivLogo = findViewById(R.id.ivLogo);
         tvText = findViewById(R.id.tvText);
+    }
+
+    public void setChecked(boolean checked) {
+        Resources resources = getResources();
+        CardView toplevel = findViewById(R.id.toplevel);
+        this.checked = checked;
+        if (checked) {
+            toplevel.setCardBackgroundColor(resources.getColor(R.color.colorWhite));
+            tvText.setTextColor(resources.getColor(R.color.colorPrimary));
+        } else {
+            toplevel.setCardBackgroundColor(resources.getColor(R.color.colorPrimary));
+            tvText.setTextColor(resources.getColor(R.color.colorWhite));
+        }
     }
 
     public void setText(String text) {

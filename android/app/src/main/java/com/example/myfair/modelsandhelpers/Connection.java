@@ -14,6 +14,7 @@ public class Connection {
     private int icon;
     private String dbKey;
     private String name;
+    private String value;
     private boolean enabled;
 
     /**
@@ -93,5 +94,13 @@ public class Connection {
                 new Connection(R.drawable.ic_linked_in, User.FIELD_LINKED_IN_USERNAME, "Linked In"),
                 new Connection(R.drawable.ic_twitter, User.FIELD_INSTAGRAM_USERNAME, "Instagram")
         };
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return this.value;
     }
 }

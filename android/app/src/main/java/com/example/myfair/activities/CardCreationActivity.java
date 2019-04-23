@@ -22,7 +22,10 @@ import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.CardCreationListener;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.db.User;
+import com.example.myfair.modelsandhelpers.Connection;
 import com.example.myfair.modelsandhelpers.Upload;
+import com.example.myfair.views.ConnectionInfoView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,7 +36,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -41,6 +47,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,6 +57,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import javax.annotation.Nullable;
 
 import static com.example.myfair.activities.CardViewingActivity.INTENT_TOOLBAR_TITLE;
 
@@ -116,8 +125,40 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         ivBanner.setOnClickListener(imageUploadListener);
         ivProfile.setOnClickListener(imageUploadListener);
 
-        changeForm(2);
-        //initialize contents of text boxes to values inside database
+        //changeForm(2);
+
+        displayConnections();
+    }
+
+    private void displayConnections() {
+        final LinearLayout lytConnections = findViewById(R.id.lytConnections);
+
+        User user = new User();
+        user.setFromDb().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot.getData() != null) {
+                    user.setMap(documentSnapshot.getData());
+                    ArrayList<Connection> connections = user.getMyConnections();
+                    for (Connection connection : connections) {
+                        ConnectionInfoView view = new ConnectionInfoView(CardCreationActivity.this,
+                                lytConnections, connection);
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (localCard.containsKey(connection.getDbKey())) {
+                                    localCard.removeKey(connection.getDbKey());
+                                    view.setChecked(false);
+                                } else {
+                                    view.setChecked(true);
+                                    localCard.setValue(connection.getDbKey(), connection.getValue());
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     private void openFileChooser(int requestCode) {
@@ -180,16 +221,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.btnDone:
-                //send info to database
-                if (validFields()) {
-                    updateData();
-                }
-                //update back to home fragment
-                break;
-            default:
-                break;
+        if (id == R.id.btnDone) {
+            updateData();
         }
     }
 
