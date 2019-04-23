@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ferris_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.CardInfoActivity"></activity>
+        <activity android:name=".activities.CardPickerActivity"></activity>
+        <activity android:name=".activities.PacketCreationActivity" />
+        <activity android:name=".activities.CardInfoActivity" />
         <activity android:name=".activities.CardViewingActivity" />
         <activity android:name=".activities.analytics.UserCardAnalyticsActivity" />
         <activity android:name=".activities.analytics.HistoryAnalytics" />

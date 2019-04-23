@@ -1,6 +1,8 @@
 package com.example.myfair.activities;
 
+import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +38,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,9 +47,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     private ImageView ivBanner, ivProfile, ivCurrentImage;
     private Uri bannerUri, profileUri;
     private EditText etName, etCompany, etPosition;
-    private String fullName, company, position;
     private Button btnDone;
-    private ConstraintLayout lytCompany;
+    private LinearLayout lytCompany, lytBio;
     private static final int PICK_BANNER_REQUEST = 1, PICK_PROFILE_REQUEST = 2;
     private LinearLayout lytPreview;
     private FirebaseDatabase database;
@@ -78,7 +79,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
-        lytCompany = findViewById(R.id.lytGeneralInfo);
+        lytBio = findViewById(R.id.lytBio);
+        lytCompany = findViewById(R.id.lytCompany);
         etName = findViewById(R.id.etName);
         etCompany = findViewById(R.id.etCompany);
         etPosition = findViewById(R.id.etPosition);
@@ -167,7 +169,10 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         switch (id) {
             case R.id.btnDone:
                 //send info to database
-                if (validFields()) {
+                if(validFields() && getForm() == 2){
+                    changeForm(3);
+                }
+                else if (getForm() == 3) {
                     updateData();
                 }
                 //update back to home fragment
@@ -201,7 +206,9 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * Helper function responsible for uploading photos and updating the information on a card
      * */
     private void updateData(){
+        EditText etBio = findViewById(R.id.etBio);
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
+        localCard.setValue(Card.FIELD_ABOUT, etBio.getText().toString());
         Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
         if (bannerUri != null) {
             uploadImage(bannerUri, Card.FIELD_BANNER_URI);
@@ -293,7 +300,16 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      */
     private int getForm(){
         if (lytCompany.getVisibility() == View.VISIBLE) return 2;
+        else if(lytBio.getVisibility() == View.VISIBLE) return 3;
         else return 3;
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        View view = activity.findViewById(android.R.id.content);
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**
@@ -304,12 +320,20 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         form = formID;
         switch(formID){
             case 2:
-                btnDone.setVisibility(View.VISIBLE);
+                btnDone.setText("NEXT");
                 etName.setVisibility(View.VISIBLE);
                 lytCompany.setVisibility(View.VISIBLE);
+                lytBio.setVisibility(View.GONE);
                 break;
+            case 3:
+                hideKeyboard(CardCreationActivity.this);
+                btnDone.setText("DONE");
+                lytCompany.setVisibility(View.GONE);
+                lytBio.setVisibility(View.VISIBLE);
             default:
                 Log.d("ChangeFormLog", "Form Not Yet Implemented");
         }
     }
+
+
 }
