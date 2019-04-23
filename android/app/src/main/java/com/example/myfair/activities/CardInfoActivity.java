@@ -20,6 +20,7 @@ import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.qrObject;
 import com.example.myfair.views.BottomSheet;
+import com.example.myfair.views.ConnectionInfoView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -73,6 +74,10 @@ public class CardInfoActivity extends AppCompatActivity {
 
             setQrString(uID, cID);
             cardRef = db.getCardRef(uID, cID);
+
+            ConnectionInfoView testConnection = findViewById(R.id.ciTest);
+            testConnection.setImage(R.drawable.ic_twitter);
+            testConnection.setText("kennybrawner");
         }
         else{
             finish();
