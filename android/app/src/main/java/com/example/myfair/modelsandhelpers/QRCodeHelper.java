@@ -11,10 +11,17 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.IntRange;
+
+import androidx.print.PrintHelper;
 
 /**
  * Built with reference to a tutorial by Ahsen Saeed
@@ -55,6 +62,21 @@ public class QRCodeHelper {
             qrCodeHelper = new QRCodeHelper(context);
         }
         return qrCodeHelper;
+    }
+
+    public static void printQRCode(Context context, Bitmap bitmap) {
+         PrintHelper printHelper = new PrintHelper(context);
+         printHelper.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+         printHelper.printBitmap("Print QR Code", bitmap);
+    }
+
+    public static void saveQRCode(Bitmap bitmap) {
+        try (FileOutputStream out = new FileOutputStream("QR-export-" + Calendar.getInstance().getTime() + ".png")) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -134,9 +156,9 @@ public class QRCodeHelper {
             for (int i = 0; i < mHeight; i++) {
                 for (int j = 0; j < mWidth; j++) {
                     if (bitMatrix.get(j, i)) {
-                        pixels[i * mWidth + j] = 0xFFFFFFFF;
+                        pixels[i * mWidth + j] = 0xFF000000;
                     } else {
-                        pixels[i * mWidth + j] = 0x282946;
+                        pixels[i * mWidth + j] = 0xFFFFFFFF;
                     }
                 }
             }
