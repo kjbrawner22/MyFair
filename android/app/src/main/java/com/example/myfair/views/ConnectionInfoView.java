@@ -18,7 +18,7 @@ import com.example.myfair.db.Card;
 import com.example.myfair.modelsandhelpers.Connection;
 
 public class ConnectionInfoView extends LinearLayout {
-    private ImageView ivLogo;
+    private ImageView ivLogo, ivSelected;
     private TextView tvText;
     private boolean checked;
 
@@ -70,6 +70,7 @@ public class ConnectionInfoView extends LinearLayout {
         inflater.inflate(R.layout.view_connection_info, this);
 
         ivLogo = findViewById(R.id.ivLogo);
+        ivSelected = findViewById(R.id.ivSelected);
         tvText = findViewById(R.id.tvText);
     }
 
@@ -77,10 +78,12 @@ public class ConnectionInfoView extends LinearLayout {
         Resources resources = getResources();
         CardView toplevel = findViewById(R.id.toplevel);
         this.checked = checked;
-        if (checked) {
-            toplevel.setCardBackgroundColor(resources.getColor(R.color.colorWhite));
-            tvText.setTextColor(resources.getColor(R.color.colorPrimary));
+        if (!checked) {
+            ivSelected.setImageResource(R.drawable.ic_selected_no);
+            toplevel.setCardBackgroundColor(resources.getColor(R.color.default_indicator_off));
+            tvText.setTextColor(resources.getColor(R.color.colorWhite));
         } else {
+            ivSelected.setImageResource(R.drawable.ic_selected_yes);
             toplevel.setCardBackgroundColor(resources.getColor(R.color.colorPrimary));
             tvText.setTextColor(resources.getColor(R.color.colorWhite));
         }
