@@ -80,7 +80,7 @@ public class ConnectionInfoView extends LinearLayout {
         this.checked = checked;
         if (!checked) {
             ivSelected.setImageResource(R.drawable.ic_selected_no);
-            toplevel.setCardBackgroundColor(resources.getColor(R.color.default_indicator_off));
+            toplevel.setCardBackgroundColor(resources.getColor(R.color.default_indicator_light_off));
         } else {
             ivSelected.setImageResource(R.drawable.ic_selected_yes);
             toplevel.setCardBackgroundColor(resources.getColor(R.color.colorPrimary));

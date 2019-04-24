@@ -40,6 +40,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardBackgroundColor="@color/default_indicator_light_off"
                     app:cardCornerRadius="25dp"
                     app:contentPadding="2dp">
@@ -89,6 +92,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardBackgroundColor="@color/default_indicator_light_off"
                     app:cardCornerRadius="25dp"
                     app:contentPadding="2dp">
@@ -103,7 +109,8 @@
                         android:textAllCaps="true"
                         android:textColor="@color/colorWhite"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
                     <ImageView
                         android:id="@+id/imageView4"
