@@ -39,7 +39,8 @@ public class CardInfoActivity extends AppCompatActivity {
     private String encryptedString;
     DocumentReference cardRef;
 
-
+    public static final String INTENT_CARD_MAP = "card_map";
+    public static final String INTENT_CARD_ID = "card_id";
     public static final String INTENT_TOOLBAR_TITLE = "Card Info";
 
     @Override
@@ -51,19 +52,17 @@ public class CardInfoActivity extends AppCompatActivity {
         TextView cardBio = findViewById(R.id.tvCardBio);
         setupToolbar(INTENT_TOOLBAR_TITLE);
 
-        FloatingActionButton fabShare;
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        fabShare = findViewById(R.id.fabShare);
-        fabShare.setOnClickListener(fabListener);
+
         lytCardInfo = findViewById(R.id.lytCardInfo);
         HashMap<String, Object> map;
         String cID;
 
 
         if(bundle != null) {
-            map = (HashMap<String, Object>) bundle.getSerializable("card_map");
-            cID = bundle.getString("card_id");
+            map = (HashMap<String, Object>) bundle.getSerializable(INTENT_CARD_MAP);
+            cID = bundle.getString(INTENT_CARD_ID);
             Log.d("CardInfoActivityLog", "uID: "+ (String) map.get(Card.FIELD_CARD_OWNER) + "cID: " + cID);
             cardView = new UniversityCardView(this, cID, map, lytCardInfo, 0);
             String name = (String) map.get(Card.FIELD_NAME);
@@ -175,13 +174,6 @@ public class CardInfoActivity extends AppCompatActivity {
         }
         return true;
     }
-
-    private View.OnClickListener fabListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            shareCard();
-        }
-    };
 
     private void shareCard(){
         Bundle bundle = new Bundle();

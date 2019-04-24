@@ -41,6 +41,9 @@ public class PacketInfoActivity extends AppCompatActivity {
     HashMap<String, Object> cards, documents;
     DocumentReference packetRef;
 
+    public static final String INTENT_PACKET_MAP = "packet_map";
+    public static final String INTENT_PACKET_ID = "packet_id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,19 +52,16 @@ public class PacketInfoActivity extends AppCompatActivity {
         FirebaseDatabase db = new FirebaseDatabase();
         setupToolbar();
 
-        FloatingActionButton fabShare;
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        fabShare = findViewById(R.id.fabShare);
-        fabShare.setOnClickListener(fabListener);
         lytPacketInfo = findViewById(R.id.lytCardInfo);
         lytDocumentList = findViewById(R.id.lytDocumentList);
         HashMap<String, Object> map;
         String pID;
 
         if(bundle != null) {
-            map = (HashMap<String, Object>) bundle.getSerializable("packet_map");
-            pID = bundle.getString("packet_id");
+            map = (HashMap<String, Object>) bundle.getSerializable(INTENT_PACKET_MAP);
+            pID = bundle.getString(INTENT_PACKET_ID);
             String uID = (String) map.get(Packet.FIELD_PACKET_OWNER);
             setQrString(uID, pID);
 
@@ -69,8 +69,6 @@ public class PacketInfoActivity extends AppCompatActivity {
                 packetRef = db.getPacketRef(uID, pID);
             else
                 packetRef = db.packetsLibrary().document(pID);
-
-            packetRef = db.getPacketRef(uID, pID);
 
             Log.d("CardInfoActivityLog", "uID: "+ (String) map.get(Card.FIELD_CARD_OWNER) + "pID: " + pID);
             //cardView = new UniversityCardView(this, cID, map, lytPacketInfo, 0);
@@ -109,14 +107,7 @@ public class PacketInfoActivity extends AppCompatActivity {
         }
     }
 
-    private View.OnClickListener fabListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            shareCard();
-        }
-    };
-
-    private void shareCard(){
+    private void shareCard() {
         Bundle bundle = new Bundle();
         bundle.putString("encryptedString", encryptedString);
         BottomSheet bottomSheet = new BottomSheet();
@@ -124,7 +115,7 @@ public class PacketInfoActivity extends AppCompatActivity {
         bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
     }
 
-    private void setQrString(String uID, String pID){
+    private void setQrString(String uID, String pID) {
         qrObject user = new qrObject(uID, pID);
         user.setType(qrObject.VALUE_TYPE_PACKET);
         String serializeString = new Gson().toJson(user);

@@ -20,7 +20,8 @@
         <activity android:name=".activities.CardPickerActivity" />
         <activity android:name=".activities.PacketCreationActivity" />
         <activity android:name=".activities.CardInfoActivity" />
-        <activity android:name=".activities.CardViewingActivity" />
+        <activity android:name=".activities.CardViewingActivity"
+            android:windowSoftInputMode="adjustResize|adjustResize|adjustPan"/>
         <activity android:name=".activities.analytics.UserCardAnalyticsActivity" />
         <activity android:name=".activities.analytics.HistoryAnalytics" />
         <activity android:name=".activities.analytics.UserAnalytics" />
@@ -32,7 +33,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ProfileEditingActivity" />
-        <activity android:name=".activities.ScannedActivity" />
         <activity android:name=".activities.GenerateActivity" />
         <activity android:name=".activities.ScanActivity" />
         <activity android:name=".activities.CardCreationActivity" />

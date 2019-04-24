@@ -7,17 +7,40 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.example.myfair.R;
+import com.example.myfair.db.Card;
+import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.db.User;
+import com.example.myfair.modelsandhelpers.EncryptionHelper;
+import com.example.myfair.modelsandhelpers.qrObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static com.google.android.gms.common.util.CollectionUtils.listOf;
@@ -25,6 +48,7 @@ import static com.google.android.gms.common.util.CollectionUtils.listOf;
 
 
 public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+    private static final String TAG = "Scan Activity";
 
     ZXingScannerView qrCodeScanner;
     //ImageView barcodeBackImageView;
@@ -32,14 +56,15 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
     int MY_CAMERA_REQUEST_CODE;
 
-
-
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+
+        database = new FirebaseDatabase();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -122,9 +147,19 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(Result p0){
         if(p0!=null){
-            ScannedActivity s = new ScannedActivity();
-            startActivity(s.getScannedActivity(this,p0.getText()));
-            resumeCamera();
+            String decryptedString = EncryptionHelper.getInstance().getDecryptionString(p0.getText());
+            qrObject qr = new Gson().fromJson(decryptedString, qrObject.class);
+            String cID = qr.getCardID();
+            String uID = qr.getUserID();
+            String type = qr.getType();
+
+            //Run the request to get the info from firebase
+            if(type.equals(qrObject.VALUE_TYPE_CARD)){
+                dbCardCall(uID, cID);
+            }
+            else{
+                dbPacketCall(uID, cID);
+            }
         }
     }
 
@@ -134,9 +169,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         if(requestCode == MY_CAMERA_REQUEST_CODE){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 openCamera();
-            }
-            else if (grantResults[0] == PackageManager.PERMISSION_DENIED){
-
             }
         }
     }
@@ -161,7 +193,127 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
      */
     @Override
     public void onBackPressed(){
-        Intent returnToMain = new Intent(this,MainActivity.class);
-        startActivity(returnToMain);
+        finish();
+    }
+
+    public void dbCardCall(String uID, String cID){
+        Log.d("Scanned", "Checking Ids "+uID+" "+cID);
+        final Card sharedCard = new Card();
+        DocumentReference ref = sharedCard.setFromDb(uID,cID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("Scanned", "Listen failed.");
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d("Scanned", "User snapshot updated");
+                    Map<String,Object> temp = snapshot.getData();
+                    temp.put("scan_date", new Timestamp(Calendar.getInstance().getTime()));
+                    Log.d("Scanned","Object info" + sharedCard.getMap());
+
+                    //push card to collections folder
+                    Bundle bundle = new Bundle();
+                    HashMap<String, Object> map = new HashMap<>();
+                    final String metaPushed = "meta_pushed";
+                    final String mainCardPushed = "main_card_pushed";
+
+                    DocumentReference docRef = database.userContacts().document(sharedCard.getCardID());
+
+                    docRef.set(temp).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "DocumentSnapshot card added to collection!");
+                                map.put(mainCardPushed, 1);
+                                bundle.putSerializable(CardInfoActivity.INTENT_CARD_MAP, (HashMap) temp);
+                                bundle.putString(CardInfoActivity.INTENT_CARD_ID, snapshot.getId());
+                            } else {
+                                Log.d(TAG, "Error adding card info document to collection");
+                            }
+                        }
+                    });
+
+                    DocumentReference metaRef = database.getCardRef(uID,cID).collection("cdata").document("metadata");
+                    metaRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                Map<String,Object> metadata = task.getResult().getData();
+                                ArrayList<Timestamp> timeStamp = (ArrayList<Timestamp>) metadata.get("scanRegistry");
+                                long scans = (long) metadata.get("shared");
+                                scans++;
+                                timeStamp.add(new Timestamp(Calendar.getInstance().getTime()));
+
+                                metaRef.update("scanRegistry", timeStamp, "shared", scans).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Log.e("pushing a moose", "We Updated");
+                                            map.put(metaPushed, 1);
+                                        }
+                                        else{
+                                            Log.e("pushing a moose", "oops something went wrong");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (!map.containsKey(metaPushed) || !map.containsKey(mainCardPushed)) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            Intent intent = new Intent(ScanActivity.this, CardInfoActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    t.start();
+                }
+            }
+        });
+    }
+
+    public void dbPacketCall(String uID, String pID){
+        DocumentReference packetRef = database.getPacketRef(uID, pID);
+        packetRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    Map<String, Object> data = task.getResult().getData();
+                    Log.d(TAG, "Map: " + data);
+                    String id = task.getResult().getId();
+                    if (data != null)
+                        database.packetsLibrary().document(id).set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "DocumentSnapshot packet added to collection!");
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable(PacketInfoActivity.INTENT_PACKET_MAP, (HashMap) data);
+                                    bundle.putString(PacketInfoActivity.INTENT_PACKET_ID, id);
+                                    Intent intent = new Intent(ScanActivity.this, PacketInfoActivity.class);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Log.d(TAG, "Error adding packet info document to collection");
+                                }
+                            }
+                        });
+                }
+            }
+        });
     }
 }

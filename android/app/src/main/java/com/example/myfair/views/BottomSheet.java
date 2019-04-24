@@ -56,14 +56,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-        Button btnSave = v.findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                QRCodeHelper.saveQRCode(((BitmapDrawable)qrCode.getDrawable()).getBitmap());
-            }
-        });
-
         setQrCode();
         return v;
     }
