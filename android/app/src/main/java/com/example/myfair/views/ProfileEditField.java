@@ -61,19 +61,19 @@ public class ProfileEditField extends LinearLayout {
      * @param label - String to update the label's value
      */
     public void setLabel(String label) {
-
-        if (label.equals("twitter_username"))
-            this.label.setText("Twitter Username:");
-        else if (label.equals("github_username"))
-            this.label.setText("Github Username:");
-        else if (label.equals("linked_in_username"))
-            this.label.setText("LinkedIn Username:");
-        else if (label.equals("instagram_username"))
-            this.label.setText("Instagram Username:");
-        else if (label.equals("name"))
-            this.label.setText("Name:");
-        else
             this.label.setText(label);
+//        if (label.equals("twitter_username"))
+//            this.label.setText("Twitter Username:");
+//        else if (label.equals("github_username"))
+//            this.label.setText("Github Username:");
+//        else if (label.equals("linked_in_username"))
+//            this.label.setText("LinkedIn Username:");
+//        else if (label.equals("instagram_username"))
+//            this.label.setText("Instagram Username:");
+//        else if (label.equals("name"))
+//            this.label.setText("Name:");
+//        else
+//            this.label.setText(label);
     }
 
     /**

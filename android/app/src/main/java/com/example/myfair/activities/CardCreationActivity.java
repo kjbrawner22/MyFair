@@ -19,27 +19,36 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.CardCreationListener;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.db.User;
+import com.example.myfair.modelsandhelpers.Connection;
+import com.example.myfair.views.ConnectionInfoView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import java.util.ArrayList;
 
-import static com.example.myfair.activities.CardViewingActivity.INTENT_TOOLBAR_TITLE;
+import javax.annotation.Nullable;
 
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -82,7 +91,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
         lytBio = findViewById(R.id.lytBio);
-        lytCompany = findViewById(R.id.lytCompany);
+        lytCompany = findViewById(R.id.lytGeneralInfo);
         etName = findViewById(R.id.etName);
         etCompany = findViewById(R.id.etCompany);
         etPosition = findViewById(R.id.etPosition);
@@ -104,8 +113,40 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         ivBanner.setOnClickListener(imageUploadListener);
         ivProfile.setOnClickListener(imageUploadListener);
 
-        changeForm(2);
-        //initialize contents of text boxes to values inside database
+        //changeForm(2);
+
+        displayConnections();
+    }
+
+    private void displayConnections() {
+        final LinearLayout lytConnections = findViewById(R.id.lytConnections);
+
+        User user = new User();
+        user.setFromDb().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot.getData() != null) {
+                    user.setMap(documentSnapshot.getData());
+                    ArrayList<Connection> connections = user.getMyConnections();
+                    for (Connection connection : connections) {
+                        ConnectionInfoView view = new ConnectionInfoView(CardCreationActivity.this,
+                                lytConnections, connection);
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (localCard.containsKey(connection.getDbKey())) {
+                                    localCard.removeKey(connection.getDbKey());
+                                    view.setChecked(false);
+                                } else {
+                                    view.setChecked(true);
+                                    localCard.setValue(connection.getDbKey(), connection.getValue());
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     private void openFileChooser(int requestCode) {
@@ -168,19 +209,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.btnDone:
-                //send info to database
-                if(validFields() && getForm() == 2){
-                    changeForm(3);
-                }
-                else if (getForm() == 3) {
-                    updateData();
-                }
-                //update back to home fragment
-                break;
-            default:
-                break;
+        if (id == R.id.btnDone) {
+            updateData();
         }
     }
 
@@ -208,10 +238,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * Helper function responsible for uploading photos and updating the information on a card
      * */
     private void updateData(){
-        EditText etBio = findViewById(R.id.etBio);
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
-        localCard.setValue(Card.FIELD_ABOUT, etBio.getText().toString());
-        Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
+
         if (bannerUri != null) {
             uploadImage(bannerUri, Card.FIELD_BANNER_URI);
         } else {

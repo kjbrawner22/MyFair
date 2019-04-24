@@ -2,11 +2,9 @@ package com.example.myfair.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -18,9 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -31,23 +26,10 @@ import com.example.myfair.activities.ProfileCreationActivity;
 import com.example.myfair.R;
 import com.example.myfair.activities.ProfileEditingActivity;
 import com.example.myfair.activities.ScanActivity;
-import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.db.User;
-import com.example.myfair.views.BottomSheet;
-import com.example.myfair.views.BusinessCardView;
-import com.example.myfair.views.CardInfoView;
-import com.example.myfair.views.GenericCardView;
-import com.example.myfair.views.UniversityCardView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -72,7 +54,7 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private ScrollView profileMenu;
     private FirebaseDatabase db;
-    private CardView profileCards, profileBrochures, profileDocuments;
+    private CardView profileCards, profilePackets;
     private TextView cardText, brochureText, documentText;
 
     private FirebaseAuth mAuth;
@@ -178,8 +160,7 @@ public class ProfileFragment extends Fragment {
         FragmentActivity mainActivity = getActivity();
 
         profileCards = v.findViewById(R.id.cvProfileCards);
-        profileBrochures = v.findViewById(R.id.cvProfileBrochures);
-        profileDocuments = v.findViewById(R.id.cvProfileDocs);
+        profilePackets = v.findViewById(R.id.cvProfilePackets);
         profileMenu = v.findViewById(R.id.svProfileMenu);
 
         /*
@@ -197,8 +178,7 @@ public class ProfileFragment extends Fragment {
         db = new FirebaseDatabase();
 
         profileCards.setOnClickListener(menuCardListener);
-        profileBrochures.setOnClickListener(menuCardListener);
-        profileDocuments.setOnClickListener(menuCardListener);
+        profilePackets.setOnClickListener(menuCardListener);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,12 +206,7 @@ public class ProfileFragment extends Fragment {
                     intent.putExtra(CardViewingActivity.INTENT_TOOLBAR_TITLE, CARD_VIEWING_TOOLBAR_TITLE);
                     startActivity(intent);
                     break;
-                case R.id.cvProfileBrochures:
-                    Intent intent2 = new Intent(getContext(), PacketViewingActivity.class);
-                    startActivity(intent2);
-                    break;
-                case R.id.cvProfileDocs:
-
+                case R.id.cvProfilePackets:
                     break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");
