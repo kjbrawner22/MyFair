@@ -90,7 +90,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
-        lytCompany = findViewById(R.id.lytCompany);
+        lytBio = findViewById(R.id.lytBio);
+        lytCompany = findViewById(R.id.lytGeneralInfo);
         etName = findViewById(R.id.etName);
         etCompany = findViewById(R.id.etCompany);
         etPosition = findViewById(R.id.etPosition);
