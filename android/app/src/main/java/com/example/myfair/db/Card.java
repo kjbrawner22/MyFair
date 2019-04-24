@@ -146,6 +146,10 @@ public class Card extends DatabaseObject {
         }
     }
 
+    public void removeKey(String key) {
+        getMap().remove(key);
+    }
+
     public ArrayList<Pair<String, String>> getConnectionEntries() {
         ArrayList<Pair<String, String>> list = new ArrayList<>();
 

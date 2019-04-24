@@ -1,15 +1,16 @@
 package com.example.myfair.activities;
 
+import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,40 +19,36 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myfair.R;
-import com.example.myfair.db.Card;
-import com.example.myfair.db.CardCreationListener;
-import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.modelsandhelpers.Upload;
-import com.example.myfair.views.UniversityCardView;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-
-import java.lang.reflect.Method;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import static com.example.myfair.activities.CardViewingActivity.INTENT_TOOLBAR_TITLE;
+import com.example.myfair.R;
+import com.example.myfair.db.Card;
+import com.example.myfair.db.CardCreationListener;
+import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.db.User;
+import com.example.myfair.modelsandhelpers.Connection;
+import com.example.myfair.views.ConnectionInfoView;
+import com.example.myfair.views.UniversityCardView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import javax.annotation.Nullable;
 
 public class CardCreationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,9 +58,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     private ImageView ivBanner, ivProfile, ivCurrentImage;
     private Uri bannerUri, profileUri;
     private EditText etName, etCompany, etPosition;
-    private String fullName, company, position;
     private Button btnDone;
-    private ConstraintLayout lytCompany;
+    private ConstraintLayout lytCompany, lytBio;
     private static final int PICK_BANNER_REQUEST = 1, PICK_PROFILE_REQUEST = 2;
     private LinearLayout lytPreview;
     private FirebaseDatabase database;
@@ -94,7 +90,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
-        lytCompany = findViewById(R.id.lytCompany);
+        lytBio = findViewById(R.id.lytBio);
+        lytCompany = findViewById(R.id.lytGeneralInfo);
         etName = findViewById(R.id.etName);
         etCompany = findViewById(R.id.etCompany);
         etPosition = findViewById(R.id.etPosition);
@@ -116,8 +113,40 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         ivBanner.setOnClickListener(imageUploadListener);
         ivProfile.setOnClickListener(imageUploadListener);
 
-        changeForm(2);
-        //initialize contents of text boxes to values inside database
+        //changeForm(2);
+
+        displayConnections();
+    }
+
+    private void displayConnections() {
+        final LinearLayout lytConnections = findViewById(R.id.lytConnections);
+
+        User user = new User();
+        user.setFromDb().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot.getData() != null) {
+                    user.setMap(documentSnapshot.getData());
+                    ArrayList<Connection> connections = user.getMyConnections();
+                    for (Connection connection : connections) {
+                        ConnectionInfoView view = new ConnectionInfoView(CardCreationActivity.this,
+                                lytConnections, connection);
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (localCard.containsKey(connection.getDbKey())) {
+                                    localCard.removeKey(connection.getDbKey());
+                                    view.setChecked(false);
+                                } else {
+                                    view.setChecked(true);
+                                    localCard.setValue(connection.getDbKey(), connection.getValue());
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     private void openFileChooser(int requestCode) {
@@ -180,16 +209,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.btnDone:
-                //send info to database
-                if (validFields()) {
-                    updateData();
-                }
-                //update back to home fragment
-                break;
-            default:
-                break;
+        if (id == R.id.btnDone) {
+            updateData();
         }
     }
 
@@ -218,7 +239,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * */
     private void updateData(){
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
-        Log.d("CardCreationLog", "Map for card: " + localCard.getMap());
+
         if (bannerUri != null) {
             uploadImage(bannerUri, Card.FIELD_BANNER_URI);
         } else {
@@ -309,7 +330,16 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      */
     private int getForm(){
         if (lytCompany.getVisibility() == View.VISIBLE) return 2;
+        else if(lytBio.getVisibility() == View.VISIBLE) return 3;
         else return 3;
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        View view = activity.findViewById(android.R.id.content);
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**
@@ -320,12 +350,20 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         form = formID;
         switch(formID){
             case 2:
-                btnDone.setVisibility(View.VISIBLE);
+                btnDone.setText("NEXT");
                 etName.setVisibility(View.VISIBLE);
                 lytCompany.setVisibility(View.VISIBLE);
+                lytBio.setVisibility(View.GONE);
                 break;
+            case 3:
+                hideKeyboard(CardCreationActivity.this);
+                btnDone.setText("DONE");
+                lytCompany.setVisibility(View.GONE);
+                lytBio.setVisibility(View.VISIBLE);
             default:
                 Log.d("ChangeFormLog", "Form Not Yet Implemented");
         }
     }
+
+
 }
