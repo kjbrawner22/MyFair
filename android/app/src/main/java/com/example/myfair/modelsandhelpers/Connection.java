@@ -1,6 +1,8 @@
 package com.example.myfair.modelsandhelpers;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 import com.example.myfair.R;
 import com.example.myfair.db.User;
@@ -94,6 +96,32 @@ public class Connection {
                 new Connection(R.drawable.ic_linked_in, User.FIELD_LINKED_IN_USERNAME, "Linked In"),
                 new Connection(R.drawable.ic_instagram, User.FIELD_INSTAGRAM_USERNAME, "Instagram")
         };
+    }
+
+    public static boolean isPhoneNumber(String key) {
+        switch (key) {
+            case User.FIELD_CELL_NUMBER:
+            case User.FIELD_HOME_NUMBER:
+            case User.FIELD_WORK_NUMBER:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static String getInternetUrl(String key, String value) {
+        switch (key) {
+            case User.FIELD_GITHUB_USERNAME:
+                return "https://github.com/" + value;
+            case User.FIELD_TWITTER_USERNAME:
+                return "https://twitter.com/" + value;
+            case User.FIELD_LINKED_IN_USERNAME:
+                return "https://www.linkedin.com/in/" + value + "/";
+            case User.FIELD_INSTAGRAM_USERNAME:
+                return "https://www.instagram.com/" + value + "/";
+            default:
+                return null;
+        }
     }
 
     public void setValue(String value) {

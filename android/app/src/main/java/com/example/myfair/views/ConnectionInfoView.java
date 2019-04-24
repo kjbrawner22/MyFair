@@ -96,4 +96,9 @@ public class ConnectionInfoView extends LinearLayout {
     public void setImage(int resourceId) {
         ivLogo.setImageResource(resourceId);
     }
+
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        findViewById(R.id.toplevel).setOnClickListener(l);
+    }
 }
