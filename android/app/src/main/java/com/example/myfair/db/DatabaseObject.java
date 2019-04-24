@@ -68,6 +68,12 @@ public class DatabaseObject {
         return (String) map.get(key);
     }
 
+    public HashMap<String, Object> getValueHashMap(String key){
+        if(!containsKey(key))
+            return null;
+        return (HashMap<String, Object>) map.get(key);
+    }
+
     /**
      * Method that verifies the existence of a given field in the object's map
      * @param key - String that specifies a key

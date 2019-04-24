@@ -1,5 +1,6 @@
 package com.example.myfair.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,16 +13,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.myfair.R;
+import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.db.Packet;
+import com.example.myfair.views.ConnectionInfoView;
 import com.example.myfair.views.UniversityCardView;
-
-import java.net.URL;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import java.util.HashMap;
 
 public class PacketCreationActivity extends AppCompatActivity {
@@ -29,6 +35,7 @@ public class PacketCreationActivity extends AppCompatActivity {
     public static final String TAG = "PacketCreationLog";
     private String docName, docLink;
     private LinearLayout lytCardList, lytDocList;
+    private Packet packet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,7 @@ public class PacketCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_packet_creation);
         setupToolbar();
 
+        packet = new Packet();
         lytCardList = findViewById(R.id.lytCardList);
         lytDocList = findViewById(R.id.lytDocList);
 
@@ -61,7 +69,10 @@ public class PacketCreationActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 HashMap<String, Object> map = (HashMap<String, Object>) data.getSerializableExtra("card_map");
                 String cID = data.getStringExtra("card_id");
-                UniversityCardView card = new UniversityCardView(this, cID, map, lytCardList);
+                if(!packet.containsCard(cID)) {
+                    packet.addCard(cID, map);
+                    UniversityCardView card = new UniversityCardView(this, cID, map, lytCardList);
+                }
                 Log.d(TAG, "result: " + cID);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -96,6 +107,48 @@ public class PacketCreationActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_menu_packet_creation, menu);
+        return true;
+    }
+
+    /**
+     * Handle actions within the action bar
+     * @param item - which item was clicked
+     * @return boolean value on if it was handled or not
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                setNameDialog();
+                Log.d(TAG, "result: " + packet.getMap());
+                break;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+        return true;
+    }
+
+    public void sendData(){
+        FirebaseDatabase db = new FirebaseDatabase();
+        CollectionReference colRef = db.userPackets();
+        colRef.add(packet.getMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d(TAG, "DocumentSnapshot packet with ID: " + documentReference.getId());
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error adding document", e);
+            }
+        });
+    }
 
     private void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -112,6 +165,41 @@ public class PacketCreationActivity extends AppCompatActivity {
                 dialog.dismiss();
                 docName = etDocName.getText().toString();
                 docLink = etDocLink.getText().toString();
+                if(!packet.containsDocument(docName)) {
+                    ConnectionInfoView connection = new ConnectionInfoView(PacketCreationActivity.this);
+                    connection.setImage(R.drawable.ic_drive);
+                    connection.setText(docName);
+                    lytDocList.addView(connection);
+                    packet.addDocument(docName, docLink);
+                }
+
+            }
+        });
+        builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    private void setNameDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Name Your Packet");
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.name_dialog_entry, null, false);
+
+        final EditText etPacketName = (EditText) viewInflated.findViewById(R.id.etPacketName);
+
+        builder.setView(viewInflated);
+        builder.setPositiveButton("submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+                String name = etPacketName.getText().toString();
+                if(!name.isEmpty()) {
+                    packet.setValue(Packet.FIELD_PACKET_NAME, name);
+                    sendData();
+                }
             }
         });
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
