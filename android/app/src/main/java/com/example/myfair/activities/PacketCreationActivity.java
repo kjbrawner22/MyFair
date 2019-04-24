@@ -133,9 +133,7 @@ public class PacketCreationActivity extends AppCompatActivity {
         return true;
     }
 
-    public void sendData(){
-        FirebaseDatabase db = new FirebaseDatabase();
-        CollectionReference colRef = db.userPackets();
+    public void sendData(CollectionReference colRef){
         colRef.add(packet.getMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -195,10 +193,12 @@ public class PacketCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
+                FirebaseDatabase db = new FirebaseDatabase();
                 String name = etPacketName.getText().toString();
                 if(!name.isEmpty()) {
+                    packet.setValue(Packet.FIELD_PACKET_OWNER, db.getUserId());
                     packet.setValue(Packet.FIELD_PACKET_NAME, name);
-                    sendData();
+                    sendData(db.userPackets());
                 }
             }
         });

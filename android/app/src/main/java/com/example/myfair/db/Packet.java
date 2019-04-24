@@ -7,6 +7,7 @@ public class Packet extends DatabaseObject {
     public static final String FIELD_PACKET_NAME = "packet_name";
     public static final String FIELD_CARD_LIST = "card_list";
     public static final String FIELD_DOCUMENT_LIST = "document_list";
+    public static final String FIELD_PACKET_OWNER = "packet_owner";
 
     public Packet() {
         super();

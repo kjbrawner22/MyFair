@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.LoginActivity;
+import com.example.myfair.activities.PacketViewingActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
 import com.example.myfair.R;
 import com.example.myfair.activities.ProfileEditingActivity;
@@ -226,7 +227,8 @@ public class ProfileFragment extends Fragment {
                     startActivity(intent);
                     break;
                 case R.id.cvProfileBrochures:
-
+                    Intent intent2 = new Intent(getContext(), PacketViewingActivity.class);
+                    startActivity(intent2);
                     break;
                 case R.id.cvProfileDocs:
 
