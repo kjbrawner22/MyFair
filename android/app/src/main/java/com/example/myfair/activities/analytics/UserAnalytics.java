@@ -71,9 +71,8 @@ public class UserAnalytics extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String cID = document.getId(); //Creating the view to display the preview of the cards the user owns
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                        UniversityCardView v = new UniversityCardView(UserAnalytics.this, cID, map);
+                        UniversityCardView v = new UniversityCardView(UserAnalytics.this, cID, map, listView);
                         v.setOnClickListener(specificCardAnalyticsListener);
-                        addCardView(v, listView);
 
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }

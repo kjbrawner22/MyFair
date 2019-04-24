@@ -159,8 +159,7 @@ public class HistoryAnalytics extends AppCompatActivity {
                         String cID = document.getId();
                         HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
                         //String type = (String) map.get(Card.FIELD_TYPE);
-                        UniversityCardView v = new UniversityCardView(HistoryAnalytics.this, cID, map);
-                        addCardView(v, listView);
+                        new UniversityCardView(HistoryAnalytics.this, cID, map, listView);
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {
