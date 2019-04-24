@@ -87,7 +87,7 @@ public class PacketInfoActivity extends AppCompatActivity {
             for (HashMap.Entry<String, Object> entry : documents.entrySet()) {
                 String key = entry.getKey();
                 String value = (String) entry.getValue();
-                ConnectionInfoView v = new ConnectionInfoView(PacketInfoActivity.this, lytDocumentList, R.drawable.ic_twitter, key);
+                ConnectionInfoView v = new ConnectionInfoView(PacketInfoActivity.this, lytDocumentList, R.drawable.ic_drive, key);
                 v.hideSelectors();
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
