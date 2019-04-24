@@ -95,9 +95,9 @@ public class Connection {
                 new Connection(R.drawable.ic_github, User.FIELD_GITHUB_USERNAME, "Github"),
                 new Connection(R.drawable.ic_linkedin, User.FIELD_LINKED_IN_USERNAME, "Linked In"),
                 new Connection(R.drawable.ic_twitter, User.FIELD_INSTAGRAM_USERNAME, "Instagram"),
-                new Connection(R.drawable.ic_phone, User.FIELD_CELL_NUMBER, "Mobile"),
-                new Connection(R.drawable.ic_phone, User.FIELD_WORK_NUMBER, "Work"),
-                new Connection(R.drawable.ic_phone, User.FIELD_HOME_NUMBER, "Home")
+                new Connection(R.drawable.ic_phone_mobile, User.FIELD_CELL_NUMBER, "Mobile"),
+                new Connection(R.drawable.ic_phone_work, User.FIELD_WORK_NUMBER, "Work"),
+                new Connection(R.drawable.ic_phone_home, User.FIELD_HOME_NUMBER, "Home")
         };
     }
 
