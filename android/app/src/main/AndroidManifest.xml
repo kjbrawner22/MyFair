@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.WebViewActivity"></activity>
-        <activity android:name=".PacketInfoActivity"></activity>
+        <activity android:name=".activities.PacketInfoActivity"></activity>
         <activity android:name=".activities.PacketViewingActivity" />
         <activity android:name=".activities.CardPickerActivity" />
         <activity android:name=".activities.PacketCreationActivity" />

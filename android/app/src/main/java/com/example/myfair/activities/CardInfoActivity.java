@@ -85,7 +85,7 @@ public class CardInfoActivity extends AppCompatActivity {
     }
 
     private void displayConnections(HashMap<String, Object> map) {
-        LinearLayout lytConnections = findViewById(R.id.lytConnections);
+        LinearLayout lytConnections = findViewById(R.id.lytDocumentList);
 
         for (Connection connection : Connection.getConnectionList()) {
             String key = connection.getDbKey();

@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
@@ -119,7 +118,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void displayConnections() {
-        final LinearLayout lytConnections = findViewById(R.id.lytConnections);
+        final LinearLayout lytConnections = findViewById(R.id.lytDocumentList);
 
         User user = new User();
         user.setFromDb().addSnapshotListener(new EventListener<DocumentSnapshot>() {
