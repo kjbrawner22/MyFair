@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.LoginActivity;
+import com.example.myfair.activities.PacketViewingActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
 import com.example.myfair.R;
 import com.example.myfair.activities.ProfileEditingActivity;
@@ -206,7 +207,6 @@ public class ProfileFragment extends Fragment {
                     startActivity(intent);
                     break;
                 case R.id.cvProfilePackets:
-
                     break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");

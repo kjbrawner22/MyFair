@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.example.myfair.activities.CardCreationActivity;
 import com.example.myfair.R;
 import com.example.myfair.activities.PacketCreationActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 /**
@@ -85,8 +86,16 @@ public class CreateFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create, container, false);
 
+        FloatingActionButton createNewPacket = (FloatingActionButton) view.findViewById(R.id.fabPacket);
         createNewCard = (ImageView) view.findViewById(R.id.createFAB);
-      
+
+        createNewPacket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPacketCreation();
+            }
+        });
+
         createNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

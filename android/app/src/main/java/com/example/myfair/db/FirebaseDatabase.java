@@ -62,6 +62,13 @@ public class FirebaseDatabase {
     }
 
     /**
+     * Get database reference for packets collection
+     * @return CollectionReference for the packet library of the current user
+     */
+    public CollectionReference userPackets(){
+        return db.collection("users").document(currentUser.getUid()).collection("packets");
+    }
+    /**
      * Get Database reference for a specific card,
      * @param uID - String that represents the specified user ID
      * @param cID - String that represents the specified card ID
