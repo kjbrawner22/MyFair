@@ -136,16 +136,6 @@ public class HistoryAnalytics extends AppCompatActivity {
     }
 
     /**
-     * Adds a card to the linear layout
-     * @param listView - linear layout holding card views
-     * @param v - card view being added to list
-     * */
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
-        v.setMargins();
-    }
-
-    /**
      * Gets the list of IDs of cards and populates a linear layout with cardViews.
      * */
     private void getIdList(CollectionReference ref, final LinearLayout listView){

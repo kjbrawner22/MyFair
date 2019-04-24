@@ -1,7 +1,9 @@
 package com.example.myfair.activities.analytics;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,9 +44,29 @@ public class UserAnalytics extends AppCompatActivity {
         db = new FirebaseDatabase();
         usersCards =  db.userCards();
 
+        setupToolbar();
+
         listView = findViewById(R.id.usersCardListView);
 
         getIdList(usersCards, listView);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        Log.d("ACTION_BAR_CARD_INFO", "Actionbar: " + actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
     }
 
     private View.OnClickListener specificCardAnalyticsListener = new View.OnClickListener() {
