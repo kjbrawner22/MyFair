@@ -53,7 +53,7 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private ScrollView profileMenu;
     private FirebaseDatabase db;
-    private CardView profileCards, profilePackets, profileDocuments;
+    private CardView profileCards, profilePackets;
     private TextView cardText, brochureText, documentText;
 
     private FirebaseAuth mAuth;
@@ -178,7 +178,6 @@ public class ProfileFragment extends Fragment {
 
         profileCards.setOnClickListener(menuCardListener);
         profilePackets.setOnClickListener(menuCardListener);
-        profileDocuments.setOnClickListener(menuCardListener);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override

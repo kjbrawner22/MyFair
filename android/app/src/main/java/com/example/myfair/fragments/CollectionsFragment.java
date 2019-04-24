@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -17,31 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.example.myfair.activities.CardViewingActivity;
-import com.example.myfair.activities.GenerateActivity;
 import com.example.myfair.R;
-import com.example.myfair.activities.MainActivity;
-import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.views.BottomSheet;
-import com.example.myfair.views.BusinessCardView;
-import com.example.myfair.views.CardInfoView;
-import com.example.myfair.views.GenericCardView;
-import com.example.myfair.views.UniversityCardView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
 
 
 /**
@@ -63,7 +43,7 @@ public class CollectionsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private CardView cvCards, cvBrochures, cvDocs;
+    private CardView cvCards, cvPackets;
     private ScrollView svMenu;
     CollectionReference contactsLibrary;
 
@@ -164,12 +144,10 @@ public class CollectionsFragment extends Fragment {
 
         // find views
         cvCards = v.findViewById(R.id.cvProfileCards);
-        cvBrochures = v.findViewById(R.id.cvProfilePackets);
+        cvPackets = v.findViewById(R.id.cvProfilePackets);
         svMenu = v.findViewById(R.id.svProfileMenu);
         svMenu.setVisibility(View.VISIBLE);
         cvCards.setOnClickListener(cvListener);
-        cvBrochures.setOnClickListener(cvListener);
-        cvDocs.setOnClickListener(cvListener);
         contactsLibrary = db.userContacts();
 
         return v;

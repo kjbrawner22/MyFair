@@ -27,13 +27,6 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintStart_toStartOf="parent">
 
-            <ImageView
-                android:id="@+id/analyticsHistoryImg"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/clock_splash" />
-
             <TextView
                 android:id="@+id/analyticsHistoryCard"
                 android:layout_width="170dp"
@@ -49,6 +42,13 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/analyticsHistoryImg"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/clock_splash" />
 
         </androidx.cardview.widget.CardView>
 
