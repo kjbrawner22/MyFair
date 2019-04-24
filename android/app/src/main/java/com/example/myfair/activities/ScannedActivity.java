@@ -39,6 +39,11 @@ public class ScannedActivity extends AppCompatActivity {
     Intent getScannedActivity(Context callingClassContext, String encryptedString){
         return new Intent(callingClassContext,ScannedActivity.class).putExtra(SCANNED_STRING,encryptedString);
     }
+
+    public static final String VALUE_TYPE_CARD = "card";
+    public static final String VALUE_TYPE_PACKET = "packet";
+    private String type;
+
     TextView scannedNameTextView;
     TextView scannedUniCompTextView;
     TextView scannedMajPosTextView;
