@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.FirebaseDatabase;
@@ -35,7 +36,11 @@ public class PacketCreationActivity extends AppCompatActivity {
     public static final String TAG = "PacketCreationLog";
     private String docName, docLink;
     private LinearLayout lytCardList, lytDocList;
+    private TextView cardTitle, docsTitle;
     private Packet packet;
+    private int cardCount = 0;
+    private int docCount = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,8 @@ public class PacketCreationActivity extends AppCompatActivity {
         packet = new Packet();
         lytCardList = findViewById(R.id.lytCardList);
         lytDocList = findViewById(R.id.lytDocList);
+        cardTitle = findViewById(R.id.cardTitle);
+        docsTitle = findViewById(R.id.docsTitle);
 
         CardView cvAddDoc = findViewById(R.id.cvAddDoc);
         cvAddDoc.setOnClickListener(docListener);
@@ -70,6 +77,8 @@ public class PacketCreationActivity extends AppCompatActivity {
                 HashMap<String, Object> map = (HashMap<String, Object>) data.getSerializableExtra("card_map");
                 String cID = data.getStringExtra("card_id");
                 if(!packet.containsCard(cID)) {
+                    cardCount = cardCount + 1;
+                    cardTitle.setText("Cards (" + cardCount + ")");
                     packet.addCard(cID, map);
                     UniversityCardView card = new UniversityCardView(this, cID, map, lytCardList);
                 }
@@ -167,6 +176,9 @@ public class PacketCreationActivity extends AppCompatActivity {
                     ConnectionInfoView connection = new ConnectionInfoView(PacketCreationActivity.this);
                     connection.setImage(R.drawable.ic_drive);
                     connection.setText(docName);
+                    connection.hideSelectors();
+                    docCount = docCount + 1;
+                    docsTitle.setText("Documents (" + docCount + ")");
                     lytDocList.addView(connection);
                     packet.addDocument(docName, docLink);
                 }

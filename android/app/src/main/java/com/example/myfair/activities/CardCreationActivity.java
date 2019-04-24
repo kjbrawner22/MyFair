@@ -112,8 +112,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         ivBanner.setOnClickListener(imageUploadListener);
         ivProfile.setOnClickListener(imageUploadListener);
 
-        //changeForm(2);
-
         displayConnections();
     }
 
@@ -209,7 +207,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnDone) {
-            updateData();
+            if (validFields())
+                updateData();
         }
     }
 
@@ -238,6 +237,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
      * */
     private void updateData(){
         localCard.setValue(Card.FIELD_CARD_OWNER, user.getUid());
+        localCard.setValue(Card.FIELD_ABOUT, ((EditText)findViewById(R.id.etBio)).getText().toString());
 
         if (bannerUri != null) {
             uploadImage(bannerUri, Card.FIELD_BANNER_URI);
@@ -298,11 +298,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private boolean validFields() {
-        if(form == 2){
-            return validate(etName, etCompany, etPosition);
-        }
-
-        return false;
+        return validate(etName, etCompany, etPosition);
     }
 
     private boolean validate(EditText etOne, EditText etTwo, EditText etThree){
@@ -311,7 +307,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             etOne.requestFocus();
             return false;
         } else if (etTwo.getText().toString().isEmpty()) {
-            etTwo.setError("Company Name is required.");
+            etTwo.setError("Organization is required.");
             etTwo.requestFocus();
             return false;
         } else if (etThree.getText().toString().isEmpty()) {
@@ -338,29 +334,6 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    /**
-     * change form view
-     * @param formID - state of the desired view setting
-     */
-    private void changeForm(int formID){
-        form = formID;
-        switch(formID){
-            case 2:
-                btnDone.setText("NEXT");
-                etName.setVisibility(View.VISIBLE);
-                lytCompany.setVisibility(View.VISIBLE);
-                lytBio.setVisibility(View.GONE);
-                break;
-            case 3:
-                hideKeyboard(CardCreationActivity.this);
-                btnDone.setText("DONE");
-                lytCompany.setVisibility(View.GONE);
-                lytBio.setVisibility(View.VISIBLE);
-            default:
-                Log.d("ChangeFormLog", "Form Not Yet Implemented");
         }
     }
 

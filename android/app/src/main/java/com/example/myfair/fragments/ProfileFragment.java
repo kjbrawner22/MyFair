@@ -46,10 +46,9 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    public static final String CARD_VIEWING_TOOLBAR_TITLE = "My Cards";
+  
     public static final String PACKET_VIEWING_TOOLBAR_TITLE = "Your Packets";
-
+    public static final String CARD_VIEWING_TOOLBAR_TITLE = "Your Cards";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
