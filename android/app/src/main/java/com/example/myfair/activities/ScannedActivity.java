@@ -174,6 +174,7 @@ public class ScannedActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
                     Map<String, Object> data = task.getResult().getData();
+                    Log.d(TAG, "Map: " + data);
                     String id = task.getResult().getId();
                     if (data != null)
                         database.packetsLibrary().document(id).set(data).addOnCompleteListener(new OnCompleteListener<Void>() {

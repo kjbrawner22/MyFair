@@ -126,6 +126,7 @@ public class PacketInfoActivity extends AppCompatActivity {
 
     private void setQrString(String uID, String pID){
         qrObject user = new qrObject(uID, pID);
+        user.setType(qrObject.VALUE_TYPE_PACKET);
         String serializeString = new Gson().toJson(user);
         encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
         Log.d("CardInfoActivityLog", "CardInfoView: " + encryptedString);
