@@ -25,16 +25,14 @@
         android:id="@+id/lytPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="vertical"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/LightToolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="New Card"
+        app:titleTextColor="@color/colorWhite" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -138,11 +136,23 @@
                     android:singleLine="false" />
 
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lytConnections"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        </LinearLayout>
-    </ScrollView>
+                <TextView
+                    android:id="@+id/tvConnectionsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Add Connections"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-    <Button
+            </LinearLayout>
+          
+          <Button
             android:id="@+id/btnDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -153,4 +163,6 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent" />
 
+        </LinearLayout>
+  </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

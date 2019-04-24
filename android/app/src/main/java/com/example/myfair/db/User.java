@@ -131,6 +131,20 @@ public class User extends DatabaseObject {
         };
     }
 
+    public ArrayList<Connection> getMyConnections() {
+        ArrayList<Connection> connections = new ArrayList<>();
+
+        for (Connection connection : Connection.getConnectionList()) {
+            if (containsKey(connection.getDbKey())) {
+                connection.setValue(getValue(connection.getDbKey()));
+                connection.setEnabled(false);
+                connections.add(connection);
+            }
+        }
+
+        return connections;
+    }
+
     /**
      * Static method that determines whether a field is private
      * @param key - String that representsa specified field
