@@ -198,15 +198,18 @@ public class ProfileFragment extends Fragment {
     private View.OnClickListener menuCardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Intent intent;
             int id = view.getId();
             Log.d("ButtonIDClicked", "ID: " + id);
             switch(id){
                 case R.id.cvProfileCards:
-                    Intent intent = new Intent(getContext(), CardViewingActivity.class);
+                    intent = new Intent(getContext(), CardViewingActivity.class);
                     intent.putExtra(CardViewingActivity.INTENT_TOOLBAR_TITLE, CARD_VIEWING_TOOLBAR_TITLE);
                     startActivity(intent);
                     break;
                 case R.id.cvProfilePackets:
+                    intent = new Intent(getContext(), PacketViewingActivity.class);
+                    startActivity(intent);
                     break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");
