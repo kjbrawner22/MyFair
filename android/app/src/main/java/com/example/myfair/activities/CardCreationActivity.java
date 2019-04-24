@@ -59,7 +59,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     private Uri bannerUri, profileUri;
     private EditText etName, etCompany, etPosition;
     private Button btnDone;
-    private ConstraintLayout lytCompany, lytBio;
+    private LinearLayout lytCompany, lytBio;
     private static final int PICK_BANNER_REQUEST = 1, PICK_PROFILE_REQUEST = 2;
     private LinearLayout lytPreview;
     private FirebaseDatabase database;
