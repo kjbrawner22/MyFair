@@ -164,8 +164,7 @@ public class CollectionsFragment extends Fragment {
 
         // find views
         cvCards = v.findViewById(R.id.cvProfileCards);
-        cvBrochures = v.findViewById(R.id.cvProfileBrochures);
-        cvDocs = v.findViewById(R.id.cvProfileDocs);
+        cvBrochures = v.findViewById(R.id.cvProfilePackets);
         svMenu = v.findViewById(R.id.svProfileMenu);
         svMenu.setVisibility(View.VISIBLE);
         cvCards.setOnClickListener(cvListener);
@@ -238,9 +237,7 @@ public class CollectionsFragment extends Fragment {
                     intent.putExtra(CardViewingActivity.INTENT_TOOLBAR_TITLE, CARD_VIEWING_TOOLBAR_TITLE);
                     startActivity(intent);
                     break;
-                case R.id.cvProfileBrochures:
-                    break;
-                case R.id.cvProfileDocs:
+                case R.id.cvProfilePackets:
                     break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");
