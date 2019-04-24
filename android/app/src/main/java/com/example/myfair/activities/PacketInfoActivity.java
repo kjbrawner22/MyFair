@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +16,8 @@ import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.db.Packet;
+import com.example.myfair.modelsandhelpers.Connection;
+import com.example.myfair.views.CardInfoView;
 import com.example.myfair.views.ConnectionInfoView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -58,15 +62,25 @@ public class PacketInfoActivity extends AppCompatActivity {
                 String key = entry.getKey();
                 HashMap<String, Object> value = (HashMap<String, Object>) entry.getValue();
                 UniversityCardView cardView = new UniversityCardView(this, key, value, lytPacketInfo, 0);
+                cardView.setOnClickListener(universityCardClickListener);
             }
 
             for (HashMap.Entry<String, Object> entry : documents.entrySet()) {
                 String key = entry.getKey();
                 String value = (String) entry.getValue();
-                ConnectionInfoView v = new ConnectionInfoView(PacketInfoActivity.this);
-                v.setImage(R.drawable.ic_drive);
-                v.setText(key);
-                lytDocumentList.addView(v);
+                ConnectionInfoView v = new ConnectionInfoView(PacketInfoActivity.this, lytDocumentList, R.drawable.ic_twitter, key);
+                v.hideSelectors();
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(PacketInfoActivity.this, WebViewActivity.class);
+                        intent.putExtra(WebViewActivity.TOOLBAR_TITLE, key);
+                        intent.putExtra(WebViewActivity.VIEW_URL, value);
+                        startActivity(intent);
+                    }
+                });
+
+                Log.d("WebViewCreate", "URL: " + v.getURL());
             }
             //setQrString(uID, pID);
             //displayConnections(map);
@@ -75,6 +89,19 @@ public class PacketInfoActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Bundle extras = new Bundle();
+            extras.putSerializable("card_map", ((UniversityCardView) view).getMap());
+            extras.putString("card_id", ((UniversityCardView) view).getCardID());
+
+            Intent intent = new Intent(PacketInfoActivity.this, CardInfoActivity.class);
+            intent.putExtras(extras);
+            startActivity(intent);
+        }
+    };
 
     @Override
     public boolean onSupportNavigateUp() {
