@@ -32,7 +32,7 @@ public class User extends DatabaseObject {
     // social media username fields
     public static final String FIELD_CELL_NUMBER = "cell_number";
     public static final String FIELD_WORK_NUMBER = "work_number";
-    public static final String FIELD_HOME_NUMBER = "work_number";
+    public static final String FIELD_HOME_NUMBER = "home_number";
     public static final String FIELD_TWITTER_USERNAME ="twitter_username";
     public static final String FIELD_GITHUB_USERNAME ="github_username";
     public static final String FIELD_LINKED_IN_USERNAME ="linked_in_username";
