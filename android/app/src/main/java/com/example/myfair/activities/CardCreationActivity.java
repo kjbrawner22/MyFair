@@ -209,7 +209,8 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnDone) {
-            updateData();
+            if (validFields())
+                updateData();
         }
     }
 
@@ -298,11 +299,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private boolean validFields() {
-        if(form == 2){
-            return validate(etName, etCompany, etPosition);
-        }
-
-        return false;
+        return validate(etName, etCompany, etPosition);
     }
 
     private boolean validate(EditText etOne, EditText etTwo, EditText etThree){
@@ -311,7 +308,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             etOne.requestFocus();
             return false;
         } else if (etTwo.getText().toString().isEmpty()) {
-            etTwo.setError("Company Name is required.");
+            etTwo.setError("Organization is required.");
             etTwo.requestFocus();
             return false;
         } else if (etThree.getText().toString().isEmpty()) {

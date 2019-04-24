@@ -24,7 +24,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="20dp"
             android:clickable="true"
-            android:src="@drawable/ic_dashboard_black_24dp"
+            android:src="@drawable/ic_create_packet"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/createFAB"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -116,7 +116,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/textView14"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorWhite"
