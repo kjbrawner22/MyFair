@@ -81,12 +81,17 @@ public class ConnectionInfoView extends LinearLayout {
         if (!checked) {
             ivSelected.setImageResource(R.drawable.ic_selected_no);
             toplevel.setCardBackgroundColor(resources.getColor(R.color.default_indicator_off));
-            tvText.setTextColor(resources.getColor(R.color.colorWhite));
         } else {
             ivSelected.setImageResource(R.drawable.ic_selected_yes);
             toplevel.setCardBackgroundColor(resources.getColor(R.color.colorPrimary));
-            tvText.setTextColor(resources.getColor(R.color.colorWhite));
         }
+    }
+
+    public void hideSelectors() {
+        Resources resources = getResources();
+        CardView toplevel = findViewById(R.id.toplevel);
+        findViewById(R.id.selected).setVisibility(GONE);
+        toplevel.setCardBackgroundColor(resources.getColor(R.color.colorPrimary));
     }
 
     public void setText(String text) {

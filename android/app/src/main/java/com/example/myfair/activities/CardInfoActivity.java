@@ -92,6 +92,7 @@ public class CardInfoActivity extends AppCompatActivity {
             if (map.containsKey(key)) {
                 connection.setValue((String) map.get(key));
                 ConnectionInfoView view = new ConnectionInfoView(this, lytConnections, connection);
+                view.hideSelectors();
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
