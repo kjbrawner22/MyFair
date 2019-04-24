@@ -178,7 +178,7 @@ public class PacketCreationActivity extends AppCompatActivity {
                     connection.setText(docName);
                     connection.hideSelectors();
                     docCount = docCount + 1;
-                    docsTitle.setText("Cards (" + docCount + ")");
+                    docsTitle.setText("Documents (" + docCount + ")");
                     lytDocList.addView(connection);
                     packet.addDocument(docName, docLink);
                 }
