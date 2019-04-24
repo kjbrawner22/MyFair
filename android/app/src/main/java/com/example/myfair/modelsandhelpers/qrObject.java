@@ -5,12 +5,17 @@ package com.example.myfair.modelsandhelpers;
  */
 
 public class qrObject {
+    public static final String VALUE_TYPE_CARD = "card";
+    public static final String VALUE_TYPE_PACKET = "packet";
+
     private String userID;
     private String cardID;
+    private String type;
 
     public qrObject(String uID, String cID){
         this.userID = uID;
         this.cardID = cID;
+        this.type = VALUE_TYPE_CARD;
     }
 
     public String getUserID() {
@@ -20,4 +25,6 @@ public class qrObject {
     public String getCardID() {
         return cardID;
     }
+
+    public String getType(){ return type; }
 }

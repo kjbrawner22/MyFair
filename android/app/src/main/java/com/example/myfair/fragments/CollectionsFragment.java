@@ -20,6 +20,7 @@ import android.widget.ScrollView;
 
 import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.R;
+import com.example.myfair.activities.PacketViewingActivity;
 import com.example.myfair.db.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 
@@ -38,6 +39,8 @@ public class CollectionsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
+    public static final String PACKET_VIEWING_TOOLBAR_TITLE = "Received Packets";
     public static final String CARD_VIEWING_TOOLBAR_TITLE = "Card Wallet";
 
     // TODO: Rename and change types of parameters
@@ -148,6 +151,7 @@ public class CollectionsFragment extends Fragment {
         svMenu = v.findViewById(R.id.svProfileMenu);
         svMenu.setVisibility(View.VISIBLE);
         cvCards.setOnClickListener(cvListener);
+        cvPackets.setOnClickListener(cvListener);
         contactsLibrary = db.userContacts();
 
         return v;
@@ -208,14 +212,18 @@ public class CollectionsFragment extends Fragment {
         @Override
         public void onClick(View view) {
             int id = view.getId();
+            Intent intent;
             switch(id){
                 case R.id.cvProfileCards:
                     // start new intent
-                    Intent intent = new Intent(getContext(), CardViewingActivity.class);
+                    intent = new Intent(getContext(), CardViewingActivity.class);
                     intent.putExtra(CardViewingActivity.INTENT_TOOLBAR_TITLE, CARD_VIEWING_TOOLBAR_TITLE);
                     startActivity(intent);
                     break;
                 case R.id.cvProfilePackets:
+                    intent = new Intent(getContext(), PacketViewingActivity.class);
+                    intent.putExtra(PacketViewingActivity.INTENT_TOOLBAR_TITLE, PACKET_VIEWING_TOOLBAR_TITLE);
+                    startActivity(intent);
                     break;
                 default:
                     Log.d("ErrorLog", view.getId() + "- button not yet implemented");

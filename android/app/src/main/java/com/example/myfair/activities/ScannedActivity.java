@@ -39,6 +39,7 @@ public class ScannedActivity extends AppCompatActivity {
     Intent getScannedActivity(Context callingClassContext, String encryptedString){
         return new Intent(callingClassContext,ScannedActivity.class).putExtra(SCANNED_STRING,encryptedString);
     }
+
     TextView scannedNameTextView;
     TextView scannedUniCompTextView;
     TextView scannedMajPosTextView;
@@ -72,12 +73,21 @@ public class ScannedActivity extends AppCompatActivity {
         if(getIntent().getSerializableExtra(SCANNED_STRING) == null) throw new RuntimeException("No encrypted string found in intent");
 
         String decryptedString = EncryptionHelper.getInstance().getDecryptionString(getIntent().getStringExtra(SCANNED_STRING));
-        qrObject qrObject = new Gson().fromJson(decryptedString, qrObject.class);
-        String cID = qrObject.getCardID();
-        String uID = qrObject.getUserID();
+        qrObject qr = new Gson().fromJson(decryptedString, qrObject.class);
+        String cID = qr.getCardID();
+        String uID = qr.getUserID();
+        String type = qr.getType();
 
         //Run the request to get the info from firebase
+        if(type.equals(qrObject.VALUE_TYPE_CARD)){
+            dbCardCall(uID, cID);
+        }
+        else{
+            dbPacketCall(uID, cID);
+        }
+    }
 
+    public void dbCardCall(String uID, String cID){
         Log.d("Scanned", "Checking Ids "+uID+" "+cID);
         final Card sharedCard = new Card();
         DocumentReference ref = sharedCard.setFromDb(uID,cID);
@@ -152,6 +162,30 @@ public class ScannedActivity extends AppCompatActivity {
                         }
                     });
 
+                }
+            }
+        });
+    }
+
+    public void dbPacketCall(String uID, String pID){
+        DocumentReference packetRef = database.getPacketRef(uID, pID);
+        packetRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    Map<String, Object> data = task.getResult().getData();
+                    String id = task.getResult().getId();
+                    if (data != null)
+                        database.packetsLibrary().document(id).set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "DocumentSnapshot packet added to collection!");
+                                } else {
+                                    Log.d(TAG, "Error adding packet info document to collection");
+                                }
+                            }
+                        });
                 }
             }
         });

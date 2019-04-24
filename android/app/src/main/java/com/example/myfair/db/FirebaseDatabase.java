@@ -81,4 +81,16 @@ public class FirebaseDatabase {
         return cards(uID).document(cID);
     }
 
+    /**
+     * Get database reference for received packets collection
+     * @return CollectionReference for the received packet library of the current user
+     */
+    public CollectionReference packetsLibrary(){
+        return db.collection("users").document(currentUser.getUid()).collection("receivedPackets");
+    }
+
+    public DocumentReference getPacketRef(String uID, String pID){
+        return db.collection("users").document(uID).collection("packets").document(pID);
+    }
+
 }

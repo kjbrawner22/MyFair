@@ -20,6 +20,7 @@ import com.example.myfair.modelsandhelpers.Connection;
 public class ConnectionInfoView extends LinearLayout {
     private ImageView ivLogo, ivSelected;
     private TextView tvText;
+    private String URL;
     private boolean checked;
 
     public ConnectionInfoView(Context context) {
@@ -48,6 +49,7 @@ public class ConnectionInfoView extends LinearLayout {
         parent.addView(this);
         ivLogo.setImageResource(logoResourceId);
         tvText.setText(text);
+        checked = false;
     }
 
     public ConnectionInfoView(Context context, ViewGroup parent, Connection connection) {
@@ -97,6 +99,7 @@ public class ConnectionInfoView extends LinearLayout {
     public void setText(String text) {
         tvText.setText(text);
     }
+    public String getText() { return tvText.getText().toString(); }
 
     public void setImage(int resourceId) {
         ivLogo.setImageResource(resourceId);
@@ -105,5 +108,13 @@ public class ConnectionInfoView extends LinearLayout {
     @Override
     public void setOnClickListener(@Nullable OnClickListener l) {
         findViewById(R.id.toplevel).setOnClickListener(l);
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+
+    public String getURL(){
+        return this.URL;
     }
 }
