@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebChromeClient;
@@ -14,6 +15,7 @@ import com.example.myfair.R;
 
 public class WebViewActivity extends AppCompatActivity {
     public static final String VIEW_URL = "view_url";
+    public static final String TOOLBAR_TITLE = "toolbar_title";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,9 @@ public class WebViewActivity extends AppCompatActivity {
 
         WebView webView = findViewById(R.id.webview);
 
-        String url = getIntent().getStringExtra(VIEW_URL);
+        Intent intent = getIntent();
+
+        String url = intent.getStringExtra(VIEW_URL);
         if (url != null) {
             webView.setWebViewClient(new WebViewClient());
             webView.getSettings().setJavaScriptEnabled(true);
@@ -31,7 +35,7 @@ public class WebViewActivity extends AppCompatActivity {
             finish();
         }
 
-        setupToolbar();
+        setupToolbar(intent.getStringExtra(TOOLBAR_TITLE), webView.getUrl());
     }
 
     @Override
@@ -40,8 +44,12 @@ public class WebViewActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setupToolbar() {
+    private void setupToolbar(String title, String url) {
         Toolbar toolbar = findViewById(R.id.toolbar);
+        if (title != null) {
+            toolbar.setTitle(title);
+        }
+        toolbar.setSubtitle(url);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();

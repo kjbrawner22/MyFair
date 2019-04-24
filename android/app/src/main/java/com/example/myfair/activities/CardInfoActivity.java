@@ -101,6 +101,7 @@ public class CardInfoActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(CardInfoActivity.this, WebViewActivity.class);
+                            intent.putExtra(WebViewActivity.TOOLBAR_TITLE, connection.getName());
                             intent.putExtra(WebViewActivity.VIEW_URL,
                                     Connection.getInternetUrl(connection.getDbKey(), connection.getValue()));
                             startActivity(intent);
