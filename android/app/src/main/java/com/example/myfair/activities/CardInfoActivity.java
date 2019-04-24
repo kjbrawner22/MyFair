@@ -68,14 +68,17 @@ public class CardInfoActivity extends AppCompatActivity {
             cardView = new UniversityCardView(this, cID, map, lytCardInfo, 0);
             String name = (String) map.get(Card.FIELD_NAME);
             String uID = (String) map.get(Card.FIELD_CARD_OWNER);
+            setQrString(uID, cID);
             setupToolbar(name);
 
             if(map.containsKey(Card.FIELD_ABOUT)){
                 cardBio.setText((String) map.get(Card.FIELD_ABOUT));
             }
 
-            setQrString(uID, cID);
-            cardRef = db.getCardRef(uID, cID);
+            if(uID!=null && uID.equals(db.getUserId()))
+                cardRef = db.getCardRef(uID, cID);
+            else
+                cardRef = db.userContacts().document(cID);
 
             displayConnections(map);
         }

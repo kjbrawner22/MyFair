@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 
 import com.example.myfair.R;
 import com.example.myfair.db.FirebaseDatabase;
+import com.example.myfair.fragments.CollectionsFragment;
+import com.example.myfair.fragments.ProfileFragment;
 import com.example.myfair.views.PacketView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,7 +27,7 @@ import java.util.HashMap;
 public class PacketViewingActivity extends AppCompatActivity {
     FirebaseDatabase db;
 
-    public static final String INTENT_TOOLBAR_TITLE = "Your Packets";
+    public static final String INTENT_TOOLBAR_TITLE = "title";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,15 @@ public class PacketViewingActivity extends AppCompatActivity {
         db = new FirebaseDatabase();
         LinearLayout packetList = findViewById(R.id.lytListView);
 
-        getIdList(db.userPackets(), packetList);
+
+        String title = getIntent().getStringExtra(INTENT_TOOLBAR_TITLE);
+        if (title.equals(ProfileFragment.PACKET_VIEWING_TOOLBAR_TITLE)) {
+            getIdList(db.userPackets(), packetList);
+        } else {
+            getIdList(db.packetsLibrary(), packetList);
+        }
+
+        //getIdList(db.userPackets(), packetList);
     }
 
     @Override
@@ -48,7 +58,7 @@ public class PacketViewingActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(INTENT_TOOLBAR_TITLE);
+        toolbar.setTitle(getIntent().getStringExtra(INTENT_TOOLBAR_TITLE));
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();

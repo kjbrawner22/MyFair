@@ -48,6 +48,8 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     public static final String CARD_VIEWING_TOOLBAR_TITLE = "My Cards";
+    public static final String PACKET_VIEWING_TOOLBAR_TITLE = "Your Packets";
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -209,6 +211,7 @@ public class ProfileFragment extends Fragment {
                     break;
                 case R.id.cvProfilePackets:
                     intent = new Intent(getContext(), PacketViewingActivity.class);
+                    intent.putExtra(PacketViewingActivity.INTENT_TOOLBAR_TITLE, PACKET_VIEWING_TOOLBAR_TITLE);
                     startActivity(intent);
                     break;
                 default:
