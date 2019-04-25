@@ -41,12 +41,21 @@ public class WebViewActivity extends AppCompatActivity {
         setupToolbar(intent.getStringExtra(TOOLBAR_TITLE), webView.getUrl());
     }
 
+    /**
+     * Implements toolbar back button
+     * @return boolean variable that specifies success
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
+    /**
+     * Initializes toolbar for the web view activity
+     * @param title - String that specifies the title of the toolbar
+     * @param url - String that specifies the URL for the web view
+     */
     private void setupToolbar(String title, String url) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (title != null) {
@@ -63,11 +72,21 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Inflates menu layout
+     * @param menu - specifies menu variable
+     * @return returns boolean that specifies success
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_menu_web_view, menu);
         return true;
     }
 
+    /**
+     * Implements options selected menu
+     * @param item - specifies the selected MenuItem
+     * @return returns boolean to specify success
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_open_external) {

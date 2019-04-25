@@ -18,6 +18,10 @@ public class PacketView extends LinearLayout {
     private HashMap<String, Object> map;
     private String pID;
 
+    /**
+     * Default constructor
+     * @param context - desired context
+     */
     public PacketView(Context context) {
         super(context);
         map = new HashMap<>();
@@ -42,6 +46,13 @@ public class PacketView extends LinearLayout {
         initialize(context);
     }
 
+    /**
+     * Custom constructor creates view using map
+     * @param context - desired context variable
+     * @param pID - String packet ID
+     * @param parent - Layout variable parent ViewGroup
+     * @param map - HashMap variable for packet contents
+     */
     public PacketView(Context context, String pID, ViewGroup parent, HashMap<String, Object> map) {
         super(context);
         setPacketId(pID);
@@ -50,6 +61,10 @@ public class PacketView extends LinearLayout {
         parent.addView(this);
     }
 
+    /**
+     * helper function for initialization, inflates the view
+     * @param context - desired context
+     */
     public void initialize(Context context){
         setOrientation(VERTICAL);
 
@@ -75,14 +90,26 @@ public class PacketView extends LinearLayout {
         tvDocumentCount.setText(str2);
     }
 
+    /**
+     * Basic setter for packet ID
+     * @param pID - String for new packet ID
+     */
     public void setPacketId(String pID){
         this.pID = pID;
     }
 
+    /**
+     * Basic getter for packet ID
+     * @return - returns String for current packet ID
+     */
     public String getPacketId(){
         return pID;
     }
 
+    /**
+     * Basic getter for the map
+     * @return - HashMap - returns the map
+     */
     public HashMap<String, Object> getMap(){
         return this.map;
     }
