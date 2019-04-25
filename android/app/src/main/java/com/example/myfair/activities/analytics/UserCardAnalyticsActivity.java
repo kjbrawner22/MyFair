@@ -38,6 +38,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity for analytics about a specific card
+ * must pass appropriate data through intent
+ */
 public class UserCardAnalyticsActivity extends AppCompatActivity {
 
     //Initializing Variables
@@ -296,6 +300,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Helper function to convert timestamps to usable format
+     * @param list - ArrayList that holds the timestamp data
+     * @return returns ArrayList with converted timestamps
+     */
     private ArrayList<Calendar> translateTimestamps(ArrayList<Timestamp> list){
         ArrayList<Calendar> temp = new ArrayList<>(list.size());
         for( Timestamp elem : list){ //Doing necessary transformations
@@ -307,11 +316,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         return temp;
     }
 
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
-        v.setMargins();
-    }
-
+    /**
+     * Makes Preview for desired Car
+     * @param ref - DocumentReference for the desired card
+     * @param listView - LinearLayout where we want to add the card
+     */
     private void makePreview(DocumentReference ref, final LinearLayout listView){
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -322,7 +331,6 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
                     UniversityCardView v = new UniversityCardView(UserCardAnalyticsActivity.this, cID, map, listView);
                     Log.d(TAG, document.getId() + " => " + document.getData());
-
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

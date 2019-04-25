@@ -17,12 +17,20 @@ import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.modelsandhelpers.Connection;
 
+/**
+ * Constructs custom view for the connection
+ * and document information data
+ */
 public class ConnectionInfoView extends LinearLayout {
     private ImageView ivLogo, ivSelected;
     private TextView tvText;
     private String URL;
     private boolean checked;
 
+    /**
+     * Default constructor
+     * @param context - desired context
+     */
     public ConnectionInfoView(Context context) {
         super(context);
         initialize(context);
@@ -43,6 +51,13 @@ public class ConnectionInfoView extends LinearLayout {
         initialize(context);
     }
 
+    /**
+     * Custom consturctor that initializes the view using specific data
+     * @param context - desired context
+     * @param parent - Layout for desired ViewGroup parent object
+     * @param logoResourceId - Int for desired image resource
+     * @param text - String to set the title of the view
+     */
     public ConnectionInfoView(Context context, ViewGroup parent, int logoResourceId, String text) {
         super(context);
         initialize(context);
@@ -52,6 +67,12 @@ public class ConnectionInfoView extends LinearLayout {
         checked = false;
     }
 
+    /**
+     * Custom consturctor that initializes the view using custom connection object
+     * @param context - desired context
+     * @param parent - layout for desired ViewGroup
+     * @param connection Connection object for base data
+     */
     public ConnectionInfoView(Context context, ViewGroup parent, Connection connection) {
         super(context);
         initialize(context);
@@ -76,6 +97,10 @@ public class ConnectionInfoView extends LinearLayout {
         tvText = findViewById(R.id.tvText);
     }
 
+    /**
+     * Sets the radio button asset to checked state
+     * @param checked - boolean variable that specifies button status
+     */
     public void setChecked(boolean checked) {
         Resources resources = getResources();
         CardView toplevel = findViewById(R.id.toplevel);
@@ -89,6 +114,9 @@ public class ConnectionInfoView extends LinearLayout {
         }
     }
 
+    /**
+     * Hides the radio button image
+     */
     public void hideSelectors() {
         Resources resources = getResources();
         CardView toplevel = findViewById(R.id.toplevel);
@@ -96,13 +124,22 @@ public class ConnectionInfoView extends LinearLayout {
         toplevel.setCardBackgroundColor(resources.getColor(R.color.colorPrimary));
     }
 
+    /*
+        Setters and Getters
+     */
+
     public void setText(String text) {
         tvText.setText(text);
     }
     public String getText() { return tvText.getText().toString(); }
-
     public void setImage(int resourceId) {
         ivLogo.setImageResource(resourceId);
+    }
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+    public String getURL(){
+        return this.URL;
     }
 
     @Override
@@ -110,11 +147,4 @@ public class ConnectionInfoView extends LinearLayout {
         findViewById(R.id.toplevel).setOnClickListener(l);
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
-
-    public String getURL(){
-        return this.URL;
-    }
 }
