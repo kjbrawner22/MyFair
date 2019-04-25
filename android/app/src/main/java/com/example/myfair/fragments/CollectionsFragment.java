@@ -93,43 +93,6 @@ public class CollectionsFragment extends Fragment {
     }
 
     /**
-     * Standard onCreateOptionsMenu override.
-     * Inflates options menu.
-     * @param menu - Menu selected.
-     * @param inflater - inflater responsible with inflating menu.
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.actionmenu_collections, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    /**
-     * Standard onOptionsItemsSelected override.
-     * Determines menu item selected and executes associated functions.
-     * @param item - menu item selected.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_menu_search:
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-            case R.id.action_menu_filter:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-    /**
      * Standard onCreateView override. Finds needed handles and initializes the view
      * @param inflater - Inflater responsible for inflating the layout fragment.
      * @param container - ViewGroup associated with the inflater.
