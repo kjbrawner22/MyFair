@@ -3,14 +3,15 @@ package com.example.myfair.views;
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+
 import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.qrObject;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
-
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 
 /**
  * Base Class for UniversityCardView

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.myfair.R;
 import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
@@ -16,8 +18,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.HashMap;
-
-import androidx.annotation.NonNull;
 
 /**
  * Custom card view that sets the university card view layout

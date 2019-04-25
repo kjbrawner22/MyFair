@@ -1,9 +1,9 @@
 package com.example.myfair.modelsandhelpers;
 
+import androidx.annotation.NonNull;
+
 import com.example.myfair.R;
 import com.example.myfair.db.User;
-
-import androidx.annotation.NonNull;
 
 /**
  * Connection object that stores an icon drawable id, a connection type, and its proper name

@@ -6,19 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
+
+import androidx.annotation.Nullable;
 
 import com.example.myfair.ConnectionArrayAdapter;
 import com.example.myfair.R;
-import com.example.myfair.db.User;
 import com.example.myfair.modelsandhelpers.Connection;
-
-import androidx.annotation.Nullable;
 
 /**
  * Compound view to display a spinner and an edit field that correspond to data

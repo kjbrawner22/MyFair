@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.annotation.IntRange;
+import androidx.print.PrintHelper;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -16,10 +19,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
-import androidx.annotation.IntRange;
-
-import androidx.print.PrintHelper;
 
 /**
  * Built with reference to a tutorial by Ahsen Saeed
