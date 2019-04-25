@@ -80,11 +80,6 @@ public class UserAnalytics extends AppCompatActivity {
         }
     };
 
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v); //add view to layout
-        v.setMargins();
-    }
-
     private void getIdList(CollectionReference ref, final LinearLayout listView){
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
