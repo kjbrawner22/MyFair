@@ -320,8 +320,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     String cID = document.getId();
                     HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
-                    UniversityCardView v = new UniversityCardView(UserCardAnalyticsActivity.this, cID, map);
-                    addCardView(v, listView);
+                    UniversityCardView v = new UniversityCardView(UserCardAnalyticsActivity.this, cID, map, listView);
                     Log.d(TAG, document.getId() + " => " + document.getData());
 
                 } else {
