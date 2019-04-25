@@ -267,9 +267,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             }
             filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
                 long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
-                Log.e(TAG, "Checking the diff "+ diff);
-                subDivisions[(int) (diff/msInDay)]++;
-                if(subDivisions[(int) (diff/msInDay)] > 0) Log.e(TAG, "We got 1");
+                if(diff/msInDay < subDivisions.length){
+                    Log.e(TAG, "Checking the diff "+ diff);
+                    subDivisions[(int) (diff/msInDay)]++;
+                    if(subDivisions[(int) (diff/msInDay)] > 0) Log.e(TAG, "We got 1");
+                }
             });
 
             for(int i = 0; i<subDivisions.length; i++){ //This for set up the Series for the graph
