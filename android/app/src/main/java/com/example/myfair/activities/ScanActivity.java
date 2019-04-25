@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.db.User;
 import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.qrObject;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -101,6 +99,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
     }
 
+    /**
+     * Initializes the scanner
+     */
     private void scannerInit(){
         qrCodeScanner.setFormats(listOf(BarcodeFormat.QR_CODE));
         qrCodeScanner.setAutoFocus(true);
@@ -184,6 +185,11 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         finish();
     }
 
+    /**
+     * Database call that sends card info into the card collection
+     * @param uID - uID of the appropriate user
+     * @param cID - cID of the card
+     */
     public void dbCardCall(String uID, String cID){
         cvProgressBar.setVisibility(View.VISIBLE);
         Log.d("Scanned", "Checking Ids "+uID+" "+cID);
@@ -274,6 +280,11 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         });
     }
 
+    /**
+     * Database call that sends packet info into the packet collection
+     * @param uID - uID of the appropriate user
+     * @param pID - pID of the packet
+     */
     public void dbPacketCall(String uID, String pID){
         cvProgressBar.setVisibility(View.VISIBLE);
         DocumentReference packetRef = database.getPacketRef(uID, pID);
