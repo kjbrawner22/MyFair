@@ -1,13 +1,9 @@
 package com.example.myfair.modelsandhelpers;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import androidx.annotation.NonNull;
 
 import com.example.myfair.R;
 import com.example.myfair.db.User;
-
-import androidx.annotation.NonNull;
 
 /**
  * Connection object that stores an icon drawable id, a connection type, and its proper name
@@ -101,6 +97,11 @@ public class Connection {
         };
     }
 
+    /**
+     * Check if the field is a phone number
+     * @param key - String key reference for the connection data
+     * @return boolean indication whether the field is a phone number
+     */
     public static boolean isPhoneNumber(String key) {
         switch (key) {
             case User.FIELD_CELL_NUMBER:
@@ -112,6 +113,12 @@ public class Connection {
         }
     }
 
+    /**
+     * Static helper that constructs internet URL from a String username
+     * @param key - String value that represents the type of social username
+     * @param value - String value that represents the social username
+     * @return returns String of constructed URL
+     */
     public static String getInternetUrl(String key, String value) {
         switch (key) {
             case User.FIELD_GITHUB_USERNAME:
@@ -127,10 +134,18 @@ public class Connection {
         }
     }
 
+    /**
+     * Generic setter for value variable
+     * @param value - String value
+     */
     public void setValue(String value) {
         this.value = value;
     }
 
+    /**
+     * Generic getter for value variable
+     * @return returns
+     */
     public String getValue() {
         return this.value;
     }

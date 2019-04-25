@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.myfair.R;
 import com.example.myfair.activities.MainActivity;
 import com.example.myfair.db.Card;
@@ -16,9 +18,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.HashMap;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Custom card view that sets the university card view layout
@@ -109,7 +108,7 @@ public class UniversityCardView extends GenericCardView {
 
         setQrString();
     }
-
+    
     private ImageLoadingListener getImageLoadingListener(String cardField) {
         return new ImageLoadingListener() {
             @Override
@@ -138,6 +137,9 @@ public class UniversityCardView extends GenericCardView {
         };
     }
 
+    /**
+     * helper method to render images
+     */
     private void renderImages() {
         ImageLoader imageLoader = ImageLoader.getInstance();
 

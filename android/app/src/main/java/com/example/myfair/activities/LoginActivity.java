@@ -1,9 +1,6 @@
 package com.example.myfair.activities;
 
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -15,6 +12,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.myfair.R;
 import com.example.myfair.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,8 +25,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import static com.google.android.gms.tasks.Tasks.await;
 
 /**
  * LoginActivity that handles the authentication and logic dealing with user sign in/up/etc.

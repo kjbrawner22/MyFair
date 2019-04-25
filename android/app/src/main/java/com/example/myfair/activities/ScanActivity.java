@@ -12,6 +12,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+
 import com.example.myfair.R;
 import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
@@ -27,11 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Calendar;

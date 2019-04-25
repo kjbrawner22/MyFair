@@ -1,8 +1,6 @@
 package com.example.myfair.views;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+
 import com.example.myfair.R;
 import com.example.myfair.modelsandhelpers.QRCodeHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
-import androidx.annotation.Nullable;
 
 /**
  * Bottom sheet class for initializing Bottom Sheets (QR codes/sharing cards)

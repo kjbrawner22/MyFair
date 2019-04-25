@@ -1,12 +1,10 @@
 package com.example.myfair.views;
 
 import android.content.Context;
-import android.media.Image;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;

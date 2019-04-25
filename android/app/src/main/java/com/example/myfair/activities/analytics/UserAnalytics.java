@@ -1,22 +1,18 @@
 package com.example.myfair.activities.analytics;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-
 import com.example.myfair.R;
-import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.views.BusinessCardView;
 import com.example.myfair.views.GenericCardView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +23,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 
+/**
+ * Displays the list of cards a user can pick from
+ * will send card data to UserCardAnalyticsActivity through intent
+ */
 public class UserAnalytics extends AppCompatActivity {
 
     //Init Variables
@@ -51,12 +51,19 @@ public class UserAnalytics extends AppCompatActivity {
         getIdList(usersCards, listView);
     }
 
+    /**
+     * Implements back button on toolbar
+     * @return returns boolean that specifies success
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
+    /**
+     * Helper function to set up the toolbar
+     */
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,6 +76,9 @@ public class UserAnalytics extends AppCompatActivity {
         }
     }
 
+    /**
+     * Custom card listener for this activity CardViews
+     */
     private View.OnClickListener specificCardAnalyticsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) { //On a cards click open the user card analytics activity
@@ -80,6 +90,11 @@ public class UserAnalytics extends AppCompatActivity {
         }
     };
 
+    /**
+     * Helper function to get the info from a db collection
+     * @param ref - CollectionReference for desired data
+     * @param listView - LinearLayout for adding the created card views
+     */
     private void getIdList(CollectionReference ref, final LinearLayout listView){
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,11 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.myfair.R;
 import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.LoginActivity;
 import com.example.myfair.activities.PacketViewingActivity;
 import com.example.myfair.activities.ProfileCreationActivity;
-import com.example.myfair.R;
 import com.example.myfair.activities.ProfileEditingActivity;
 import com.example.myfair.activities.ScanActivity;
 import com.example.myfair.db.FirebaseDatabase;

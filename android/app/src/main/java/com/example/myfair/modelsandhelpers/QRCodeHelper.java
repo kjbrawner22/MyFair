@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.annotation.IntRange;
+import androidx.print.PrintHelper;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -11,17 +14,11 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import androidx.annotation.IntRange;
-
-import androidx.print.PrintHelper;
 
 /**
  * Built with reference to a tutorial by Ahsen Saeed
@@ -64,12 +61,22 @@ public class QRCodeHelper {
         return qrCodeHelper;
     }
 
+    /**
+     * Opens dialog to print QR image
+     * @param context - current context
+     * @param bitmap - image to print
+     */
     public static void printQRCode(Context context, Bitmap bitmap) {
          PrintHelper printHelper = new PrintHelper(context);
          printHelper.setScaleMode(PrintHelper.SCALE_MODE_FIT);
          printHelper.printBitmap("Print QR Code", bitmap);
     }
 
+    /**
+     * Function to save QR code
+     * !!not implemented or used
+     * @param bitmap
+     */
     public static void saveQRCode(Bitmap bitmap) {
         try (FileOutputStream out = new FileOutputStream("QR-export-" + Calendar.getInstance().getTime() + ".png")) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);

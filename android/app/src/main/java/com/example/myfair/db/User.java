@@ -1,9 +1,9 @@
 package com.example.myfair.db;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.example.myfair.R;
+import androidx.annotation.NonNull;
+
 import com.example.myfair.modelsandhelpers.Connection;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -14,8 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
 
 /**
  * Class model for user information that is stored in the database

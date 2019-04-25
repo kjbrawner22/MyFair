@@ -1,30 +1,25 @@
 package com.example.myfair.activities;
 
 import android.content.Context;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
-
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import android.view.View;
-
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.myfair.R;
 import com.example.myfair.modelsandhelpers.EncryptionHelper;
 import com.example.myfair.modelsandhelpers.QRCodeHelper;
 import com.example.myfair.modelsandhelpers.qrObject;
-import com.example.myfair.R;
 import com.google.gson.Gson;
-
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 
 public class GenerateActivity extends AppCompatActivity {
@@ -34,8 +29,8 @@ public class GenerateActivity extends AppCompatActivity {
     EditText fullNameEditText;
     EditText ageEditText;
 
-    // info send from onClick BusinessCardView -- sends cID & uID with putExtra.
-    // private vars (BusinessCardView -> cID / uID) should be set properly
+    // info send from onClick CardView -- sends cID & uID with putExtra.
+    // private vars (CardView-> cID / uID) should be set properly
     // using database info at initialization.
 
 

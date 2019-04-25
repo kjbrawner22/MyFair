@@ -4,22 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ScrollView;
-
-import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.R;
+import com.example.myfair.activities.CardViewingActivity;
 import com.example.myfair.activities.PacketViewingActivity;
 import com.example.myfair.db.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;

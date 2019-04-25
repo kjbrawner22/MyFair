@@ -8,10 +8,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.myfair.modelsandhelpers.Connection;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.myfair.modelsandhelpers.Connection;
 
 /**
  * ArrayAdapter that handles the spinner items for the AddConnectionsView

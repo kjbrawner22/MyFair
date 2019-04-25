@@ -1,11 +1,7 @@
 package com.example.myfair.activities.analytics;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,11 +9,11 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.myfair.R;
-import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.views.BusinessCardView;
-import com.example.myfair.views.GenericCardView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,18 +22,19 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity for analytics about a specific card
+ * must pass appropriate data through intent
+ */
 public class UserCardAnalyticsActivity extends AppCompatActivity {
 
     //Initializing Variables
@@ -296,6 +293,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Helper function to convert timestamps to usable format
+     * @param list - ArrayList that holds the timestamp data
+     * @return returns ArrayList with converted timestamps
+     */
     private ArrayList<Calendar> translateTimestamps(ArrayList<Timestamp> list){
         ArrayList<Calendar> temp = new ArrayList<>(list.size());
         for( Timestamp elem : list){ //Doing necessary transformations
@@ -307,11 +309,11 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
         return temp;
     }
 
-    private void addCardView(GenericCardView v, LinearLayout listView) {
-        listView.addView(v);
-        v.setMargins();
-    }
-
+    /**
+     * Makes Preview for desired Car
+     * @param ref - DocumentReference for the desired card
+     * @param listView - LinearLayout where we want to add the card
+     */
     private void makePreview(DocumentReference ref, final LinearLayout listView){
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -322,7 +324,6 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                     HashMap<String,Object> map = (HashMap<String,Object>) document.getData();
                     UniversityCardView v = new UniversityCardView(UserCardAnalyticsActivity.this, cID, map, listView);
                     Log.d(TAG, document.getId() + " => " + document.getData());
-
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
