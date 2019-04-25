@@ -115,6 +115,9 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         displayConnections();
     }
 
+    /**
+     * Helper function to display the connections to select from on the profile
+     */
     private void displayConnections() {
         final LinearLayout lytConnections = findViewById(R.id.lytDocumentList);
 
@@ -180,13 +183,20 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
             Picasso.with(this).load(profileUri).fit().centerInside().into(ivProfile);
         }
     }
-    
+
+    /**
+     * Implements toolbar back button functionality
+     * @return boolean variable verifies return status
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
+    /**
+     * Helper function to setup the toolbar
+     */
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -212,6 +222,12 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    /**
+     * Implements live update of the text views on the card preview
+     * @param textView - TextView that we want to update
+     * @param cardField - String value to go into the TextView
+     * @return returns a TextWatcher that can be used to update values
+     */
     private TextWatcher createTextWatcher(TextView textView, String cardField) {
         return new TextWatcher() {
             @Override
@@ -266,6 +282,12 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         t.start();
     }
 
+    /**
+     * Helper function to upload image to the firebase storage and
+     * make a database entry on the newly created card
+     * @param uri - URI variable for the image that we want to upload
+     * @param cardField - name of the card field for the Image URI
+     */
     private void uploadImage(Uri uri, String cardField) {
         StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                 + "." + getFileExtension(uri));
@@ -301,6 +323,13 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         return validate(etName, etCompany, etPosition);
     }
 
+    /**
+     * Helper function to validate that text has been entered
+     * @param etOne - first EditText
+     * @param etTwo - second EditText
+     * @param etThree - third EditText
+     * @return boolean variable that specifies whether the input is valid
+     */
     private boolean validate(EditText etOne, EditText etTwo, EditText etThree){
         if (etOne.getText().toString().isEmpty()) {
             etOne.setError("Name is required.");
@@ -329,6 +358,10 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         else return 3;
     }
 
+    /**
+     * helper function to hide the keyboard
+     * @param activity - the current activity
+     */
     public static void hideKeyboard(Activity activity) {
         View view = activity.findViewById(android.R.id.content);
         if (view != null) {

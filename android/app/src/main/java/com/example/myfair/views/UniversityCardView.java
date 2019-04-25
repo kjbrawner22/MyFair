@@ -109,7 +109,7 @@ public class UniversityCardView extends GenericCardView {
 
         setQrString();
     }
-
+    
     private ImageLoadingListener getImageLoadingListener(String cardField) {
         return new ImageLoadingListener() {
             @Override
@@ -138,6 +138,9 @@ public class UniversityCardView extends GenericCardView {
         };
     }
 
+    /**
+     * helper method to render images
+     */
     private void renderImages() {
         ImageLoader imageLoader = ImageLoader.getInstance();
 
