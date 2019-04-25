@@ -223,9 +223,9 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
 
         if(toCalendar.getTimeInMillis()-fromCalendar.getTimeInMillis()<= msInDay){ // If the time frame is only one day
             Log.e(TAG,"24 hours");
-            DataPoint[] set = new DataPoint[24];
-            int []subDivisions = new int[24];
-            for (int i = 0; i < 24; i++){
+            DataPoint[] set = new DataPoint[25];
+            int []subDivisions = new int[25];
+            for (int i = 0; i < 25; i++){
                 subDivisions[i]=0;
             }
 
@@ -237,7 +237,7 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
                 if(subDivisions[(int) (diff/3600000)] > 0) Log.e(TAG, "We got 1");
             });
 
-            for (int i = 0; i < 24 ; i++) {
+            for (int i = 0; i < 25 ; i++) {
                 set[i] = new DataPoint(i,subDivisions[i]);
             }
 
@@ -260,18 +260,18 @@ public class UserCardAnalyticsActivity extends AppCompatActivity {
             //Time frame takes place over multiple days
             Log.e(TAG,"Multi Day");
             int numberOfDays = toCalendar.get(Calendar.DAY_OF_YEAR)-fromCalendar.get(Calendar.DAY_OF_YEAR);
-            int subDivisions[] = new int[numberOfDays];
-            DataPoint[] set = new DataPoint[numberOfDays];
+            int subDivisions[] = new int[numberOfDays+1];
+            DataPoint[] set = new DataPoint[numberOfDays+1];
             for(int i = 0; i< subDivisions.length; i++){
                 subDivisions[i] = 0;
             }
             filteredScanDates.forEach(c -> { //This foreach takes each of the remaining scan dates and categorizes them into one of the 12 subDivisions based on the time
                 long diff = c.getTimeInMillis() - fromCalendar.getTimeInMillis();
-                if(diff/msInDay < subDivisions.length){
+                //if(diff/msInDay < subDivisions.length){
                     Log.e(TAG, "Checking the diff "+ diff);
                     subDivisions[(int) (diff/msInDay)]++;
                     if(subDivisions[(int) (diff/msInDay)] > 0) Log.e(TAG, "We got 1");
-                }
+                //}
             });
 
             for(int i = 0; i<subDivisions.length; i++){ //This for set up the Series for the graph
