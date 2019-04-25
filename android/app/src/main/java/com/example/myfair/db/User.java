@@ -1,9 +1,6 @@
 package com.example.myfair.db;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
-
-import com.example.myfair.R;
 import com.example.myfair.modelsandhelpers.Connection;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

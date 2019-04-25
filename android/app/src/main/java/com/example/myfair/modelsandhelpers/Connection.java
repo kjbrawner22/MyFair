@@ -1,9 +1,5 @@
 package com.example.myfair.modelsandhelpers;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-
 import com.example.myfair.R;
 import com.example.myfair.db.User;
 

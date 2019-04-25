@@ -18,7 +18,6 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Custom card view that sets the university card view layout

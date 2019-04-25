@@ -4,24 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.FirebaseDatabase;
 import com.example.myfair.fragments.CollectionsFragment;
-import com.example.myfair.views.BottomSheet;
-import com.example.myfair.views.CardInfoView;
-import com.example.myfair.views.GenericCardView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

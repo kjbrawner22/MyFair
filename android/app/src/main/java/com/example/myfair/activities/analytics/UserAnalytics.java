@@ -9,14 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.example.myfair.R;
-import com.example.myfair.db.Card;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.views.BusinessCardView;
 import com.example.myfair.views.GenericCardView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;

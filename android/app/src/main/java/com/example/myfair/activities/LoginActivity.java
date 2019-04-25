@@ -25,8 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static com.google.android.gms.tasks.Tasks.await;
-
 /**
  * LoginActivity that handles the authentication and logic dealing with user sign in/up/etc.
  */

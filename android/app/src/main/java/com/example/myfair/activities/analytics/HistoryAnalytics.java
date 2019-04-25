@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.views.GenericCardView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

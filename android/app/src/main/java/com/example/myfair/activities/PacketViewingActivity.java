@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 
 import com.example.myfair.R;
 import com.example.myfair.db.FirebaseDatabase;
-import com.example.myfair.fragments.CollectionsFragment;
 import com.example.myfair.fragments.ProfileFragment;
 import com.example.myfair.views.PacketView;
 import com.google.android.gms.tasks.OnCompleteListener;

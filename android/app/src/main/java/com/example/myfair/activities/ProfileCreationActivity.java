@@ -7,14 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.example.myfair.R;
 import com.example.myfair.db.User;
-import com.example.myfair.modelsandhelpers.Connection;
 import com.example.myfair.views.AddConnectionsView;
 import com.example.myfair.views.ConnectionView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

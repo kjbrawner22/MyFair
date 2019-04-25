@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 /**
- * Base Class for BusinessCardView and UniversityCardView
+ * Base Class for UniversityCardView
  */
 public class GenericCardView extends CardView {
     private String cID, uID;
@@ -46,7 +46,7 @@ public class GenericCardView extends CardView {
         qrObject user = new qrObject(uID, cID);
         String serializeString = new Gson().toJson(user);
         encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
-        Log.d("SetQrCode", "CardInfoView: " + encryptedString);
+        Log.d("SetQrCode", "Card: " + encryptedString);
     }
 
     /**

@@ -11,11 +11,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,7 +28,6 @@ import com.example.myfair.views.ConnectionInfoView;
 import com.example.myfair.views.UniversityCardView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.gson.Gson;
 
@@ -202,7 +199,7 @@ public class CardInfoActivity extends AppCompatActivity {
         qrObject user = new qrObject(uID, cID);
         String serializeString = new Gson().toJson(user);
         encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
-        Log.d("CardInfoActivityLog", "CardInfoView: " + encryptedString);
+        Log.d("CardInfoActivityLog", "Card: " + encryptedString);
     }
 
     /**

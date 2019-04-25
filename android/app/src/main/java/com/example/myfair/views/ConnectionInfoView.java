@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 import com.example.myfair.R;
-import com.example.myfair.db.Card;
 import com.example.myfair.modelsandhelpers.Connection;
 
 /**

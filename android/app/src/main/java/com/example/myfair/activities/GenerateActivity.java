@@ -34,8 +34,8 @@ public class GenerateActivity extends AppCompatActivity {
     EditText fullNameEditText;
     EditText ageEditText;
 
-    // info send from onClick BusinessCardView -- sends cID & uID with putExtra.
-    // private vars (BusinessCardView -> cID / uID) should be set properly
+    // info send from onClick CardView -- sends cID & uID with putExtra.
+    // private vars (CardView-> cID / uID) should be set properly
     // using database info at initialization.
 
 

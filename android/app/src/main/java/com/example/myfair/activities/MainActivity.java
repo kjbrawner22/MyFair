@@ -1,6 +1,5 @@
 package com.example.myfair.activities;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
