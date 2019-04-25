@@ -105,7 +105,7 @@
         android:layout_height="0dp"
         android:background="@drawable/layout_top_rounded"
         android:elevation="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -115,10 +115,12 @@
 
         <com.example.myfair.views.AddConnectionsView
             android:id="@+id/addConnectionsView"
-            android:layout_width="348dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="92dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
