@@ -61,6 +61,10 @@ public class CardPickerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Generic onclickListener for UniversityCardView
+     * Puts card data into a bundle to send back to parent activity
+     */
     private View.OnClickListener cardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -83,6 +87,9 @@ public class CardPickerActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Helper function to setup toolbar
+     */
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar4);
         toolbar.setTitle(INTENT_TOOLBAR_TITLE);

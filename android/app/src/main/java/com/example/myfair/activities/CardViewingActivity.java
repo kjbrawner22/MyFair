@@ -57,12 +57,19 @@ public class CardViewingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Implements back button on toolbar
+     * @return - boolean variable to specify success
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
+    /**
+     * Helper function to setup toolbar
+     */
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getIntent().getStringExtra(INTENT_TOOLBAR_TITLE));
@@ -99,6 +106,10 @@ public class CardViewingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Listener for the UniversityCardView
+     * Opens CardInfoActivity
+     */
     private View.OnClickListener universityCardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -109,22 +120,6 @@ public class CardViewingActivity extends AppCompatActivity {
             Intent intent = new Intent(CardViewingActivity.this, CardInfoActivity.class);
             intent.putExtras(extras);
             startActivity(intent);
-        }
-    };
-
-    private View.OnClickListener buttonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-            Log.d("ButtonIDClicked", "ID: " + id);
-            switch(id){
-                case R.id.homeAsUp:
-                    onBackPressed();
-                    break;
-                default:
-                    Log.d("ErrorLog", view.getId() + "- button not yet implemented");
-                    break;
-            }
         }
     };
 }

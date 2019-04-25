@@ -47,6 +47,9 @@ public class CardInfoActivity extends AppCompatActivity {
     public static final String INTENT_CARD_ID = "card_id";
     public static final String INTENT_TOOLBAR_TITLE = "Card Info";
 
+    /**
+     * On Create method..
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,10 @@ public class CardInfoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the links for the card info activity
+     * @param map - HashMap that contains the connections data
+     */
     private void displayConnections(HashMap<String, Object> map) {
         LinearLayout lytConnections = findViewById(R.id.lytDocumentList);
 
@@ -125,6 +132,10 @@ public class CardInfoActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Halper function to setup the toolbar
+     * @param name - String that holds the title of the toolbar
+     */
     private void setupToolbar(String name) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(name);
@@ -138,6 +149,11 @@ public class CardInfoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Inflates menu layout
+     * @param menu - specifies menu variable
+     * @return returns a boolean to specify success
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_menu_card_info, menu);
         return true;
@@ -166,6 +182,9 @@ public class CardInfoActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Helper function to open Qr bottom sheet
+     */
     private void shareCard(){
         Bundle bundle = new Bundle();
         bundle.putString("encryptedString", encryptedString);
@@ -174,6 +193,11 @@ public class CardInfoActivity extends AppCompatActivity {
         bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
     }
 
+    /**
+     * helper function to initialize encrypted string (used for QR code gen
+     * @param uID - String user ID
+     * @param cID - String card ID
+     */
     private void setQrString(String uID, String cID){
         qrObject user = new qrObject(uID, cID);
         String serializeString = new Gson().toJson(user);
@@ -181,6 +205,9 @@ public class CardInfoActivity extends AppCompatActivity {
         Log.d("CardInfoActivityLog", "CardInfoView: " + encryptedString);
     }
 
+    /**
+     * Dialog to confirm deletion
+     */
     private void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Are you sure you want to delete this card?");
