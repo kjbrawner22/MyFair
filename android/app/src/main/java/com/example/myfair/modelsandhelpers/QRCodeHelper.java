@@ -64,12 +64,22 @@ public class QRCodeHelper {
         return qrCodeHelper;
     }
 
+    /**
+     * Opens dialog to print QR image
+     * @param context - current context
+     * @param bitmap - image to print
+     */
     public static void printQRCode(Context context, Bitmap bitmap) {
          PrintHelper printHelper = new PrintHelper(context);
          printHelper.setScaleMode(PrintHelper.SCALE_MODE_FIT);
          printHelper.printBitmap("Print QR Code", bitmap);
     }
 
+    /**
+     * Function to save QR code
+     * !!not implemented or used
+     * @param bitmap
+     */
     public static void saveQRCode(Bitmap bitmap) {
         try (FileOutputStream out = new FileOutputStream("QR-export-" + Calendar.getInstance().getTime() + ".png")) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
