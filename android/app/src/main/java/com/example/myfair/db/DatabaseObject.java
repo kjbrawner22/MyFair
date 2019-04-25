@@ -68,6 +68,11 @@ public class DatabaseObject {
         return (String) map.get(key);
     }
 
+    /**
+     * returns a hash map value (need to know type of return val)
+     * @param key - string for the map key of desired value
+     * @return returns hashmap vallue for specified key
+     */
     public HashMap<String, Object> getValueHashMap(String key){
         if(!containsKey(key))
             return null;
