@@ -116,10 +116,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="175dp" />
-
         </LinearLayout>
     </ScrollView>
 

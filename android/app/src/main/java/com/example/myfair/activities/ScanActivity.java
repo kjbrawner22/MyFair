@@ -32,6 +32,7 @@ import com.google.zxing.Result;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     ZXingScannerView qrCodeScanner;
     //ImageView barcodeBackImageView;
     ImageView flashOnOffImageView;
+    private CardView cvProgressBar;
 
     int MY_CAMERA_REQUEST_CODE;
 
@@ -60,15 +62,16 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_scan);
 
         database = new FirebaseDatabase();
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_scan);
+        cvProgressBar = findViewById(R.id.cvProgressBar);
+        cvProgressBar.setVisibility(View.GONE);
 
         qrCodeScanner = findViewById(R.id.qrCodeScanner);
         flashOnOffImageView = findViewById(R.id.flashOnOffImageView);
@@ -174,21 +177,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     /**
-     * Timer for restarting the camera after a code has been scanned
-     */
-    private void resumeCamera(){
-        Handler handler = new Handler();
-        final Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                qrCodeScanner.resumeCameraPreview(ScanActivity.this);
-            }
-        };
-        handler.postDelayed(r,2000);
-    }
-
-
-    /**
      * Return the user to the main menu on pressing the back button
      */
     @Override
@@ -197,6 +185,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     public void dbCardCall(String uID, String cID){
+        cvProgressBar.setVisibility(View.VISIBLE);
         Log.d("Scanned", "Checking Ids "+uID+" "+cID);
         final Card sharedCard = new Card();
         DocumentReference ref = sharedCard.setFromDb(uID,cID);
@@ -286,6 +275,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     public void dbPacketCall(String uID, String pID){
+        cvProgressBar.setVisibility(View.VISIBLE);
         DocumentReference packetRef = database.getPacketRef(uID, pID);
         packetRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
