@@ -32,9 +32,9 @@ public class DatabaseObjectTest {
 
     @Test
     public void setMap() {
-        Card newCard = new Card();
-        newCard.setMap(map);
-        assertEquals(map, newCard.getMap());
+        DatabaseObject dbObject = new DatabaseObject();
+        dbObject.setMap(map);
+        assertEquals(map, dbObject.getMap());
     }
 
     @Test

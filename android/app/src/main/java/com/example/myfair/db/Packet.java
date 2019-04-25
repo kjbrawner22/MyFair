@@ -56,4 +56,12 @@ public class Packet extends DatabaseObject {
         }
         return false;
     }
+
+    public HashMap<String,Object> getCardMap(){
+        return super.getValueHashMap(Packet.FIELD_CARD_LIST);
+    }
+
+    public HashMap<String,Object> getDocumentMap(){
+        return super.getValueHashMap(Packet.FIELD_DOCUMENT_LIST);
+    }
 }

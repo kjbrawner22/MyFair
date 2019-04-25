@@ -65,8 +65,6 @@ dependencies {
 
     // Assertions
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.ext:truth:1.1.0'
-    androidTestImplementation 'com.google.truth:truth:0.42'
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0-beta01'
@@ -74,7 +72,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     androidTestImplementation 'androidx.test:rules:1.1.2-alpha02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    implementation 'com.google.auto.value:auto-value-annotations:1.6.2'
+
 
     //Graphing Dependency
     implementation 'com.jjoe64:graphview:4.2.2'
