@@ -119,86 +119,42 @@ public class NavigationTest {
         }
 
         ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.navigation_collections), withContentDescription("Collections"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.navigation),
-                                        0),
-                                1),
+                allOf(withId(R.id.navigation_collections),
                         isDisplayed()));
         bottomNavigationItemView.perform(click());
 
         ViewInteraction textView = onView(
                 allOf(withText("Collections"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                0),
                         isDisplayed()));
         textView.check(matches(withText("Collections")));
 
         ViewInteraction bottomNavigationItemView2 = onView(
-                allOf(withId(R.id.navigation_create), withContentDescription("Create"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.navigation),
-                                        0),
-                                2),
+                allOf(withId(R.id.navigation_create),
                         isDisplayed()));
         bottomNavigationItemView2.perform(click());
 
         ViewInteraction textView2 = onView(
                 allOf(withText("Create"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                0),
                         isDisplayed()));
         textView2.check(matches(withText("Create")));
 
         ViewInteraction bottomNavigationItemView3 = onView(
-                allOf(withId(R.id.navigation_analytics), withContentDescription("Analytics"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.navigation),
-                                        0),
-                                3),
+                allOf(withId(R.id.navigation_analytics),
                         isDisplayed()));
         bottomNavigationItemView3.perform(click());
 
         ViewInteraction textView3 = onView(
                 allOf(withText("Analytics"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                0),
                         isDisplayed()));
         textView3.check(matches(withText("Analytics")));
 
         ViewInteraction bottomNavigationItemView4 = onView(
-                allOf(withId(R.id.navigation_profile), withContentDescription("Profile"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.navigation),
-                                        0),
-                                0),
+                allOf(withId(R.id.navigation_profile),
                         isDisplayed()));
         bottomNavigationItemView4.perform(click());
 
         ViewInteraction textView4 = onView(
                 allOf(withText("Profile"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                0),
                         isDisplayed()));
         textView4.check(matches(withText("Profile")));
 

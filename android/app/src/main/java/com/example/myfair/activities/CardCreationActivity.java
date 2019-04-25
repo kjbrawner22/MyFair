@@ -273,7 +273,7 @@ public class CardCreationActivity extends AppCompatActivity implements View.OnCl
         mUploadTask = fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(CardCreationActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
+                Toast.makeText(CardCreationActivity.this, "Upload Successful", Toast.LENGTH_LONG).show();
                 taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
